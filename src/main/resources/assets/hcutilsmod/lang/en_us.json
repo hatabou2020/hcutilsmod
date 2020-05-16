@@ -1,4 +1,5 @@
 {
     "hcutilsmod.common.key_category" : "サバイバルで便利なMOD集",
-    "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）"
+    "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
+    "hcutilsmod.coords.key_description" : "座標の表示"
 }
