@@ -33,6 +33,7 @@ description='''
 ※当MODの使用は自己責任でお願いします。
 
 #01 ブロックの方向を変えるMOD
+#02 座標だけ表示するMOD
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.hcutilsmod]] #optional
