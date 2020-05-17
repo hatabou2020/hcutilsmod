@@ -2,16 +2,16 @@ package com.htbcraft.hcutilsmod.mods.coords;
 
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F4;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 // 仕様
 // 登録キー押下でプレイヤーの現在座標を画面に表示する
@@ -70,15 +70,10 @@ public class CoordsModHandler {
     }
 
     @SubscribeEvent
-    public void onPlayer(PlayerEvent event) {
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (enableDsiplay) {
-            PlayerEntity player = event.getPlayer();
-            if (player == null) {
-                return;
-            }
-
             // 座標の更新
-            coordsOverlayGui.setBlockPos(player.getPosition());
+            coordsOverlayGui.setBlockPos(event.player.getPosition());
         }
     }
 
