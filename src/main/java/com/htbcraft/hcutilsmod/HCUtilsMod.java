@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod;
 
 import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
 import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
+import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -16,5 +17,6 @@ public class HCUtilsMod {
         // MODのハンドラを登録
         MinecraftForge.EVENT_BUS.register(new BlockDirectionModHandler());
         MinecraftForge.EVENT_BUS.register(new CoordsModHandler());
+        MinecraftForge.EVENT_BUS.register(new InventoryCustomModHandler());
     }
 }
