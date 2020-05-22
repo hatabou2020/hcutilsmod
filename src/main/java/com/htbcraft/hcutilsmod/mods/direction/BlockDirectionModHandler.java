@@ -2,7 +2,6 @@ package com.htbcraft.hcutilsmod.mods.direction;
 
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -114,9 +113,6 @@ public class BlockDirectionModHandler {
         else if (block instanceof ChestBlock) {             // チェスト・トラップチェスト
             blockState = new ChestDirectionAdapter(blockState).change();
         }
-        else if (block instanceof BeehiveBlock) {           // ミツバチの巣・養蜂箱
-            blockState = new HorizontalDirectionAdapter(blockState).change();
-        }
         else if ((block instanceof StandingSignBlock) ||    // 看板
                 (block instanceof BannerBlock) ||           // 旗
                 (block instanceof SkullBlock)) {            // スケルトンの頭蓋骨・ウィザースケルトンの頭蓋骨・プレイヤーの頭・ゾンビの頭・クリーパーの頭・ドラゴンの頭
@@ -176,7 +172,7 @@ public class BlockDirectionModHandler {
                     Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_UP_ICON);
                 }
 
-                RenderSystem.enableBlend();
+//                RenderSystem.enableBlend();
                 AbstractGui.blit((width - DIRECT_ICON_SIZE) / 2,
                         (height - DIRECT_ICON_SIZE) / 2 + 12,
                         0,
@@ -186,7 +182,7 @@ public class BlockDirectionModHandler {
                         DIRECT_ICON_SIZE,
                         DIRECT_ICON_SIZE,
                         DIRECT_ICON_SIZE);
-                RenderSystem.disableBlend();
+//                RenderSystem.disableBlend();
 
                 event.setCanceled(true);
             }
