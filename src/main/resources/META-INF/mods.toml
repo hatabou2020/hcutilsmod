@@ -32,9 +32,10 @@ description='''
 マイクラのサバイバルで便利なMODを作ります。
 ※当MODの使用は自己責任でお願いします。
 
-#01 ブロックの方向を変えるMOD
-#02 座標だけ表示するMOD
-#03 インベントリを整理するMOD
+#01 ブロックの方向を変える
+#02 座標だけ表示する
+#03 インベントリを整理する
+#04 手持ちを使い切ったら自動で補充する
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.hcutilsmod]] #optional
