@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +40,8 @@ public class InventoryCustomModHandler {
     private boolean sortInventory = false;
     private boolean sortEnable = false;
     private InventorySortButton inventorySortButton = null;
+    private ItemStack mainHandItem = ItemStack.EMPTY;
+    private ItemStack offHandItem = ItemStack.EMPTY;
 
     // デフォルトキー：[ｏ]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
@@ -181,11 +184,36 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
+    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getSide().isServer()) {
+            ItemStack itemStack = event.getItemStack();
+            if (itemStack.getCount() <= 1) {
+                if (Hand.MAIN_HAND.equals(event.getHand())) {
+                    mainHandItem = itemStack.copy();
+                } else {
+                    offHandItem = itemStack.copy();
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
         PlayerInventory inventory = event.getPlayer().inventory;
         Hand hand = Objects.requireNonNull(event.getHand());
 
-        ItemStack original = event.getOriginal();
+        // event.getOriginal()のバグで1.14.4まではnullになってしまうため
+        // 右クリックイベントで取っておいたItemStackを使う。
+        // event.getOriginal()のバグは1.15.2-31.1.73で修正されている。
+        ItemStack original;
+        if (Hand.MAIN_HAND.equals(hand)) {
+            original = mainHandItem;
+            mainHandItem = ItemStack.EMPTY;
+        } else {
+            original = offHandItem;
+            offHandItem = ItemStack.EMPTY;
+        }
+
         LOGGER.info("PlayerDestroyItemEvent: " + original.toString());
 
         for (int i = 0; i < inventory.mainInventory.size(); i++) {
