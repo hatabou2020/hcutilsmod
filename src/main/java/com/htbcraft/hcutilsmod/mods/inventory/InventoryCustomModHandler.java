@@ -10,7 +10,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
@@ -19,7 +18,6 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -41,8 +39,6 @@ public class InventoryCustomModHandler {
     private boolean sortInventory = false;
     private boolean sortEnable = false;
     private InventorySortButton inventorySortButton = null;
-    private Item mainHandItem = ItemStack.EMPTY.getItem();
-    private Item offHandItem = ItemStack.EMPTY.getItem();
 
     // デフォルトキー：[ｏ]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
@@ -64,6 +60,10 @@ public class InventoryCustomModHandler {
             int action = event.getAction();
 
             sortInventory = BIND_KEY.test(key, modifiers, action);
+
+            if (sortInventory) {
+                inventorySortButton.active = false;
+            }
         }
     }
 
@@ -113,6 +113,10 @@ public class InventoryCustomModHandler {
             inventorySortButton.x = gui.width - inventorySortButton.getWidth();
             inventorySortButton.y = 0;
             inventorySortButton.render((int) mouseX, (int) mouseY, 0.0F);
+
+            if (!sortInventory) {
+                inventorySortButton.active = true;
+            }
         }
     }
 
@@ -172,25 +176,7 @@ public class InventoryCustomModHandler {
 
         public void onPress() {
             InventoryCustomModHandler.this.sortInventory = true;
-        }
-    }
-
-    @SubscribeEvent
-    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getSide().isServer()) {
-            Item item = event.getItemStack().getItem();
-            if (event.getHand().equals(Hand.MAIN_HAND)) {
-                if (!mainHandItem.equals(item)) {
-                    mainHandItem = item;
-                    LOGGER.info(mainHandItem);
-                }
-            }
-            else {
-                if (!offHandItem.equals(item)) {
-                    offHandItem = item;
-                    LOGGER.info(offHandItem);
-                }
-            }
+            InventoryCustomModHandler.this.inventorySortButton.active = false;
         }
     }
 
@@ -199,6 +185,9 @@ public class InventoryCustomModHandler {
         PlayerInventory inventory = event.getPlayer().inventory;
         Hand hand = Objects.requireNonNull(event.getHand());
 
+        ItemStack original = event.getOriginal();
+        LOGGER.info("PlayerDestroyItemEvent: " + original.toString());
+
         for (int i = 0; i < inventory.mainInventory.size(); i++) {
             ItemStack itemStack = inventory.mainInventory.get(i);
             if (itemStack.isEmpty()) {
@@ -206,23 +195,15 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (hand.equals(Hand.MAIN_HAND)) {
-                if (mainHandItem.equals(itemStack.getItem())) {
-                    LOGGER.info(itemStack.toString());
+            if (original.isItemEqual(itemStack)) {
+                if (Hand.MAIN_HAND.equals(hand)) {
                     inventory.mainInventory.set(inventory.currentItem, itemStack);
-                    inventory.mainInventory.set(i, ItemStack.EMPTY);
-                    mainHandItem = ItemStack.EMPTY.getItem();
-                    break;
                 }
-            }
-            else {
-                if (offHandItem.equals(itemStack.getItem())) {
-                    LOGGER.info(itemStack.toString());
+                else {
                     inventory.offHandInventory.set(0, itemStack);
-                    inventory.mainInventory.set(i, ItemStack.EMPTY);
-                    offHandItem = ItemStack.EMPTY.getItem();
-                    break;
                 }
+                inventory.mainInventory.set(i, ItemStack.EMPTY);
+                break;
             }
         }
     }
