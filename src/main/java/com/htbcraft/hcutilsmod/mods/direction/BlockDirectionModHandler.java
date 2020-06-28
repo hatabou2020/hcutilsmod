@@ -98,8 +98,7 @@ public class BlockDirectionModHandler {
         if (block instanceof StairsBlock) {                 // 階段
             blockState = new StairsDirectionAdapter(blockState).change();
         }
-        else if ((block instanceof LogBlock) ||             // 原木
-                (block instanceof HayBlock)) {              // 干草の俵
+        else if (block instanceof RotatedPillarBlock) {     // 原木・干草の俵
             blockState = new LogDirectionAdapter(blockState).change();
         }
         else if (block instanceof SlabBlock) {              // ハーフブロック
@@ -177,7 +176,8 @@ public class BlockDirectionModHandler {
                 }
 
                 RenderSystem.enableBlend();
-                AbstractGui.blit((width - DIRECT_ICON_SIZE) / 2,
+                AbstractGui.func_238464_a_(event.getMatrixStack(),
+                        (width - DIRECT_ICON_SIZE) / 2,
                         (height - DIRECT_ICON_SIZE) / 2 + 12,
                         0,
                         0,

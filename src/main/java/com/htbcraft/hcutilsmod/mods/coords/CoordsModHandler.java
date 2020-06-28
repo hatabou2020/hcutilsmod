@@ -73,14 +73,14 @@ public class CoordsModHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (enableDsiplay) {
             // 座標の更新
-            coordsOverlayGui.setBlockPos(event.player.getPosition());
+            coordsOverlayGui.setBlockPos(event.player.func_233580_cy_());
         }
     }
 
     @SubscribeEvent
     public void onRenderGameOverlayText(RenderGameOverlayEvent.Text event) {
         if (enableDsiplay) {
-            coordsOverlayGui.render(Minecraft.getInstance().fontRenderer);
+            coordsOverlayGui.render(event.getMatrixStack(), Minecraft.getInstance().fontRenderer);
         }
     }
 }

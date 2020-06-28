@@ -13,6 +13,7 @@ import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -62,7 +63,7 @@ public class InventoryCustomModHandler {
             sortInventory = BIND_KEY.test(key, modifiers, action);
 
             if (sortInventory) {
-                inventorySortButton.active = false;
+                inventorySortButton.field_230693_o_ = false;
             }
         }
     }
@@ -71,7 +72,7 @@ public class InventoryCustomModHandler {
     public void onMouseReleased(GuiScreenEvent.MouseReleasedEvent event) {
         if (sortEnable) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
-                inventorySortButton.mouseClicked(event.getMouseX(), event.getMouseY(), 0);
+                inventorySortButton.func_231044_a_(event.getMouseX(), event.getMouseY(), 0);
             }
         }
     }
@@ -87,7 +88,7 @@ public class InventoryCustomModHandler {
             return;
         }
 
-        LOGGER.info(gui.getTitle().getString());
+        LOGGER.info(gui.func_231171_q_().getString());
 
         String textKeyName = I18n.format(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
         int width = Minecraft.getInstance().fontRenderer.getStringWidth(textKeyName);
@@ -110,12 +111,12 @@ public class InventoryCustomModHandler {
             double mouseX = event.getMouseX();
             double mouseY = event.getMouseY();
 
-            inventorySortButton.x = gui.width - inventorySortButton.getWidth();
-            inventorySortButton.y = 0;
-            inventorySortButton.render((int) mouseX, (int) mouseY, 0.0F);
+            inventorySortButton.field_230690_l_ = gui.field_230708_k_ - inventorySortButton.func_230998_h_();
+            inventorySortButton.field_230691_m_ = 0;
+            inventorySortButton.func_230430_a_(event.getMatrixStack(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {
-                inventorySortButton.active = true;
+                inventorySortButton.field_230693_o_ = true;
             }
         }
     }
@@ -167,16 +168,12 @@ public class InventoryCustomModHandler {
 
     class InventorySortButton extends AbstractButton {
         public InventorySortButton(int x, int y, int width, int height, String msg) {
-            super(x, y, width, height, msg);
+            super(x, y, width, height, ITextComponent.func_241827_a_(msg));
         }
 
-        public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
-            super.renderButton(p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
-        }
-
-        public void onPress() {
+        public void func_230930_b_() {
             InventoryCustomModHandler.this.sortInventory = true;
-            InventoryCustomModHandler.this.inventorySortButton.active = false;
+            InventoryCustomModHandler.this.inventorySortButton.field_230693_o_ = false;
         }
     }
 
