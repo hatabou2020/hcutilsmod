@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -167,18 +168,22 @@ public class BlockDirectionModHandler {
             if (event.getType().equals(RenderGameOverlayEvent.ElementType.CROSSHAIRS)) {
                 int width = event.getWindow().getScaledWidth();
                 int height = event.getWindow().getScaledHeight();
+                int x = (width - DIRECT_ICON_SIZE) / 2;
+                int y = (height - DIRECT_ICON_SIZE) / 2;
+
+                Minecraft mc = Minecraft.getInstance();
 
                 if (mouseClick) {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_DOWN_ICON);
+                    mc.getTextureManager().bindTexture(DIRECT_DOWN_ICON);
                 }
                 else {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_UP_ICON);
+                    mc.getTextureManager().bindTexture(DIRECT_UP_ICON);
                 }
 
                 RenderSystem.enableBlend();
                 AbstractGui.func_238464_a_(event.getMatrixStack(),
-                        (width - DIRECT_ICON_SIZE) / 2,
-                        (height - DIRECT_ICON_SIZE) / 2 + 12,
+                        x,
+                        y + 12,
                         0,
                         0,
                         0,
@@ -187,6 +192,9 @@ public class BlockDirectionModHandler {
                         DIRECT_ICON_SIZE,
                         DIRECT_ICON_SIZE);
                 RenderSystem.disableBlend();
+
+                // 右クリック指示テキスト
+//                mc.fontRenderer.func_238421_b_(event.getMatrixStack(), I18n.format("hcutilsmod.direction.icon"), (float)x + DIRECT_ICON_SIZE, (float)y + DIRECT_ICON_SIZE, 14737632);
 
                 event.setCanceled(true);
             }

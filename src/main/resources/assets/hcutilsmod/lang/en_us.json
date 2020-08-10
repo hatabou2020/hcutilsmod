@@ -1,7 +1,13 @@
 {
     "hcutilsmod.common.key_category" : "サバイバルで便利なMOD集",
+    "hcutilsmod.settings.key_description" : "- 設定画面を開く -",
     "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
-    "hcutilsmod.coords.key_description" : "座標の表示",
-    "hcutilsmod.inventory.key_description" : "インベントリの整理(オープン時)",
-    "hcutilsmod.inventory.button" : "整理 [%s]"
+    "hcutilsmod.inventory.key_description" : "インベントリの整理",
+
+    "hcutilsmod.settings.title" : "サバイバルで便利なMOD集 設定画面",
+    "hcutilsmod.settings.cords.enable" : "プレイヤー座標 ： 表示",
+    "hcutilsmod.settings.cords.disable" : "プレイヤー座標 ： 非表示",
+
+    "hcutilsmod.inventory.button" : "整理 [%s]",
+    "hcutilsmod.direction.icon" : "右クリック"
 }
