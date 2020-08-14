@@ -33,16 +33,16 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.func_230480_a_(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.findspawner.return")),
+                ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.return")),
                 (var1) -> this.getMinecraft().displayGuiScreen(this.getParent())));
     }
 
     private ITextComponent getEnableFindSpawnerModText() {
         if (HCSettings.getInstance().enableFindSpawnerMod) {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.findspawner.enable"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.enable"));
         }
         else {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.findspawner.disable"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.disable"));
         }
     }
 
@@ -56,7 +56,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().rangeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = translationKey.func_238238_a_();
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.range")).func_240702_b_(": ");
                 return s.func_230529_a_(new TranslationTextComponent("" + HCSettings.getInstance().rangeFindSpawner));
             });
 
@@ -66,7 +66,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().timeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = translationKey.func_238238_a_();
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.time")).func_240702_b_(": ");
                 return s.func_230529_a_(new TranslationTextComponent(HCSettings.getInstance().timeFindSpawner + I18n.format("hcutilsmod.settings.findspawner.seconds")));
             });
 }

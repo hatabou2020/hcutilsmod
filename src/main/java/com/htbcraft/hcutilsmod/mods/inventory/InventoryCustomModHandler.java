@@ -95,7 +95,7 @@ public class InventoryCustomModHandler {
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ChestScreen)) {
             sortEnable = true;
-            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.func_241827_a_(textKeyName), (var1) -> {
+            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.func_244388_a(textKeyName), (var1) -> {
                 sortInventory = true;
                 inventorySortButton.field_230693_o_ = false;
             });

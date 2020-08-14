@@ -38,30 +38,30 @@ public class MainSettingsScreen extends SettingsScreen {
 
         // スポナーの検索設定
         this.func_230480_a_(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-                ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.findspawner.title") + "…"),
+                ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.title") + "…"),
                 (var1) -> this.getMinecraft().displayGuiScreen(new FindSpawnerSettingsScreen(this))));
 
         // ゲームに戻る
         this.func_230480_a_(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.return")),
+                ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.return")),
                 (var1) -> this.getMinecraft().displayGuiScreen(null)));
     }
 
     private ITextComponent getEnableCordsModText() {
         if (HCSettings.getInstance().enableCordsMod) {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.cords.enable"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.cords.enable"));
         }
         else {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.cords.disable"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.cords.disable"));
         }
     }
 
     private ITextComponent getInventorySortTypeText() {
         if (HCSettings.getInstance().sortType == NAME) {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
         }
         else {
-            return ITextComponent.func_241827_a_(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
+            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
         }
     }
 }
