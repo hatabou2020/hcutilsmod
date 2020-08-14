@@ -34,7 +34,7 @@ public class HCSettings {
     public HCSettings(Minecraft mcIn) {
         instance = this;
         this.mc = mcIn;
-        this.optionsFile = new File(this.mc.gameDir, "hcoptions.txt");
+        this.optionsFile = new File(this.mc.gameDir, "hcutilsmod_options.txt");
 
         this.loadOptions();
     }
@@ -75,13 +75,13 @@ public class HCSettings {
                         SortType[] values = SortType.values();
                         sortType = values[Integer.parseInt(s1)];
                     }
-                    if ("searchspawnermod".equals(s)) {
+                    if ("findspawnermod".equals(s)) {
                         enableFindSpawnerMod = Boolean.valueOf(s1);
                     }
-                    if ("searchspawnermod.range".equals(s)) {
+                    if ("findspawnermod.range".equals(s)) {
                         rangeFindSpawner = Integer.parseInt(s1);
                     }
-                    if ("searchspawnermod.time".equals(s)) {
+                    if ("findspawnermod.time".equals(s)) {
                         timeFindSpawner = Long.getLong(s1);
                     }
                 } catch (Exception exception) {
@@ -99,9 +99,9 @@ public class HCSettings {
         try (PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.optionsFile), StandardCharsets.UTF_8))) {
             printwriter.println("cordsmod:" + enableCordsMod);
             printwriter.println("inventorymod:" + sortType.ordinal());
-            printwriter.println("searchspawnermod:" + enableFindSpawnerMod);
-            printwriter.println("searchspawnermod.range:" + rangeFindSpawner);
-            printwriter.println("searchspawnermod.time:" + timeFindSpawner);
+            printwriter.println("findspawnermod:" + enableFindSpawnerMod);
+            printwriter.println("findspawnermod.range:" + rangeFindSpawner);
+            printwriter.println("findspawnermod.time:" + timeFindSpawner);
         } catch (Exception exception) {
             LOGGER.error("Failed to save options", exception);
         }
