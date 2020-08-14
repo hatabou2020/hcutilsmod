@@ -5,6 +5,7 @@ import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
 import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
 import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
+import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -29,7 +30,6 @@ public class HCUtilsMod {
 
     private HCSettings settings;
     private MainSettingsScreen mainSettingsScreen;
-    private Boolean openMainSettings = false;
 
     // デフォルトキー：[H]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
@@ -53,6 +53,7 @@ public class HCUtilsMod {
         MinecraftForge.EVENT_BUS.register(new BlockDirectionModHandler());
         MinecraftForge.EVENT_BUS.register(new CoordsModHandler());
         MinecraftForge.EVENT_BUS.register(new InventoryCustomModHandler());
+        MinecraftForge.EVENT_BUS.register(new FindSpawnerModHandler());
     }
 
     @SubscribeEvent
@@ -76,14 +77,12 @@ public class HCUtilsMod {
         if (BIND_KEY.test(key, modifiers, action)) {
             if (Minecraft.getInstance().currentScreen == null) {
                 if (mainSettingsScreen == null) {
-                    mainSettingsScreen = new MainSettingsScreen();
-                    Minecraft.getInstance().displayGuiScreen(mainSettingsScreen);
+                    Minecraft.getInstance().displayGuiScreen(new MainSettingsScreen());
                 }
             }
             else {
                 if (mainSettingsScreen != null) {
                     Minecraft.getInstance().displayGuiScreen(null);
-                    mainSettingsScreen = null;
                 }
             }
         }
@@ -94,15 +93,15 @@ public class HCUtilsMod {
         Screen gui = event.getGui();
         if (gui == null) {
             LOGGER.info("gui == null");
-            if (openMainSettings) {
-                mainSettingsScreen = null;
-                openMainSettings = false;
-            }
+            mainSettingsScreen = null;
             return;
         }
 
-        if (gui == mainSettingsScreen) {
-            openMainSettings = true;
+        if (gui instanceof MainSettingsScreen) {
+            mainSettingsScreen = (MainSettingsScreen)gui;
+        }
+        else {
+            mainSettingsScreen = null;
         }
     }
 }

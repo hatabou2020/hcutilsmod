@@ -21,7 +21,15 @@ public class HCSettings {
     private Minecraft mc;
     private File optionsFile;
 
-    public Boolean enableCordsMod = false;
+    public enum SortType {
+        NAME,       // 名前順
+    }
+
+    public Boolean enableCordsMod = false;          // プレイヤー座標の表示
+    public SortType sortType = SortType.NAME;       // インベントリのソート種類
+    public Boolean enableFindSpawnerMod = false;    // スポナー検索
+    public int rangeFindSpawner = 64;               // スポナー検索の範囲
+    public long timeFindSpawner = 30L;              // スポナー座標の表示時間
 
     public HCSettings(Minecraft mcIn) {
         instance = this;
@@ -63,6 +71,19 @@ public class HCSettings {
                     if ("cordsmod".equals(s)) {
                         enableCordsMod = Boolean.valueOf(s1);
                     }
+                    if ("inventorymod".equals(s)) {
+                        SortType[] values = SortType.values();
+                        sortType = values[Integer.parseInt(s1)];
+                    }
+                    if ("searchspawnermod".equals(s)) {
+                        enableFindSpawnerMod = Boolean.valueOf(s1);
+                    }
+                    if ("searchspawnermod.range".equals(s)) {
+                        rangeFindSpawner = Integer.parseInt(s1);
+                    }
+                    if ("searchspawnermod.time".equals(s)) {
+                        timeFindSpawner = Long.getLong(s1);
+                    }
                 } catch (Exception exception) {
                     LOGGER.warn("Skipping bad option: {}:{}", s, s1);
                 }
@@ -77,6 +98,10 @@ public class HCSettings {
             return; //Don't save settings before mods add keybindigns and the like to prevent them from being deleted.
         try (PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.optionsFile), StandardCharsets.UTF_8))) {
             printwriter.println("cordsmod:" + enableCordsMod);
+            printwriter.println("inventorymod:" + sortType.ordinal());
+            printwriter.println("searchspawnermod:" + enableFindSpawnerMod);
+            printwriter.println("searchspawnermod.range:" + rangeFindSpawner);
+            printwriter.println("searchspawnermod.time:" + timeFindSpawner);
         } catch (Exception exception) {
             LOGGER.error("Failed to save options", exception);
         }

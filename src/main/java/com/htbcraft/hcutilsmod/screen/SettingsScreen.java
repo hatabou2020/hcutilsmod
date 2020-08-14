@@ -17,12 +17,21 @@ public class SettingsScreen extends Screen {
     private static final int WINDOW_WIDTH = 240;
     private static final int WINDOW_HEIGHT = 180;
 
+    private Screen parent;
     private int win_x, win_y;
+    private int win_w, win_h;
 
-    public SettingsScreen(ITextComponent titleIn) {
+    public SettingsScreen(Screen parent, ITextComponent titleIn) {
         super(titleIn);
+        this.parent = parent;
         win_x = 0;
         win_y = 0;
+        win_w = WINDOW_WIDTH;
+        win_h = WINDOW_HEIGHT;
+    }
+
+    protected Screen getParent() {
+        return this.parent;
     }
 
     public int getPosX() {
@@ -34,11 +43,11 @@ public class SettingsScreen extends Screen {
     }
 
     public int getWidth() {
-        return WINDOW_WIDTH;
+        return win_w;
     }
 
     public int getHeight() {
-        return WINDOW_HEIGHT;
+        return win_h;
     }
 
     public void func_231158_b_(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
@@ -46,6 +55,10 @@ public class SettingsScreen extends Screen {
 
         win_x = (p_231158_2_ - WINDOW_WIDTH) / 2;
         win_y = (p_231158_3_ - WINDOW_HEIGHT) / 2;
+    }
+
+    public void func_231175_as__() {
+        super.func_231175_as__();
     }
 
     public void func_231164_f_() {

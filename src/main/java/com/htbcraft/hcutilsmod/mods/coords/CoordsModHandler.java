@@ -22,9 +22,11 @@ public class CoordsModHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if ((!Minecraft.getInstance().gameSettings.showDebugInfo) && (HCSettings.getInstance().enableCordsMod)) {
-            // 座標の更新
-            coordsOverlayGui.setBlockPos(event.player.func_233580_cy_());
+        if (event.side.isClient()) {
+            if ((!Minecraft.getInstance().gameSettings.showDebugInfo) && (HCSettings.getInstance().enableCordsMod)) {
+                // 座標の更新
+                coordsOverlayGui.setBlockPos(event.player.func_233580_cy_());
+            }
         }
     }
 
