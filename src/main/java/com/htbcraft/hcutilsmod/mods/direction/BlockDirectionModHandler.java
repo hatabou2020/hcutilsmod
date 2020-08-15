@@ -165,17 +165,22 @@ public class BlockDirectionModHandler {
             if (event.getType().equals(RenderGameOverlayEvent.ElementType.CROSSHAIRS)) {
                 int width = event.getWindow().getScaledWidth();
                 int height = event.getWindow().getScaledHeight();
+                int x = (width - DIRECT_ICON_SIZE) / 2;
+                int y = (height - DIRECT_ICON_SIZE) / 2;
+
+                Minecraft mc = Minecraft.getInstance();
 
                 if (mouseClick) {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_DOWN_ICON);
+                    mc.getTextureManager().bindTexture(DIRECT_DOWN_ICON);
                 }
                 else {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_UP_ICON);
+                    mc.getTextureManager().bindTexture(DIRECT_UP_ICON);
                 }
 
                 GlStateManager.enableBlend();
-                AbstractGui.blit((width - DIRECT_ICON_SIZE) / 2,
-                        (height - DIRECT_ICON_SIZE) / 2 + 12,
+                AbstractGui.blit(
+                        x,
+                        y + 12,
                         0,
                         0,
                         0,

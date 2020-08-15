@@ -36,6 +36,7 @@ description='''
 #02 座標だけ表示する
 #03 インベントリを整理する
 #04 手持ちを使い切ったら自動で補充する
+#05 スポナーを見つける
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.hcutilsmod]] #optional

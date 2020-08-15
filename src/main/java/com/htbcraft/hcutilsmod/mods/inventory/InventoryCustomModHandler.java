@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ChestScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -39,7 +39,7 @@ public class InventoryCustomModHandler {
 
     private boolean sortInventory = false;
     private boolean sortEnable = false;
-    private InventorySortButton inventorySortButton = null;
+    private Button inventorySortButton = null;
     private ItemStack mainHandItem = ItemStack.EMPTY;
     private ItemStack offHandItem = ItemStack.EMPTY;
 
@@ -97,7 +97,10 @@ public class InventoryCustomModHandler {
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ChestScreen)) {
             sortEnable = true;
-            inventorySortButton = new InventorySortButton(0, 0, width + 10, 20, textKeyName);
+            inventorySortButton = new Button(0, 0, width + 10, 20, textKeyName, (var1) -> {
+                sortInventory = true;
+                inventorySortButton.active = false;
+            });
         }
     }
 
@@ -165,21 +168,6 @@ public class InventoryCustomModHandler {
         // ソートした結果をスロットに戻す
         for (int i = 0; i < size; i++) {
             inventory.setInventorySlotContents(i, itemStacks.get(i));
-        }
-    }
-
-    class InventorySortButton extends AbstractButton {
-        public InventorySortButton(int x, int y, int width, int height, String msg) {
-            super(x, y, width, height, msg);
-        }
-
-        public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
-            super.renderButton(p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
-        }
-
-        public void onPress() {
-            InventoryCustomModHandler.this.sortInventory = true;
-            InventoryCustomModHandler.this.inventorySortButton.active = false;
         }
     }
 
