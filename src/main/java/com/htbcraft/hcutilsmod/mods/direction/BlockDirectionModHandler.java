@@ -181,7 +181,7 @@ public class BlockDirectionModHandler {
                 }
 
                 RenderSystem.enableBlend();
-                AbstractGui.func_238464_a_(event.getMatrixStack(),
+                AbstractGui.blit(event.getMatrixStack(),
                         x,
                         y + 12,
                         0,

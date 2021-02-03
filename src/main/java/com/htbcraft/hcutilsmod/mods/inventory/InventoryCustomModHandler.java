@@ -63,7 +63,7 @@ public class InventoryCustomModHandler {
             sortInventory = BIND_KEY.test(key, modifiers, action);
 
             if (sortInventory) {
-                inventorySortButton.field_230693_o_ = false;
+                inventorySortButton.active = false;
             }
         }
     }
@@ -72,7 +72,7 @@ public class InventoryCustomModHandler {
     public void onMouseReleased(GuiScreenEvent.MouseReleasedEvent event) {
         if (sortEnable) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
-                inventorySortButton.func_231044_a_(event.getMouseX(), event.getMouseY(), 0);
+                inventorySortButton.mouseClicked(event.getMouseX(), event.getMouseY(), 0);
             }
         }
     }
@@ -88,16 +88,16 @@ public class InventoryCustomModHandler {
             return;
         }
 
-        LOGGER.info(gui.func_231171_q_().getString());
+        LOGGER.info(gui.getTitle().getString());
 
         String textKeyName = I18n.format(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
         int width = Minecraft.getInstance().fontRenderer.getStringWidth(textKeyName);
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ChestScreen)) {
             sortEnable = true;
-            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.func_244388_a(textKeyName), (var1) -> {
+            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.getTextComponentOrEmpty(textKeyName), (var1) -> {
                 sortInventory = true;
-                inventorySortButton.field_230693_o_ = false;
+                inventorySortButton.active = false;
             });
         }
     }
@@ -114,12 +114,12 @@ public class InventoryCustomModHandler {
             double mouseX = event.getMouseX();
             double mouseY = event.getMouseY();
 
-            inventorySortButton.field_230690_l_ = gui.field_230708_k_ - inventorySortButton.func_230998_h_();
-            inventorySortButton.field_230691_m_ = 0;
-            inventorySortButton.func_230430_a_(event.getMatrixStack(), (int) mouseX, (int) mouseY, 0.0F);
+            inventorySortButton.x = gui.width - inventorySortButton.getWidth();
+            inventorySortButton.y = 0;
+            inventorySortButton.render(event.getMatrixStack(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {
-                inventorySortButton.field_230693_o_ = true;
+                inventorySortButton.active = true;
             }
         }
     }

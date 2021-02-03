@@ -25,7 +25,7 @@ public class FindSpawnerModHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) {
             if (HCSettings.getInstance().enableFindSpawnerMod) {
-                BlockPos pos = event.player.func_233580_cy_();
+                BlockPos pos = event.player.getPosition();
                 if (prevPlayerPos.compareTo(pos) != 0) {
                     prevPlayerPos = pos;
 
@@ -77,7 +77,7 @@ public class FindSpawnerModHandler {
 
         @Nullable
         public BlockPos findSpawnerPosInArea() {
-            BlockPos pos = this.player.func_233580_cy_();
+            BlockPos pos = this.player.getPosition();
 
             int i = pos.getX() - this.renge;
             int j = pos.getX() + this.renge;

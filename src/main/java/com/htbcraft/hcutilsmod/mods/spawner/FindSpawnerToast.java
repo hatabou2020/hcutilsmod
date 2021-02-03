@@ -31,7 +31,7 @@ public class FindSpawnerToast implements IToast {
     }
 
     @Override
-    public Visibility func_230444_a_(MatrixStack matrixStack, ToastGui toastGui, long l) {
+    public Visibility func_230444_a_(MatrixStack p_230444_1_, ToastGui p_230444_2_, long p_230444_3_) {
         // すでに表示している座標の場合は即非表示
         if (!this.visibility) {
             LOGGER.info("Already displayed!! " + this.blockPos);
@@ -40,27 +40,27 @@ public class FindSpawnerToast implements IToast {
         }
 
         // 設定されている時間だけ表示
-        if (l > (HCSettings.getInstance().timeFindSpawner * 1000L)) {
+        if (p_230444_3_ > (HCSettings.getInstance().timeFindSpawner * 1000L)) {
             LOGGER.info("Time up!! " + this.blockPos);
             blockPosList.remove(this.blockPos);
             return Visibility.HIDE;
         }
 
         // トーストの枠
-        toastGui.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
+        p_230444_2_.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
         RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-        toastGui.func_238474_b_(matrixStack, 0, 0, 0, 0, this.func_230445_a_(), this.func_238540_d_());
+        p_230444_2_.blit(p_230444_1_, 0, 0, 0, 0, this.func_230445_a_(), this.func_238540_d_());
 
         // スポナーのアイコン
-        toastGui.getMinecraft().getTextureManager().bindTexture(SPAWNER_ICON);
+        p_230444_2_.getMinecraft().getTextureManager().bindTexture(SPAWNER_ICON);
         RenderSystem.enableBlend();
-        AbstractGui.func_238464_a_(matrixStack, 6, 6, 0, 0, 0, 20, 20, 20, 20);
+        AbstractGui.blit(p_230444_1_, 6, 6, 0, 0, 0, 20, 20, 20, 20);
         RenderSystem.enableBlend();
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        toastGui.getMinecraft().fontRenderer.func_238421_b_(matrixStack, I18n.format("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
-        toastGui.getMinecraft().fontRenderer.func_238421_b_(matrixStack, text, 36.0F, 18.0F, 14737632);
+        p_230444_2_.getMinecraft().fontRenderer.drawString(p_230444_1_, I18n.format("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
+        p_230444_2_.getMinecraft().fontRenderer.drawString(p_230444_1_, text, 36.0F, 18.0F, 14737632);
 
         return Visibility.SHOW;
     }

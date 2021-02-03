@@ -50,25 +50,25 @@ public class SettingsScreen extends Screen {
         return win_h;
     }
 
-    public void func_231158_b_(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
-        super.func_231158_b_(p_231158_1_, p_231158_2_, p_231158_3_);
+    public void init(Minecraft minecraft, int width, int height) {
+        super.init(minecraft, width, height);
 
-        win_x = (p_231158_2_ - WINDOW_WIDTH) / 2;
-        win_y = (p_231158_3_ - WINDOW_HEIGHT) / 2;
+        win_x = (width - WINDOW_WIDTH) / 2;
+        win_y = (height - WINDOW_HEIGHT) / 2;
     }
 
-    public void func_231175_as__() {
-        super.func_231175_as__();
+    public void closeScreen() {
+        super.closeScreen();
     }
 
-    public void func_231164_f_() {
+    public void onClose() {
         HCSettings.getInstance().saveOptions();
     }
 
-    public void func_230430_a_(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        super.func_230446_a_(p_230430_1_);
-        renderWindow(p_230430_1_, win_x, win_y, WINDOW_WIDTH, WINDOW_HEIGHT, this.field_230704_d_, BACKGROUND_TEXTURE);
-        super.func_230430_a_(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.renderBackground(matrixStack);
+        renderWindow(matrixStack, win_x, win_y, WINDOW_WIDTH, WINDOW_HEIGHT, this.title, BACKGROUND_TEXTURE);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     // このメソッドはライブラリ化したい
@@ -97,7 +97,7 @@ public class SettingsScreen extends Screen {
         // ウィンドウ背景の描画
         mc.getTextureManager().bindTexture(background);
         RenderSystem.enableBlend();
-        AbstractGui.func_238463_a_(matrixStack, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
+        AbstractGui.blit(matrixStack, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
         RenderSystem.disableBlend();
 
         // ウィンドウ枠の描画
@@ -105,10 +105,10 @@ public class SettingsScreen extends Screen {
         RenderSystem.enableBlend();
 
         // ウィンドウ枠の4隅
-        AbstractGui.func_238463_a_(matrixStack, x, y, 0, 0, 20, 30, 256, 256);
-        AbstractGui.func_238463_a_(matrixStack, x + width - 20, y, 252 - 20, 0, 20, 30, 256, 256);
-        AbstractGui.func_238463_a_(matrixStack, x, y + height - 20, 0, 140 - 20, 20, 20, 256, 256);
-        AbstractGui.func_238463_a_(matrixStack, x + width - 20, y + height - 20, 252 - 20, 140 - 20, 20, 20, 256, 256);
+        AbstractGui.blit(matrixStack, x, y, 0, 0, 20, 30, 256, 256);
+        AbstractGui.blit(matrixStack, x + width - 20, y, 252 - 20, 0, 20, 30, 256, 256);
+        AbstractGui.blit(matrixStack, x, y + height - 20, 0, 140 - 20, 20, 20, 256, 256);
+        AbstractGui.blit(matrixStack, x + width - 20, y + height - 20, 252 - 20, 140 - 20, 20, 20, 256, 256);
 
         int x1, y1, texture_x, texture_y, texture_width, texture_height, count;
 
@@ -125,7 +125,7 @@ public class SettingsScreen extends Screen {
             }
             texture_height = 30;
 
-            AbstractGui.func_238463_a_(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            AbstractGui.blit(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の下線
@@ -140,7 +140,7 @@ public class SettingsScreen extends Screen {
             }
             texture_height = 20;
 
-            AbstractGui.func_238463_a_(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            AbstractGui.blit(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の左線
@@ -156,7 +156,7 @@ public class SettingsScreen extends Screen {
                 texture_height = (140 - 50) + (height - 50) - ((140 - 50) * (i + 1));
             }
 
-            AbstractGui.func_238463_a_(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            AbstractGui.blit(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の右線
@@ -171,12 +171,12 @@ public class SettingsScreen extends Screen {
                 texture_height = (140 - 50) + (height - 50) - ((140 - 50) * (i + 1));
             }
 
-            AbstractGui.func_238463_a_(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            AbstractGui.blit(matrixStack, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         RenderSystem.disableBlend();
 
         // タイトルの描画
-        mc.fontRenderer.func_238421_b_(matrixStack, title.getString(), (float)x + 8, (float)y + 6, 4210752);
+        mc.fontRenderer.drawString(matrixStack, title.getString(), (float)x + 8, (float)y + 6, 4210752);
     }
 }

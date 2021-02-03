@@ -25,7 +25,7 @@ public class CoordsModHandler {
         if (event.side.isClient()) {
             if ((!Minecraft.getInstance().gameSettings.showDebugInfo) && (HCSettings.getInstance().enableCordsMod)) {
                 // 座標の更新
-                coordsOverlayGui.setBlockPos(event.player.func_233580_cy_());
+                coordsOverlayGui.setBlockPos(event.player.getPosition());
             }
         }
     }

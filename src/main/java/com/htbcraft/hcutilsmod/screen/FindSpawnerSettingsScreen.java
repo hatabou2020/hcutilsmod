@@ -15,38 +15,38 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
         super(parent, new TranslationTextComponent("hcutilsmod.settings.findspawner.title"));
     }
 
-    public void func_231158_b_(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
-        super.func_231158_b_(p_231158_1_, p_231158_2_, p_231158_3_);
+    public void init(Minecraft minecraft, int width, int height) {
+        super.init(minecraft, width, height);
 
         // オンオフ
-        this.func_230480_a_(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
+        this.addButton(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
                 getEnableFindSpawnerModText(), (var1) -> {
             HCSettings.getInstance().enableFindSpawnerMod = !HCSettings.getInstance().enableFindSpawnerMod;
-            var1.func_238482_a_(getEnableFindSpawnerModText());
+            var1.setMessage(getEnableFindSpawnerModText());
         }));
 
         // 検索の範囲
-        this.func_230480_a_(RENGE.createWidget(p_231158_1_.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+        this.addButton(RENGE.createWidget(minecraft.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // 座標の表示時間
-        this.func_230480_a_(TIME.createWidget(p_231158_1_.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
+        this.addButton(TIME.createWidget(minecraft.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
 
         // 戻る
-        this.func_230480_a_(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.return")),
+        this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
+                ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.return")),
                 (var1) -> this.getMinecraft().displayGuiScreen(this.getParent())));
     }
 
     private ITextComponent getEnableFindSpawnerModText() {
         if (HCSettings.getInstance().enableFindSpawnerMod) {
-            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.enable"));
+            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.enable"));
         }
         else {
-            return ITextComponent.func_244388_a(I18n.format("hcutilsmod.settings.findspawner.disable"));
+            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.disable"));
         }
     }
 
-    public boolean func_231178_ax__() {
+    public boolean shouldCloseOnEsc() {
         return false;
     }   // この画面はESCをはじく
 
@@ -56,8 +56,8 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().rangeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.range")).func_240702_b_(": ");
-                return s.func_230529_a_(new TranslationTextComponent("" + HCSettings.getInstance().rangeFindSpawner));
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.range")).appendString(": ");
+                return s.append(new TranslationTextComponent("" + HCSettings.getInstance().rangeFindSpawner));
             });
 
     // 座標の表示時間
@@ -66,7 +66,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().timeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.time")).func_240702_b_(": ");
-                return s.func_230529_a_(new TranslationTextComponent(HCSettings.getInstance().timeFindSpawner + I18n.format("hcutilsmod.settings.findspawner.seconds")));
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.time")).appendString(": ");
+                return s.append(new TranslationTextComponent(HCSettings.getInstance().timeFindSpawner + I18n.format("hcutilsmod.settings.findspawner.seconds")));
             });
 }
