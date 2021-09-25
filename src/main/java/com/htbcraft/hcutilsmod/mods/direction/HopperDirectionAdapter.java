@@ -1,8 +1,8 @@
 package com.htbcraft.hcutilsmod.mods.direction;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class HopperDirectionAdapter implements IBlockDirection {
     private BlockState blockState;
@@ -13,22 +13,22 @@ public class HopperDirectionAdapter implements IBlockDirection {
 
     @Override
     public BlockState change() {
-        Direction direction = blockState.get(BlockStateProperties.FACING_EXCEPT_UP);
+        Direction direction = blockState.getValue(BlockStateProperties.FACING_HOPPER);
 
         if (Direction.NORTH.equals(direction)) {
-            blockState = blockState.with(BlockStateProperties.FACING_EXCEPT_UP, Direction.EAST);
+            blockState = blockState.setValue(BlockStateProperties.FACING_HOPPER, Direction.EAST);
         }
         else if (Direction.EAST.equals(direction)) {
-            blockState = blockState.with(BlockStateProperties.FACING_EXCEPT_UP, Direction.SOUTH);
+            blockState = blockState.setValue(BlockStateProperties.FACING_HOPPER, Direction.SOUTH);
         }
         else if (Direction.SOUTH.equals(direction)) {
-            blockState = blockState.with(BlockStateProperties.FACING_EXCEPT_UP, Direction.WEST);
+            blockState = blockState.setValue(BlockStateProperties.FACING_HOPPER, Direction.WEST);
         }
         else if (Direction.WEST.equals((direction))) {
-            blockState = blockState.with(BlockStateProperties.FACING_EXCEPT_UP, Direction.DOWN);
+            blockState = blockState.setValue(BlockStateProperties.FACING_HOPPER, Direction.DOWN);
         }
         else {
-            blockState = blockState.with(BlockStateProperties.FACING_EXCEPT_UP, Direction.NORTH);
+            blockState = blockState.setValue(BlockStateProperties.FACING_HOPPER, Direction.NORTH);
         }
 
         return blockState;

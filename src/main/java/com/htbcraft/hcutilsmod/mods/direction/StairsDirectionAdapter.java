@@ -1,10 +1,10 @@
 package com.htbcraft.hcutilsmod.mods.direction;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
 
 // 階段
 public class StairsDirectionAdapter implements IBlockDirection {
@@ -16,26 +16,26 @@ public class StairsDirectionAdapter implements IBlockDirection {
 
     @Override
     public BlockState change() {
-        Half half = blockState.get(BlockStateProperties.HALF);
-        Direction direction = blockState.get(HorizontalBlock.HORIZONTAL_FACING);
+        Half half = blockState.getValue(BlockStateProperties.HALF);
+        Direction direction = blockState.getValue(HorizontalDirectionalBlock.FACING);
 
         if (Direction.NORTH.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.EAST);
+            blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, Direction.EAST);
         }
         else if (Direction.EAST.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.SOUTH);
+            blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH);
         }
         else if (Direction.SOUTH.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.WEST);
+            blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, Direction.WEST);
         }
         else {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.NORTH);
+            blockState = blockState.setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH);
 
             if (Half.BOTTOM.equals(half)) {
-                blockState = blockState.with(BlockStateProperties.HALF, Half.TOP);
+                blockState = blockState.setValue(BlockStateProperties.HALF, Half.TOP);
             }
             else {
-                blockState = blockState.with(BlockStateProperties.HALF, Half.BOTTOM);
+                blockState = blockState.setValue(BlockStateProperties.HALF, Half.BOTTOM);
             }
         }
 

@@ -1,5 +1,26 @@
 {
     "hcutilsmod.common.key_category" : "サバイバルで便利なMOD集",
+    "hcutilsmod.settings.key_description" : "- 設定画面を開く -",
     "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
-    "hcutilsmod.coords.key_description" : "座標の表示"
+    "hcutilsmod.inventory.key_description" : "インベントリの整理",
+
+    "hcutilsmod.findspawner.text" : "スポナー発見！",
+
+    "hcutilsmod.settings.title" : "サバイバルで便利なMOD集 設定画面",
+    "hcutilsmod.settings.return" : "ゲームに戻る",
+    "hcutilsmod.settings.cords.enable" : "プレイヤー座標 ： 表示",
+    "hcutilsmod.settings.cords.disable" : "プレイヤー座標 ： 非表示",
+
+    "hcutilsmod.settings.inventory.sorttype.name" : "インベントリのソート ： 名前順",
+
+    "hcutilsmod.settings.findspawner.title" : "スポナーの検索設定",
+    "hcutilsmod.settings.findspawner.enable" : "スポナーの検索 ： オン",
+    "hcutilsmod.settings.findspawner.disable" : "スポナーの検索 ： オフ",
+    "hcutilsmod.settings.findspawner.range" : "検索の範囲",
+    "hcutilsmod.settings.findspawner.time" : "座標の表示時間",
+    "hcutilsmod.settings.findspawner.seconds" : "秒",
+    "hcutilsmod.settings.findspawner.return" : "戻る",
+
+    "hcutilsmod.inventory.button" : "整理 [%s]",
+    "hcutilsmod.direction.icon" : "右クリック"
 }

@@ -1,7 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.direction;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Rotation;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class Rotation4DirectionAdapter implements IBlockDirection {
     private BlockState blockState;

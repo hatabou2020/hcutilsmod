@@ -3,20 +3,23 @@ package com.htbcraft.hcutilsmod.mods.direction;
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.piston.PistonBaseBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,7 +81,7 @@ public class BlockDirectionModHandler {
         if (directMode) {
             // このイベントはクライアント・サーバー、メインハンド・オフハンドの組み合わせで受信する
             // サーバーでメインハンドだけを処理する
-            if (event.getSide().isServer() && event.getHand().equals(Hand.MAIN_HAND)) {
+            if (event.getSide().isServer() && event.getHand().equals(InteractionHand.MAIN_HAND)) {
                 // ブロックの方向を変える
                 boolean ret = change(event.getWorld(), event.getPos());
                 LOGGER.info("change: " + ret);
@@ -89,17 +92,16 @@ public class BlockDirectionModHandler {
         }
     }
 
-    private boolean change(World world, BlockPos pos) {
+    private boolean change(Level world, BlockPos pos) {
         boolean ret = false;
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
         LOGGER.info(block);
 
-        if (block instanceof StairsBlock) {                 // 階段
+        if (block instanceof StairBlock) {                 // 階段
             blockState = new StairsDirectionAdapter(blockState).change();
         }
-        else if ((block instanceof LogBlock) ||             // 原木
-                (block instanceof HayBlock)) {              // 干草の俵
+        else if (block instanceof RotatedPillarBlock) {     // 原木・干草の俵
             blockState = new LogDirectionAdapter(blockState).change();
         }
         else if (block instanceof SlabBlock) {              // ハーフブロック
@@ -108,7 +110,7 @@ public class BlockDirectionModHandler {
         else if (block instanceof HopperBlock) {            // ホッパー
             blockState = new HopperDirectionAdapter(blockState).change();
         }
-        else if (block instanceof PistonBlock) {            // ピストン
+        else if (block instanceof PistonBaseBlock) {            // ピストン
             blockState = new PistonDirectionAdapter(blockState).change();
         }
         else if (block instanceof ChestBlock) {             // チェスト・トラップチェスト
@@ -155,30 +157,35 @@ public class BlockDirectionModHandler {
         }
 
         if (blockState != null) {
-            ret = world.setBlockState(pos, blockState, STATE_INFO_FLAGS);
+            ret = world.setBlock(pos, blockState, STATE_INFO_FLAGS);
         }
 
         return ret;
     }
 
     @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
+    public void onRenderGameOverlayPreLayer(RenderGameOverlayEvent.PreLayer event) {
         if (directMode) {
             // 十字カーソルを指アイコンに切り替え
-            if (event.getType().equals(RenderGameOverlayEvent.ElementType.CROSSHAIRS)) {
-                int width = event.getWindow().getScaledWidth();
-                int height = event.getWindow().getScaledHeight();
+            if (event.getOverlay().equals(ForgeIngameGui.CROSSHAIR_ELEMENT)) {
+                int width = event.getWindow().getGuiScaledWidth();
+                int height = event.getWindow().getGuiScaledHeight();
+                int x = (width - DIRECT_ICON_SIZE) / 2;
+                int y = (height - DIRECT_ICON_SIZE) / 2;
+
+                Minecraft mc = Minecraft.getInstance();
 
                 if (mouseClick) {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_DOWN_ICON);
+                    RenderSystem.setShaderTexture(0, DIRECT_DOWN_ICON);
                 }
                 else {
-                    Minecraft.getInstance().getTextureManager().bindTexture(DIRECT_UP_ICON);
+                    RenderSystem.setShaderTexture(0, DIRECT_UP_ICON);
                 }
 
                 RenderSystem.enableBlend();
-                AbstractGui.blit((width - DIRECT_ICON_SIZE) / 2,
-                        (height - DIRECT_ICON_SIZE) / 2 + 12,
+                GuiComponent.blit(event.getMatrixStack(),
+                        x,
+                        y + 12,
                         0,
                         0,
                         0,
@@ -187,6 +194,9 @@ public class BlockDirectionModHandler {
                         DIRECT_ICON_SIZE,
                         DIRECT_ICON_SIZE);
                 RenderSystem.disableBlend();
+
+                // 右クリック指示テキスト
+//                mc.fontRenderer.func_238421_b_(event.getMatrixStack(), I18n.format("hcutilsmod.direction.icon"), (float)x + DIRECT_ICON_SIZE, (float)y + DIRECT_ICON_SIZE, 14737632);
 
                 event.setCanceled(true);
             }

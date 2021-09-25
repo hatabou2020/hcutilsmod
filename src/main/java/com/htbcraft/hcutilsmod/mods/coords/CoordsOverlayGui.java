@@ -1,12 +1,13 @@
 package com.htbcraft.hcutilsmod.mods.coords;
 
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.core.BlockPos;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CoordsOverlayGui extends AbstractGui {
+public class CoordsOverlayGui extends GuiComponent {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private BlockPos blockPos = null;
@@ -20,11 +21,11 @@ public class CoordsOverlayGui extends AbstractGui {
         }
     }
 
-    public void render(FontRenderer fontRenderer) {
+    public void render(PoseStack matrixStack, Font font) {
         int j = 9;
-        int k = fontRenderer.getStringWidth(textCoords);
+        int k = font.width(textCoords);
         int i1 = 2;
-        fill(1, i1 - 1, 2 + k + 1, i1 + j - 1, -1873784752);
-        fontRenderer.drawStringWithShadow(textCoords, 2.0F, (float)i1, 14737632);
+        fill(matrixStack, 1, i1 - 1, 2 + k + 1, i1 + j - 1, -1873784752);
+        font.drawShadow(matrixStack, textCoords, 2.0F, (float)i1, 14737632);
     }
 }
