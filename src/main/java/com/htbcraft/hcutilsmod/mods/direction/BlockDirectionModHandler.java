@@ -173,8 +173,6 @@ public class BlockDirectionModHandler {
                 int x = (width - DIRECT_ICON_SIZE) / 2;
                 int y = (height - DIRECT_ICON_SIZE) / 2;
 
-                Minecraft mc = Minecraft.getInstance();
-
                 if (mouseClick) {
                     RenderSystem.setShaderTexture(0, DIRECT_DOWN_ICON);
                 }

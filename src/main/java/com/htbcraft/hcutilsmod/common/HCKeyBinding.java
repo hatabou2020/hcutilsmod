@@ -13,7 +13,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class HCKeyBinding extends KeyMapping {
     private static final String KEY_CATEGORY = "hcutilsmod.common.key_category";
 
-    private static final Map<Integer, KeyModifier> MODIFIER_MAP = new HashMap<Integer, KeyModifier>() {
+    private static final Map<Integer, KeyModifier> MODIFIER_MAP = new HashMap<>() {
         {
             put(0, KeyModifier.NONE);
             put(GLFW_MOD_SHIFT, KeyModifier.SHIFT);
@@ -22,7 +22,7 @@ public class HCKeyBinding extends KeyMapping {
         }
     };
 
-    private static final Map<Integer, String> MODIFIER_NAME = new HashMap<Integer, String>() {
+    private static final Map<Integer, String> MODIFIER_NAME = new HashMap<>() {
         {
             put(0, "");
             put(GLFW_MOD_SHIFT, "Shift");
@@ -31,7 +31,7 @@ public class HCKeyBinding extends KeyMapping {
         }
     };
 
-    private int action;
+    private final int action;
 
     public HCKeyBinding(String description, int key, int modifiers, int action) {
         super(description, KeyConflictContext.UNIVERSAL, MODIFIER_MAP.get(modifiers), InputConstants.Type.KEYSYM.getOrCreate(key), KEY_CATEGORY);

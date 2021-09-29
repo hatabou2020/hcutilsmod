@@ -1,6 +1,8 @@
 package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.ProgressOption;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,11 +23,13 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             var1.setMessage(getEnableFindSpawnerModText());
         }));
 
+        Options options = Minecraft.getInstance().options;
+
         // 検索の範囲
-        this.addRenderableWidget(RENGE.createButton(minecraft.options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+        this.addRenderableWidget(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // 座標の表示時間
-        this.addRenderableWidget(TIME.createButton(minecraft.options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
+        this.addRenderableWidget(TIME.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,

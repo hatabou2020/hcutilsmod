@@ -18,7 +18,7 @@ public class FindSpawnerToast implements Toast {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final ResourceLocation SPAWNER_ICON = new ResourceLocation("textures/block/spawner.png");
-    private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<BlockPos>();
+    private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 
     private final BlockPos blockPos;
     private final Boolean visibility;

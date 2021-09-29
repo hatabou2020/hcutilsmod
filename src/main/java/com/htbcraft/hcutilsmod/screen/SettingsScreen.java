@@ -17,17 +17,14 @@ public class SettingsScreen extends Screen {
     private static final int WINDOW_WIDTH = 240;
     private static final int WINDOW_HEIGHT = 180;
 
-    private Screen parent;
+    private final Screen parent;
     private int win_x, win_y;
-    private int win_w, win_h;
 
     public SettingsScreen(Screen parent, Component titleIn) {
         super(titleIn);
         this.parent = parent;
         win_x = 0;
         win_y = 0;
-        win_w = WINDOW_WIDTH;
-        win_h = WINDOW_HEIGHT;
     }
 
     protected Screen getParent() {
@@ -43,11 +40,11 @@ public class SettingsScreen extends Screen {
     }
 
     public int getWidth() {
-        return win_w;
+        return WINDOW_WIDTH;
     }
 
     public int getHeight() {
-        return win_h;
+        return WINDOW_HEIGHT;
     }
 
     protected void init() {

@@ -4,8 +4,6 @@ import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.TranslatableComponent;
 
-import static com.htbcraft.hcutilsmod.common.HCSettings.SortType.NAME;
-
 public class MainSettingsScreen extends SettingsScreen {
     public MainSettingsScreen() {
         super(null, new TranslatableComponent("hcutilsmod.settings.title"));
@@ -54,8 +52,8 @@ public class MainSettingsScreen extends SettingsScreen {
     }
 
     private TranslatableComponent getInventorySortTypeText() {
-        if (HCSettings.getInstance().sortType == NAME) {
-            return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.name");
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.category");
         }
         else {
             return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.name");

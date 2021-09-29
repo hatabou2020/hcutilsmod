@@ -1,6 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.inventory;
 
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
+import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -150,8 +151,14 @@ public class InventoryCustomModHandler {
         int inventorySize = inInventory.size();
         List<ItemStack> itemStacks = inInventory.subList(hotbarSize, inventorySize);
 
-        // 名前順でソート
-        itemStacks.sort(new InventoryNameSort());
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // カテゴリ順でソート
+            itemStacks.sort(new InventoryCategorySort());
+        }
+        else {
+            // 名前順でソート
+            itemStacks.sort(new InventoryNameSort());
+        }
     }
 
     private void sortChestInventory(ChestMenu container) {
@@ -160,8 +167,14 @@ public class InventoryCustomModHandler {
         int size = inventory.getContainerSize();
         List<ItemStack> itemStacks = container.getItems().subList(0, size);
 
-        // 名前順でソート
-        itemStacks.sort(new InventoryNameSort());
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // カテゴリ順でソート
+            itemStacks.sort(new InventoryCategorySort());
+        }
+        else {
+            // 名前順でソート
+            itemStacks.sort(new InventoryNameSort());
+        }
 
         // ソートした結果をスロットに戻す
         for (int i = 0; i < size; i++) {

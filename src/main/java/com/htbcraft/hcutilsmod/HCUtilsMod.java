@@ -28,7 +28,7 @@ public class HCUtilsMod {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "hcutilsmod";
 
-    private HCSettings settings;
+    private final HCSettings settings;
     private MainSettingsScreen mainSettingsScreen;
 
     // デフォルトキー：[H]

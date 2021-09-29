@@ -18,11 +18,11 @@ public class HCSettings {
 
     private static HCSettings instance;
 
-    private Minecraft mc;
-    private File optionsFile;
+    private final File optionsFile;
 
     public enum SortType {
         NAME,       // 名前順
+        CATEGORY,   // カテゴリ順
     }
 
     public Boolean enableCordsMod = false;          // プレイヤー座標の表示
@@ -33,8 +33,7 @@ public class HCSettings {
 
     public HCSettings(Minecraft mcIn) {
         instance = this;
-        this.mc = mcIn;
-        this.optionsFile = new File(this.mc.gameDirectory, "hcutilsmod_options.txt");
+        this.optionsFile = new File(mcIn.gameDirectory, "hcutilsmod_options.txt");
 
         this.loadOptions();
     }
