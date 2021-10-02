@@ -23,6 +23,7 @@ public class HCSettings {
 
     public enum SortType {
         NAME,       // 名前順
+        CATEGORY,   // カテゴリ順
     }
 
     public Boolean enableCordsMod = false;          // プレイヤー座標の表示

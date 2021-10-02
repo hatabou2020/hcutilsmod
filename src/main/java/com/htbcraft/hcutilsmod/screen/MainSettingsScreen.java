@@ -7,8 +7,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import static com.htbcraft.hcutilsmod.common.HCSettings.SortType.NAME;
-
 public class MainSettingsScreen extends SettingsScreen {
     public MainSettingsScreen() {
         super(null, new TranslationTextComponent("hcutilsmod.settings.title"));
@@ -57,8 +55,8 @@ public class MainSettingsScreen extends SettingsScreen {
     }
 
     private ITextComponent getInventorySortTypeText() {
-        if (HCSettings.getInstance().sortType == NAME) {
-            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.inventory.sorttype.category"));
         }
         else {
             return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.inventory.sorttype.name"));
