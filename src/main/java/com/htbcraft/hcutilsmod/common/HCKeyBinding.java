@@ -34,12 +34,12 @@ public class HCKeyBinding extends KeyBinding {
     private int action;
 
     public HCKeyBinding(String description, int key, int modifiers, int action) {
-        super(description, KeyConflictContext.UNIVERSAL, MODIFIER_MAP.get(modifiers), InputMappings.Type.KEYSYM.getOrMakeInput(key), KEY_CATEGORY);
+        super(description, KeyConflictContext.UNIVERSAL, MODIFIER_MAP.get(modifiers), InputMappings.Type.KEYSYM.getOrCreate(key), KEY_CATEGORY);
         this.action = action;
     }
 
     public int getKeyCode() {
-        return this.getKey().getKeyCode();
+        return this.getKey().getValue();
     }
 
     public int getModifiers() {
@@ -61,7 +61,7 @@ public class HCKeyBinding extends KeyBinding {
     }
 
     public boolean test(int key, int modifiers, int action) {
-        return (this.getKey().getKeyCode() == key) &&
+        return (this.getKey().getValue() == key) &&
                 (this.getKeyModifier().equals(MODIFIER_MAP.get(modifiers))) &&
                 (this.action == action);
     }

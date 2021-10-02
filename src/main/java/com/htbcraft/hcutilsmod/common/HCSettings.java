@@ -23,6 +23,7 @@ public class HCSettings {
 
     public enum SortType {
         NAME,       // 名前順
+        CATEGORY,   // カテゴリ順
     }
 
     public Boolean enableCordsMod = false;          // プレイヤー座標の表示
@@ -34,7 +35,7 @@ public class HCSettings {
     public HCSettings(Minecraft mcIn) {
         instance = this;
         this.mc = mcIn;
-        this.optionsFile = new File(this.mc.gameDir, "hcutilsmod_options.txt");
+        this.optionsFile = new File(this.mc.gameDirectory, "hcutilsmod_options.txt");
 
         this.loadOptions();
     }
@@ -64,7 +65,7 @@ public class HCSettings {
                 });
             }
 
-            for(String s : compoundnbt.keySet()) {
+            for(String s : compoundnbt.getAllKeys()) {
                 String s1 = compoundnbt.getString(s);
 
                 try {

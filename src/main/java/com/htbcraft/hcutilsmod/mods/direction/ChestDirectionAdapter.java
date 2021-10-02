@@ -14,7 +14,7 @@ public class ChestDirectionAdapter implements IBlockDirection {
     @Override
     public BlockState change() {
         // シングルチェストだけ
-        if (ChestType.SINGLE.equals(blockState.get(BlockStateProperties.CHEST_TYPE))) {
+        if (ChestType.SINGLE.equals(blockState.getValue(BlockStateProperties.CHEST_TYPE))) {
             blockState = new HorizontalDirectionAdapter(blockState).change();
         }
 

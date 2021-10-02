@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -155,7 +154,7 @@ public class BlockDirectionModHandler {
         }
 
         if (blockState != null) {
-            ret = world.setBlockState(pos, blockState, STATE_INFO_FLAGS);
+            ret = world.setBlock(pos, blockState, STATE_INFO_FLAGS);
         }
 
         return ret;
@@ -166,18 +165,18 @@ public class BlockDirectionModHandler {
         if (directMode) {
             // 十字カーソルを指アイコンに切り替え
             if (event.getType().equals(RenderGameOverlayEvent.ElementType.CROSSHAIRS)) {
-                int width = event.getWindow().getScaledWidth();
-                int height = event.getWindow().getScaledHeight();
+                int width = event.getWindow().getGuiScaledWidth();
+                int height = event.getWindow().getGuiScaledHeight();
                 int x = (width - DIRECT_ICON_SIZE) / 2;
                 int y = (height - DIRECT_ICON_SIZE) / 2;
 
                 Minecraft mc = Minecraft.getInstance();
 
                 if (mouseClick) {
-                    mc.getTextureManager().bindTexture(DIRECT_DOWN_ICON);
+                    mc.getTextureManager().bind(DIRECT_DOWN_ICON);
                 }
                 else {
-                    mc.getTextureManager().bindTexture(DIRECT_UP_ICON);
+                    mc.getTextureManager().bind(DIRECT_UP_ICON);
                 }
 
                 RenderSystem.enableBlend();

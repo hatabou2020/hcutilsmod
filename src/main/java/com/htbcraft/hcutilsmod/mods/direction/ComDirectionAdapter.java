@@ -13,25 +13,25 @@ public class ComDirectionAdapter implements IBlockDirection {
 
     @Override
     public BlockState change() {
-        Direction direction = blockState.get(DirectionalBlock.FACING);
+        Direction direction = blockState.getValue(DirectionalBlock.FACING);
 
         if (Direction.NORTH.equals(direction)) {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.EAST);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.EAST);
         }
         else if (Direction.EAST.equals(direction)) {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.SOUTH);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.SOUTH);
         }
         else if (Direction.SOUTH.equals(direction)) {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.WEST);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.WEST);
         }
         else if (Direction.WEST.equals((direction))) {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.UP);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.UP);
         }
         else if (Direction.UP.equals((direction))) {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.DOWN);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.DOWN);
         }
         else {
-            blockState = blockState.with(DirectionalBlock.FACING, Direction.NORTH);
+            blockState = blockState.setValue(DirectionalBlock.FACING, Direction.NORTH);
         }
 
         return blockState;

@@ -1,6 +1,7 @@
 package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -25,24 +26,26 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             var1.setMessage(getEnableFindSpawnerModText());
         }));
 
+        GameSettings options = Minecraft.getInstance().options;
+
         // 検索の範囲
-        this.addButton(RENGE.createWidget(minecraft.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+        this.addButton(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // 座標の表示時間
-        this.addButton(TIME.createWidget(minecraft.gameSettings, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
+        this.addButton(TIME.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.return")),
-                (var1) -> this.getMinecraft().displayGuiScreen(this.getParent())));
+                ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.return")),
+                (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
     private ITextComponent getEnableFindSpawnerModText() {
         if (HCSettings.getInstance().enableFindSpawnerMod) {
-            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.enable"));
+            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.enable"));
         }
         else {
-            return ITextComponent.getTextComponentOrEmpty(I18n.format("hcutilsmod.settings.findspawner.disable"));
+            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.disable"));
         }
     }
 
@@ -56,7 +59,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().rangeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.range")).appendString(": ");
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.range")).append(": ");
                 return s.append(new TranslationTextComponent("" + HCSettings.getInstance().rangeFindSpawner));
             });
 
@@ -66,7 +69,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().timeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
             (gameSettings, translationKey) -> {
-                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.time")).appendString(": ");
-                return s.append(new TranslationTextComponent(HCSettings.getInstance().timeFindSpawner + I18n.format("hcutilsmod.settings.findspawner.seconds")));
+                IFormattableTextComponent s = (new TranslationTextComponent("hcutilsmod.settings.findspawner.time")).append(": ");
+                return s.append(new TranslationTextComponent(HCSettings.getInstance().timeFindSpawner + I18n.get("hcutilsmod.settings.findspawner.seconds")));
             });
 }

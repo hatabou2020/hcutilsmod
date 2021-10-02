@@ -23,9 +23,9 @@ public class CoordsOverlayGui extends AbstractGui {
 
     public void render(MatrixStack matrixStack, FontRenderer fontRenderer) {
         int j = 9;
-        int k = fontRenderer.getStringWidth(textCoords);
+        int k = fontRenderer.width(textCoords);
         int i1 = 2;
         fill(matrixStack, 1, i1 - 1, 2 + k + 1, i1 + j - 1, -1873784752);
-        fontRenderer.drawStringWithShadow(matrixStack, textCoords, 2.0F, (float)i1, 14737632);
+        fontRenderer.drawShadow(matrixStack, textCoords, 2.0F, (float)i1, 14737632);
     }
 }

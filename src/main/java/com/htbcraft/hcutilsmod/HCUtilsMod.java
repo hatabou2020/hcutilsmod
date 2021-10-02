@@ -75,14 +75,14 @@ public class HCUtilsMod {
 
         // 登録キー 押下
         if (BIND_KEY.test(key, modifiers, action)) {
-            if (Minecraft.getInstance().currentScreen == null) {
+            if (Minecraft.getInstance().screen == null) {
                 if (mainSettingsScreen == null) {
-                    Minecraft.getInstance().displayGuiScreen(new MainSettingsScreen());
+                    Minecraft.getInstance().setScreen(new MainSettingsScreen());
                 }
             }
             else {
                 if (mainSettingsScreen != null) {
-                    Minecraft.getInstance().displayGuiScreen(null);
+                    Minecraft.getInstance().setScreen(null);
                 }
             }
         }

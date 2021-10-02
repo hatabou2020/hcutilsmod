@@ -57,10 +57,6 @@ public class SettingsScreen extends Screen {
         win_y = (height - WINDOW_HEIGHT) / 2;
     }
 
-    public void closeScreen() {
-        super.closeScreen();
-    }
-
     public void onClose() {
         HCSettings.getInstance().saveOptions();
     }
@@ -82,26 +78,26 @@ public class SettingsScreen extends Screen {
         }
 
         Minecraft mc = Minecraft.getInstance();
-        MainWindow window = mc.getMainWindow();
+        MainWindow window = mc.getWindow();
 
-        if (window.getScaledWidth() < width) {
-            width = window.getScaledWidth();
+        if (window.getGuiScaledWidth() < width) {
+            width = window.getGuiScaledWidth();
         }
 
-        if (window.getScaledHeight() < height) {
-            height = window.getScaledHeight();
+        if (window.getGuiScaledHeight() < height) {
+            height = window.getGuiScaledHeight();
         }
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         // ウィンドウ背景の描画
-        mc.getTextureManager().bindTexture(background);
+        mc.getTextureManager().bind(background);
         RenderSystem.enableBlend();
         AbstractGui.blit(matrixStack, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
         RenderSystem.disableBlend();
 
         // ウィンドウ枠の描画
-        mc.getTextureManager().bindTexture(WINDOW_TEXTURE);
+        mc.getTextureManager().bind(WINDOW_TEXTURE);
         RenderSystem.enableBlend();
 
         // ウィンドウ枠の4隅
@@ -177,6 +173,6 @@ public class SettingsScreen extends Screen {
         RenderSystem.disableBlend();
 
         // タイトルの描画
-        mc.fontRenderer.drawString(matrixStack, title.getString(), (float)x + 8, (float)y + 6, 4210752);
+        mc.font.draw(matrixStack, title.getString(), (float)x + 8, (float)y + 6, 4210752);
     }
 }

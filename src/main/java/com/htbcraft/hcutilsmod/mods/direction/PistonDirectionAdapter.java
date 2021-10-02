@@ -14,26 +14,26 @@ public class PistonDirectionAdapter implements IBlockDirection {
     @Override
     public BlockState change() {
         // 伸びた状態のピストンは回転するとバグる
-        if (!blockState.get(BlockStateProperties.EXTENDED)) {
-            Direction direction = blockState.get(BlockStateProperties.FACING);
+        if (!blockState.getValue(BlockStateProperties.EXTENDED)) {
+            Direction direction = blockState.getValue(BlockStateProperties.FACING);
 
             if (Direction.NORTH.equals(direction)) {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.EAST);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.EAST);
             }
             else if (Direction.EAST.equals(direction)) {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.SOUTH);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.SOUTH);
             }
             else if (Direction.SOUTH.equals(direction)) {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.WEST);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.WEST);
             }
             else if (Direction.WEST.equals((direction))) {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.UP);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.UP);
             }
             else if (Direction.UP.equals((direction))) {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.DOWN);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.DOWN);
             }
             else {
-                blockState = blockState.with(BlockStateProperties.FACING, Direction.NORTH);
+                blockState = blockState.setValue(BlockStateProperties.FACING, Direction.NORTH);
             }
         }
 

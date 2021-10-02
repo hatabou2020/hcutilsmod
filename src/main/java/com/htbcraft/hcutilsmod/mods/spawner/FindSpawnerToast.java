@@ -31,7 +31,7 @@ public class FindSpawnerToast implements IToast {
     }
 
     @Override
-    public Visibility func_230444_a_(MatrixStack p_230444_1_, ToastGui p_230444_2_, long p_230444_3_) {
+    public Visibility render(MatrixStack p_230444_1_, ToastGui p_230444_2_, long p_230444_3_) {
         // すでに表示している座標の場合は即非表示
         if (!this.visibility) {
             LOGGER.info("Already displayed!! " + this.blockPos);
@@ -47,20 +47,20 @@ public class FindSpawnerToast implements IToast {
         }
 
         // トーストの枠
-        p_230444_2_.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
+        p_230444_2_.getMinecraft().getTextureManager().bind(TEXTURE);
         RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-        p_230444_2_.blit(p_230444_1_, 0, 0, 0, 0, this.func_230445_a_(), this.func_238540_d_());
+        p_230444_2_.blit(p_230444_1_, 0, 0, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
-        p_230444_2_.getMinecraft().getTextureManager().bindTexture(SPAWNER_ICON);
+        p_230444_2_.getMinecraft().getTextureManager().bind(SPAWNER_ICON);
         RenderSystem.enableBlend();
         AbstractGui.blit(p_230444_1_, 6, 6, 0, 0, 0, 20, 20, 20, 20);
         RenderSystem.enableBlend();
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        p_230444_2_.getMinecraft().fontRenderer.drawString(p_230444_1_, I18n.format("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
-        p_230444_2_.getMinecraft().fontRenderer.drawString(p_230444_1_, text, 36.0F, 18.0F, 14737632);
+        p_230444_2_.getMinecraft().font.draw(p_230444_1_, I18n.get("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
+        p_230444_2_.getMinecraft().font.draw(p_230444_1_, text, 36.0F, 18.0F, 14737632);
 
         return Visibility.SHOW;
     }

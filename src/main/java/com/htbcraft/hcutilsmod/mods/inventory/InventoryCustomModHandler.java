@@ -1,6 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.inventory;
 
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
+import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ChestScreen;
@@ -90,12 +91,12 @@ public class InventoryCustomModHandler {
 
         LOGGER.info(gui.getTitle().getString());
 
-        String textKeyName = I18n.format(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
-        int width = Minecraft.getInstance().fontRenderer.getStringWidth(textKeyName);
+        String textKeyName = I18n.get(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
+        int width = Minecraft.getInstance().font.width(textKeyName);
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ChestScreen)) {
             sortEnable = true;
-            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.getTextComponentOrEmpty(textKeyName), (var1) -> {
+            inventorySortButton = new Button(0, 0, width + 10, 20, ITextComponent.nullToEmpty(textKeyName), (var1) -> {
                 sortInventory = true;
                 inventorySortButton.active = false;
             });
@@ -133,11 +134,11 @@ public class InventoryCustomModHandler {
                     sortInventory = false;
 
                     // インベントリのソート
-                    sortPlayerInventory(event.player.inventory.mainInventory);
+                    sortPlayerInventory(event.player.inventory.items);
 
-                    if (event.player.openContainer instanceof ChestContainer) {
+                    if (event.player.containerMenu instanceof ChestContainer) {
                         // チェストのソート
-                        sortChestInventory((ChestContainer) event.player.openContainer);
+                        sortChestInventory((ChestContainer) event.player.containerMenu);
                     }
                 }
             }
@@ -146,26 +147,38 @@ public class InventoryCustomModHandler {
 
     private void sortPlayerInventory(NonNullList<ItemStack> inInventory) {
         // ホットバーを除いたインベントリ
-        int hotbarSize = PlayerInventory.getHotbarSize();
+        int hotbarSize = PlayerInventory.getSelectionSize();
         int inventorySize = inInventory.size();
         List<ItemStack> itemStacks = inInventory.subList(hotbarSize, inventorySize);
 
-        // 名前順でソート
-        itemStacks.sort(new InventoryNameSort());
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // カテゴリ順でソート
+            itemStacks.sort(new InventoryCategorySort());
+        }
+        else {
+            // 名前順でソート
+            itemStacks.sort(new InventoryNameSort());
+        }
     }
 
     private void sortChestInventory(ChestContainer container) {
         // チェスト以外を除いたインベントリ
-        IInventory inventory = container.getLowerChestInventory();
-        int size = inventory.getSizeInventory();
-        List<ItemStack> itemStacks = container.getInventory().subList(0, size);
+        IInventory inventory = container.getContainer();
+        int size = inventory.getContainerSize();
+        List<ItemStack> itemStacks = container.getItems().subList(0, size);
 
-        // 名前順でソート
-        itemStacks.sort(new InventoryNameSort());
+        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // カテゴリ順でソート
+            itemStacks.sort(new InventoryCategorySort());
+        }
+        else {
+            // 名前順でソート
+            itemStacks.sort(new InventoryNameSort());
+        }
 
         // ソートした結果をスロットに戻す
         for (int i = 0; i < size; i++) {
-            inventory.setInventorySlotContents(i, itemStacks.get(i));
+            inventory.setItem(i, itemStacks.get(i));
         }
     }
 
@@ -177,21 +190,21 @@ public class InventoryCustomModHandler {
         ItemStack original = event.getOriginal();
         LOGGER.info("PlayerDestroyItemEvent: " + original.toString());
 
-        for (int i = 0; i < inventory.mainInventory.size(); i++) {
-            ItemStack itemStack = inventory.mainInventory.get(i);
+        for (int i = 0; i < inventory.items.size(); i++) {
+            ItemStack itemStack = inventory.items.get(i);
             if (itemStack.isEmpty()) {
                 continue;   // AIRははじく
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (original.isItemEqual(itemStack)) {
+            if (original.sameItem(itemStack)) {
                 if (Hand.MAIN_HAND.equals(hand)) {
-                    inventory.mainInventory.set(inventory.currentItem, itemStack);
+                    inventory.items.set(inventory.selected, itemStack);
                 }
                 else {
-                    inventory.offHandInventory.set(0, itemStack);
+                    inventory.offhand.set(0, itemStack);
                 }
-                inventory.mainInventory.set(i, ItemStack.EMPTY);
+                inventory.items.set(i, ItemStack.EMPTY);
                 break;
             }
         }

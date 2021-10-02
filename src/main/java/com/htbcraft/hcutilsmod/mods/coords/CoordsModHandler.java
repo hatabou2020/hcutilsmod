@@ -23,17 +23,17 @@ public class CoordsModHandler {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) {
-            if ((!Minecraft.getInstance().gameSettings.showDebugInfo) && (HCSettings.getInstance().enableCordsMod)) {
+            if ((!Minecraft.getInstance().options.renderDebug) && (HCSettings.getInstance().enableCordsMod)) {
                 // 座標の更新
-                coordsOverlayGui.setBlockPos(event.player.getPosition());
+                coordsOverlayGui.setBlockPos(event.player.blockPosition());
             }
         }
     }
 
     @SubscribeEvent
     public void onRenderGameOverlayText(RenderGameOverlayEvent.Text event) {
-        if ((!Minecraft.getInstance().gameSettings.showDebugInfo) && (HCSettings.getInstance().enableCordsMod)) {
-            coordsOverlayGui.render(event.getMatrixStack(), Minecraft.getInstance().fontRenderer);
+        if ((!Minecraft.getInstance().options.renderDebug) && (HCSettings.getInstance().enableCordsMod)) {
+            coordsOverlayGui.render(event.getMatrixStack(), Minecraft.getInstance().font);
         }
     }
 }

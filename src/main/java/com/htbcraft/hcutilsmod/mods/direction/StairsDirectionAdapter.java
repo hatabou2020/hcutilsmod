@@ -16,26 +16,26 @@ public class StairsDirectionAdapter implements IBlockDirection {
 
     @Override
     public BlockState change() {
-        Half half = blockState.get(BlockStateProperties.HALF);
-        Direction direction = blockState.get(HorizontalBlock.HORIZONTAL_FACING);
+        Half half = blockState.getValue(BlockStateProperties.HALF);
+        Direction direction = blockState.getValue(HorizontalBlock.FACING);
 
         if (Direction.NORTH.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.EAST);
+            blockState = blockState.setValue(HorizontalBlock.FACING, Direction.EAST);
         }
         else if (Direction.EAST.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.SOUTH);
+            blockState = blockState.setValue(HorizontalBlock.FACING, Direction.SOUTH);
         }
         else if (Direction.SOUTH.equals(direction)) {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.WEST);
+            blockState = blockState.setValue(HorizontalBlock.FACING, Direction.WEST);
         }
         else {
-            blockState = blockState.with(HorizontalBlock.HORIZONTAL_FACING, Direction.NORTH);
+            blockState = blockState.setValue(HorizontalBlock.FACING, Direction.NORTH);
 
             if (Half.BOTTOM.equals(half)) {
-                blockState = blockState.with(BlockStateProperties.HALF, Half.TOP);
+                blockState = blockState.setValue(BlockStateProperties.HALF, Half.TOP);
             }
             else {
-                blockState = blockState.with(BlockStateProperties.HALF, Half.BOTTOM);
+                blockState = blockState.setValue(BlockStateProperties.HALF, Half.BOTTOM);
             }
         }
 
