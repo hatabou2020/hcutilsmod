@@ -22,8 +22,8 @@ modId="hcutilsmod" #mandatory
 version="${file.jarVersion}" #mandatory
 # A display name for the mod
 displayName="サバイバルで便利なMOD集" #mandatory
-# A URL to query for updates for this mod. See the JSON update specification <here>
-# updateJSONURL="http://myurl.me/" #optional
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://www.curseforge.com/minecraft/mc-mods/hcutilsmod" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
@@ -44,8 +44,13 @@ description='''
 #05 スポナーを見つける
 
 --------
+2021/12/01
+Ver.1.51
+・forge-1.17.1-37.1.0-mdkでビルド
+・スタックできないアイテムの自動補充のバグを修正
+--------
 2021/10/02
-Ver1.5
+Ver.1.5β
 ・インベントリのソートにカテゴリ順を追加
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.

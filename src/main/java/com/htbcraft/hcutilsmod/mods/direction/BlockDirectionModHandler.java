@@ -98,7 +98,7 @@ public class BlockDirectionModHandler {
         Block block = blockState.getBlock();
         LOGGER.info(block);
 
-        if (block instanceof StairBlock) {                 // 階段
+        if (block instanceof StairBlock) {                  // 階段
             blockState = new StairsDirectionAdapter(blockState).change();
         }
         else if (block instanceof RotatedPillarBlock) {     // 原木・干草の俵
@@ -110,7 +110,7 @@ public class BlockDirectionModHandler {
         else if (block instanceof HopperBlock) {            // ホッパー
             blockState = new HopperDirectionAdapter(blockState).change();
         }
-        else if (block instanceof PistonBaseBlock) {            // ピストン
+        else if (block instanceof PistonBaseBlock) {        // ピストン
             blockState = new PistonDirectionAdapter(blockState).change();
         }
         else if (block instanceof ChestBlock) {             // チェスト・トラップチェスト
