@@ -14,13 +14,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
+import net.minecraftforge.client.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,7 +69,7 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onMouseReleased(GuiScreenEvent.MouseReleasedEvent event) {
+    public void onMouseReleased(ScreenEvent.MouseReleasedEvent event) {
         if (sortEnable) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
                 inventorySortButton.mouseClicked(event.getMouseX(), event.getMouseY(), 0);
@@ -78,10 +78,10 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onGuiOpen(GuiOpenEvent event) {
+    public void onGuiOpen(ScreenOpenEvent event) {
         sortEnable = false;
 
-        Screen gui = event.getGui();
+        Screen gui = event.getScreen();
         if (gui == null) {
             LOGGER.info("gui == null");
             inventorySortButton = null;
@@ -104,9 +104,9 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onDrawScreen(GuiScreenEvent.DrawScreenEvent event) {
+    public void onDrawScreen(ScreenEvent.DrawScreenEvent event) {
         if (sortEnable) {
-            Screen gui = event.getGui();
+            Screen gui = event.getScreen();
             if (gui == null) {
                 LOGGER.info("gui == null");
                 return;
@@ -117,7 +117,7 @@ public class InventoryCustomModHandler {
 
             inventorySortButton.x = gui.width - inventorySortButton.getWidth();
             inventorySortButton.y = 0;
-            inventorySortButton.render(event.getMatrixStack(), (int) mouseX, (int) mouseY, 0.0F);
+            inventorySortButton.render(event.getPoseStack(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {
                 inventorySortButton.active = true;

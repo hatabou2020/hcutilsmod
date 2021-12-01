@@ -9,14 +9,14 @@ import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,12 +57,12 @@ public class HCUtilsMod {
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
+    public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("HELLO from server starting");
     }
 
     @SubscribeEvent
-    public void onServerStopping(FMLServerStoppingEvent event) {
+    public void onServerStopping(ServerStoppingEvent event) {
         LOGGER.info("Bye-Bye from server stopping");
         settings.saveOptions();
     }
@@ -89,8 +89,8 @@ public class HCUtilsMod {
     }
 
     @SubscribeEvent
-    public void onGuiOpen(GuiOpenEvent event) {
-        Screen gui = event.getGui();
+    public void onGuiOpen(ScreenOpenEvent event) {
+        Screen gui = event.getScreen();
         if (gui == null) {
             LOGGER.info("gui == null");
             mainSettingsScreen = null;

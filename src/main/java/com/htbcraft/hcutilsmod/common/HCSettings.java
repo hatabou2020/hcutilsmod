@@ -93,7 +93,7 @@ public class HCSettings {
     }
 
     public void saveOptions() {
-        if (net.minecraftforge.fmlclient.ClientModLoader.isLoading())
+        if (net.minecraftforge.client.loading.ClientModLoader.isLoading())
             return; //Don't save settings before mods add keybindigns and the like to prevent them from being deleted.
         try (PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.optionsFile), StandardCharsets.UTF_8))) {
             printwriter.println("cordsmod:" + enableCordsMod);
