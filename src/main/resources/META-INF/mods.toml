@@ -50,7 +50,7 @@ Ver.1.51
 ・スタックできないアイテムの自動補充のバグを修正
 --------
 2021/10/02
-Ver.1.5β
+Ver.1.5
 ・インベントリのソートにカテゴリ順を追加
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
