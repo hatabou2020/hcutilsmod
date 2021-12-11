@@ -37,11 +37,11 @@ public class BlockDirectionModHandler {
     private boolean guiOpened = false;
     private boolean mouseClick = false;
 
-    // デフォルトキー：[SHIFT+R] 長押し
+    // デフォルトキー：[r] 長押し
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
             "hcutilsmod.direction.key_description",
             GLFW_KEY_R,
-            GLFW_MOD_SHIFT,
+            0,
             GLFW_REPEAT
     );
 
@@ -156,6 +156,12 @@ public class BlockDirectionModHandler {
         }
 
         if (blockState != null) {
+            // Flag 1 will cause a block update.
+            // Flag 2 will send the change to clients.
+            // Flag 4 will prevent the block from being re-rendered, if this is a client world.
+            // Flag 8 will force any re-renders to run on the main thread instead of the worker pool, if this is a client world and flag 4 is clear.
+            // Flag 16 will prevent observers from seeing this change.
+            // Flags can be OR-ed
             ret = world.setBlock(pos, blockState, STATE_INFO_FLAGS);
         }
 
