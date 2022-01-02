@@ -33,8 +33,13 @@ public class MainSettingsScreen extends SettingsScreen {
 
         // スポナーの検索設定
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-                        new TranslatableComponent("hcutilsmod.settings.findspawner.title").append("..."),
-                        (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this))));
+                new TranslatableComponent("hcutilsmod.settings.findspawner.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this))));
+
+        // 明るさ表示設定
+        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
+                new TranslatableComponent("hcutilsmod.settings.brightness.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this))));
 
         // ゲームに戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,

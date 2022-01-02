@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod;
 
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
+import com.htbcraft.hcutilsmod.mods.brightness.BrightnessModHandler;
 import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
 import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
 import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
@@ -54,6 +55,7 @@ public class HCUtilsMod {
         MinecraftForge.EVENT_BUS.register(new BlockDirectionModHandler());
         MinecraftForge.EVENT_BUS.register(new InventoryCustomModHandler());
         MinecraftForge.EVENT_BUS.register(new FindSpawnerModHandler());
+        MinecraftForge.EVENT_BUS.register(new BrightnessModHandler());
     }
 
     @SubscribeEvent

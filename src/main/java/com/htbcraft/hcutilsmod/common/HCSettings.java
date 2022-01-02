@@ -25,11 +25,15 @@ public class HCSettings {
         CATEGORY,   // カテゴリ順
     }
 
-    public Boolean enableCordsMod = false;          // プレイヤー座標の表示
-    public SortType sortType = SortType.NAME;       // インベントリのソート種類
-    public Boolean enableFindSpawnerMod = false;    // スポナー検索
-    public int rangeFindSpawner = 64;               // スポナー検索の範囲
-    public long timeFindSpawner = 30L;              // スポナー座標の表示時間
+    public Boolean enableCordsMod = false;                      // プレイヤー座標の表示
+    public SortType sortType = SortType.NAME;                   // インベントリのソート種類
+    public Boolean enableFindSpawnerMod = false;                // スポナー検索
+    public int rangeFindSpawner = 64;                           // スポナー検索の範囲
+    public long timeFindSpawner = 30L;                          // スポナー座標の表示時間
+    public int rangeBrightness = 8;                             // 明るさマーカー表示の範囲
+    public int thresholdBrightness = 0;                         // 明るさの閾値
+    public MinecraftColor colorBrightness = MinecraftColor.RED; // 明るさマーカーの色
+    public int alphaBrightness = 0x7F;                          // 明るさマーカーの透過度
 
     public HCSettings(Minecraft mcIn) {
         instance = this;
@@ -83,6 +87,18 @@ public class HCSettings {
                     if ("findspawnermod.time".equals(s)) {
                         timeFindSpawner = Long.getLong(s1);
                     }
+                    if ("brightnessmod.range".equals(s)) {
+                        rangeBrightness = Integer.parseInt(s1);
+                    }
+                    if ("brightnessmod.threshold".equals(s)) {
+                        thresholdBrightness = Integer.parseInt(s1);
+                    }
+                    if ("brightnessmod.color".equals(s)) {
+                        colorBrightness = MinecraftColor.values()[Integer.parseInt(s1)];
+                    }
+                    if ("brightnessmod.alpha".equals(s)) {
+                        alphaBrightness = Integer.parseInt(s1);
+                    }
                 } catch (Exception exception) {
                     LOGGER.warn("Skipping bad option: {}:{}", s, s1);
                 }
@@ -101,6 +117,10 @@ public class HCSettings {
             printwriter.println("findspawnermod:" + enableFindSpawnerMod);
             printwriter.println("findspawnermod.range:" + rangeFindSpawner);
             printwriter.println("findspawnermod.time:" + timeFindSpawner);
+            printwriter.println("brightnessmod.range:" + rangeBrightness);
+            printwriter.println("brightnessmod.threshold:" + thresholdBrightness);
+            printwriter.println("brightnessmod.color:" + colorBrightness.ordinal());
+            printwriter.println("brightnessmod.alpha:" + alphaBrightness);
         } catch (Exception exception) {
             LOGGER.error("Failed to save options", exception);
         }

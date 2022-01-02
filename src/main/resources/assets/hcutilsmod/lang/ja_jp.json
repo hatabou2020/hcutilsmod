@@ -3,6 +3,7 @@
     "hcutilsmod.settings.key_description" : "- 設定画面を開く -",
     "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
     "hcutilsmod.inventory.key_description" : "インベントリの整理",
+    "hcutilsmod.brightness.key_description" : "明るさマーカー表示",
 
     "hcutilsmod.findspawner.text" : "スポナー発見！",
 
@@ -21,6 +22,28 @@
     "hcutilsmod.settings.findspawner.time" : "座標の表示時間",
     "hcutilsmod.settings.findspawner.seconds" : "秒",
     "hcutilsmod.settings.findspawner.return" : "戻る",
+
+    "hcutilsmod.settings.brightness.title" : "明るさマーカー設定",
+    "hcutilsmod.settings.brightness.range" : "表示の範囲",
+    "hcutilsmod.settings.brightness.threshold" : "明るさの閾値",
+    "hcutilsmod.settings.brightness.color.white" : "マーカーの色 ： 白色",
+    "hcutilsmod.settings.brightness.color.black" : "マーカーの色 ： 黒色",
+    "hcutilsmod.settings.brightness.color.gray" : "マーカーの色 ： 灰色",
+    "hcutilsmod.settings.brightness.color.light_gray" : "マーカーの色 ： 薄灰色",
+    "hcutilsmod.settings.brightness.color.brown" : "マーカーの色 ： 茶色",
+    "hcutilsmod.settings.brightness.color.red" : "マーカーの色 ： 赤色",
+    "hcutilsmod.settings.brightness.color.orange" : "マーカーの色 ： 橙色",
+    "hcutilsmod.settings.brightness.color.yellow" : "マーカーの色 ： 黄色",
+    "hcutilsmod.settings.brightness.color.green" : "マーカーの色 ： 緑色",
+    "hcutilsmod.settings.brightness.color.lime" : "マーカーの色 ： 黄緑色",
+    "hcutilsmod.settings.brightness.color.blue" : "マーカーの色 ： 青色",
+    "hcutilsmod.settings.brightness.color.cyan" : "マーカーの色 ： 青緑色",
+    "hcutilsmod.settings.brightness.color.light_blue" : "マーカーの色 ： 空色",
+    "hcutilsmod.settings.brightness.color.purple" : "マーカーの色 ： 紫色",
+    "hcutilsmod.settings.brightness.color.magenta" : "マーカーの色 ： 赤紫色",
+    "hcutilsmod.settings.brightness.color.pink" : "マーカーの色 ： 桃色",
+    "hcutilsmod.settings.brightness.alpha" : "マーカーの透過度",
+    "hcutilsmod.settings.brightness.return" : "戻る",
 
     "hcutilsmod.inventory.button" : "整理 [%s]",
     "hcutilsmod.direction.icon" : "右クリック"
