@@ -32,6 +32,7 @@ public class HCSettings {
     public long timeFindSpawner = 30L;                          // スポナー座標の表示時間
     public int rangeBrightness = 8;                             // 明るさマーカー表示の範囲
     public int thresholdBrightness = 0;                         // 明るさの閾値
+    public Boolean zombieBrightness = true;                     // ゾンビが湧くことができないブロック：除外する(true)／除外しない(false)
     public MinecraftColor colorBrightness = MinecraftColor.RED; // 明るさマーカーの色
     public int alphaBrightness = 0x7F;                          // 明るさマーカーの透過度
 
@@ -93,6 +94,9 @@ public class HCSettings {
                     if ("brightnessmod.threshold".equals(s)) {
                         thresholdBrightness = Integer.parseInt(s1);
                     }
+                    if ("brightnessmod.zombie".equals(s)) {
+                        zombieBrightness = Boolean.valueOf(s1);
+                    }
                     if ("brightnessmod.color".equals(s)) {
                         colorBrightness = MinecraftColor.values()[Integer.parseInt(s1)];
                     }
@@ -119,6 +123,7 @@ public class HCSettings {
             printwriter.println("findspawnermod.time:" + timeFindSpawner);
             printwriter.println("brightnessmod.range:" + rangeBrightness);
             printwriter.println("brightnessmod.threshold:" + thresholdBrightness);
+            printwriter.println("brightnessmod.zombie:" + zombieBrightness);
             printwriter.println("brightnessmod.color:" + colorBrightness.ordinal());
             printwriter.println("brightnessmod.alpha:" + alphaBrightness);
         } catch (Exception exception) {

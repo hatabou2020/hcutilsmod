@@ -9,6 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -105,6 +107,7 @@ public class BrightnessModHandler {
                                     playerPos,
                                     HCSettings.getInstance().rangeBrightness,
                                     HCSettings.getInstance().thresholdBrightness,
+                                    HCSettings.getInstance().zombieBrightness,
                                     HCSettings.getInstance().colorBrightness,
                                     HCSettings.getInstance().alphaBrightness);
             }
@@ -117,7 +120,7 @@ public class BrightnessModHandler {
         }
     }
 
-    private ArrayList<BrightnessMarker> makeBrightnessMarkers(Level world, BlockPos playerPos, int range, int threshold, MinecraftColor color, int alpha) {
+    private ArrayList<BrightnessMarker> makeBrightnessMarkers(Level world, BlockPos playerPos, int range, int threshold, Boolean zombie, MinecraftColor color, int alpha) {
         ArrayList<BrightnessMarker> makeMarkers = new ArrayList<>();
 
         int i = playerPos.getX() - range;
@@ -135,8 +138,7 @@ public class BrightnessModHandler {
                 for (int i2 = i1; i2 < j1; ++i2) {
                     mutableBlockPos.set(k1, l1, i2);
                     mutableBlockPosY1.set(k1, l1 - 1, i2);
-                    int brightness = checkBrightness(world, mutableBlockPos, mutableBlockPosY1, threshold);
-                    if (brightness != -1) {
+                    if (checkBrightness(world, mutableBlockPos, mutableBlockPosY1, threshold, zombie) != -1) {
                         makeMarkers.add(
                                 new BrightnessMarker(
                                         color,
@@ -154,7 +156,12 @@ public class BrightnessModHandler {
         return makeMarkers;
     }
 
-    private int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold) {
+    private int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, Boolean zombie) {
+        // ゾンビが沸くことができないブロックは除外する
+        if (zombie && !SpawnPlacements.Type.ON_GROUND.canSpawnAt(world, pos, EntityType.ZOMBIE)) {
+            return -1;
+        }
+
         BlockState state = world.getBlockState(pos);
         BlockState stateY1 = world.getBlockState(posY1);
 

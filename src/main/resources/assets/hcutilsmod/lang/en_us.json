@@ -26,6 +26,10 @@
     "hcutilsmod.settings.brightness.title" : "明るさマーカー設定",
     "hcutilsmod.settings.brightness.range" : "表示の範囲",
     "hcutilsmod.settings.brightness.threshold" : "明るさの閾値",
+    "hcutilsmod.settings.brightness.zombie.without" : "沸けないブロック ： 除外する",
+    "hcutilsmod.settings.brightness.zombie.with" : "沸けないブロック ： 除外しない",
+
+    "hcutilsmod.settings.brightness.subtitle" : "マーカーの詳細設定",
     "hcutilsmod.settings.brightness.color.white" : "マーカーの色 ： 白色",
     "hcutilsmod.settings.brightness.color.black" : "マーカーの色 ： 黒色",
     "hcutilsmod.settings.brightness.color.gray" : "マーカーの色 ： 灰色",
