@@ -94,6 +94,10 @@ public class BrightnessModHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.side.isServer()) {
+            return;
+        }
+
         if (!isOverWorld()) {
             dispBrightness = false;
         }
@@ -102,14 +106,17 @@ public class BrightnessModHandler {
             BlockPos playerPos = event.player.blockPosition();
             if (prevPlayerPos.compareTo(playerPos) != 0) {
                 prevPlayerPos = playerPos;
-                tergetMarkers = makeBrightnessMarkers(
-                                    event.player.level,
-                                    playerPos,
-                                    HCSettings.getInstance().rangeBrightness,
-                                    HCSettings.getInstance().thresholdBrightness,
-                                    HCSettings.getInstance().zombieBrightness,
-                                    HCSettings.getInstance().colorBrightness,
-                                    HCSettings.getInstance().alphaBrightness);
+
+                new Thread(() ->
+                    tergetMarkers = makeBrightnessMarkers(
+                                        event.player.level,
+                                        playerPos,
+                                        HCSettings.getInstance().rangeBrightness,
+                                        HCSettings.getInstance().thresholdBrightness,
+                                        HCSettings.getInstance().zombieBrightness,
+                                        HCSettings.getInstance().colorBrightness,
+                                        HCSettings.getInstance().alphaBrightness)
+                ).start();
             }
         }
         else {
