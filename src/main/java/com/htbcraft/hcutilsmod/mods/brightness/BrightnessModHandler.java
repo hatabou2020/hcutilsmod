@@ -164,7 +164,7 @@ public class BrightnessModHandler {
     }
 
     private int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, Boolean zombie) {
-        // ゾンビが沸くことができないブロックは除外する
+        // ゾンビが湧くことができないブロックは除外する
         if (zombie && !SpawnPlacements.Type.ON_GROUND.canSpawnAt(world, pos, EntityType.ZOMBIE)) {
             return -1;
         }

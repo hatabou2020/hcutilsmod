@@ -57,7 +57,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
             (gameSettings, translationKey) -> {
                 return (new TranslatableComponent("hcutilsmod.settings.findspawner.range"))
-                        .append(": " + HCSettings.getInstance().rangeFindSpawner);
+                        .append(": " + HCSettings.getInstance().rangeFindSpawner + " blocks");
             });
 
     // 座標の表示時間
@@ -67,7 +67,7 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
             (gameSettings, translationKey) -> {
                 return (new TranslatableComponent("hcutilsmod.settings.findspawner.time"))
-                        .append(": " + HCSettings.getInstance().timeFindSpawner)
+                        .append(": " + HCSettings.getInstance().timeFindSpawner + " ")
                         .append(new TranslatableComponent("hcutilsmod.settings.findspawner.seconds"));
             });
 }

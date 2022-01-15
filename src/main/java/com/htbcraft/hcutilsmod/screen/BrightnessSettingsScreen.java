@@ -52,7 +52,7 @@ public class BrightnessSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().rangeBrightness,
             (gameSettings, value) -> HCSettings.getInstance().rangeBrightness = value.intValue(),
             (gameSettings, translationKey) -> (new TranslatableComponent("hcutilsmod.settings.brightness.range"))
-                    .append(": " + HCSettings.getInstance().rangeBrightness + "(blocks)"));
+                    .append(": " + HCSettings.getInstance().rangeBrightness + " blocks"));
 
     // 明るさの閾値
     public static final ProgressOption THRESHOLD = new ProgressOption("hcutilsmod.settings.brightness.threshold",
@@ -60,7 +60,7 @@ public class BrightnessSettingsScreen extends SettingsScreen {
             (gameSettings) -> (double)HCSettings.getInstance().thresholdBrightness,
             (gameSettings, value) -> HCSettings.getInstance().thresholdBrightness = value.intValue(),
             (gameSettings, translationKey) -> (new TranslatableComponent("hcutilsmod.settings.brightness.threshold"))
-                    .append(": (brightness ≦ " + HCSettings.getInstance().thresholdBrightness + ")"));
+                    .append(": brightness ≦ " + HCSettings.getInstance().thresholdBrightness));
 
     private TranslatableComponent getZombieBrightnessText() {
         if (HCSettings.getInstance().zombieBrightness) {

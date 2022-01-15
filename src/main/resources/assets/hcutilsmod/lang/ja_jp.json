@@ -3,19 +3,19 @@
     "hcutilsmod.settings.key_description" : "- 設定画面を開く -",
     "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
     "hcutilsmod.inventory.key_description" : "インベントリの整理",
-    "hcutilsmod.brightness.key_description" : "明るさマーカー表示",
+    "hcutilsmod.brightness.key_description" : "明るさマーカーの表示",
 
     "hcutilsmod.findspawner.text" : "スポナー発見！",
 
-    "hcutilsmod.settings.title" : "サバイバルで便利なMOD集 設定画面",
+    "hcutilsmod.settings.title" : "MOD設定",
     "hcutilsmod.settings.return" : "ゲームに戻る",
     "hcutilsmod.settings.cords.enable" : "プレイヤー座標 ： 表示",
     "hcutilsmod.settings.cords.disable" : "プレイヤー座標 ： 非表示",
 
-    "hcutilsmod.settings.inventory.sorttype.name" : "インベントリのソート ： 名前順",
-    "hcutilsmod.settings.inventory.sorttype.category" : "インベントリのソート ： カテゴリ順",
+    "hcutilsmod.settings.inventory.sorttype.name" : "インベントリの整理 ： 名前順",
+    "hcutilsmod.settings.inventory.sorttype.category" : "インベントリの整理 ： カテゴリ順",
 
-    "hcutilsmod.settings.findspawner.title" : "スポナーの検索設定",
+    "hcutilsmod.settings.findspawner.title" : "スポナー検索設定",
     "hcutilsmod.settings.findspawner.enable" : "スポナーの検索 ： オン",
     "hcutilsmod.settings.findspawner.disable" : "スポナーの検索 ： オフ",
     "hcutilsmod.settings.findspawner.range" : "検索の範囲",
@@ -26,10 +26,10 @@
     "hcutilsmod.settings.brightness.title" : "明るさマーカー設定",
     "hcutilsmod.settings.brightness.range" : "表示の範囲",
     "hcutilsmod.settings.brightness.threshold" : "明るさの閾値",
-    "hcutilsmod.settings.brightness.zombie.without" : "沸けないブロック ： 除外する",
-    "hcutilsmod.settings.brightness.zombie.with" : "沸けないブロック ： 除外しない",
+    "hcutilsmod.settings.brightness.zombie.without" : "湧けないブロック ： 除外する",
+    "hcutilsmod.settings.brightness.zombie.with" : "湧けないブロック ： 除外しない",
 
-    "hcutilsmod.settings.brightness.subtitle" : "マーカーの詳細設定",
+    "hcutilsmod.settings.brightness.subtitle" : "マーカー詳細設定",
     "hcutilsmod.settings.brightness.color.white" : "マーカーの色 ： 白色",
     "hcutilsmod.settings.brightness.color.black" : "マーカーの色 ： 黒色",
     "hcutilsmod.settings.brightness.color.gray" : "マーカーの色 ： 灰色",
