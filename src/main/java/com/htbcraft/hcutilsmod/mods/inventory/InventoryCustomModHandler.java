@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -227,6 +228,11 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
+        if (event.getOriginal().is(Items.BUCKET)) {
+            // 牛乳もこのイベントがくるので捨てる
+            return;
+        }
+
         destroyItemParam.hand = Objects.requireNonNull(event.getHand());
         destroyItemParam.original = event.getOriginal();
         LOGGER.info("PlayerDestroyItemEvent: " + destroyItemParam.original.toString() + " / " + destroyItemParam.hand);
