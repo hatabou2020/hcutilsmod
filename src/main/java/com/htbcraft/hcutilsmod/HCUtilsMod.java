@@ -1,5 +1,6 @@
 package com.htbcraft.hcutilsmod;
 
+import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.mods.brightness.BrightnessModHandler;
@@ -7,6 +8,7 @@ import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
 import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
 import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
 import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
+import com.htbcraft.hcutilsmod.mods.twitter.TwitterModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -56,6 +58,15 @@ public class HCUtilsMod {
         MinecraftForge.EVENT_BUS.register(new InventoryCustomModHandler());
         MinecraftForge.EVENT_BUS.register(new FindSpawnerModHandler());
         MinecraftForge.EVENT_BUS.register(new BrightnessModHandler());
+
+        if (HCCrypt.isSupportOS()) {
+            try {
+                HCCrypt.init();
+                MinecraftForge.EVENT_BUS.register(new TwitterModHandler());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @SubscribeEvent
