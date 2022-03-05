@@ -66,6 +66,11 @@ public class BrightnessModHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if (Minecraft.getInstance().screen != null) {
+            LOGGER.info("Displaying on screen");
+            return;
+        }
+
         int key = event.getKey();
         int modifiers = event.getModifiers();
         int action = event.getAction();

@@ -56,6 +56,13 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if ((Minecraft.getInstance().screen != null) &&
+            !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
+            !(Minecraft.getInstance().screen instanceof ContainerScreen)) {
+            LOGGER.info("Displaying on screen");
+            return;
+        }
+
         if (sortEnable) {
             int key = event.getKey();
             int modifiers = event.getModifiers();

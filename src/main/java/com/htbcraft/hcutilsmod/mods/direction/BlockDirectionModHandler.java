@@ -3,6 +3,7 @@ package com.htbcraft.hcutilsmod.mods.direction;
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -56,6 +57,11 @@ public class BlockDirectionModHandler {
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
+        if (Minecraft.getInstance().screen != null) {
+            LOGGER.info("Displaying on screen");
+            return;
+        }
+
         if (!guiOpened) {
             int key = event.getKey();
             int modifiers = event.getModifiers();
