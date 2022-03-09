@@ -31,7 +31,7 @@ public class HCSettings {
     public int rangeFindSpawner = 64;                           // スポナー検索の範囲
     public long timeFindSpawner = 30L;                          // スポナー座標の表示時間
     public int rangeBrightness = 8;                             // 明るさマーカー表示の範囲
-    public int thresholdBrightness = 0;                         // 明るさの閾値
+    public int thresholdBrightness = 7;                         // 明るさの閾値
     public Boolean zombieBrightness = true;                     // ゾンビが湧くことができないブロック：除外する(true)／除外しない(false)
     public MinecraftColor colorBrightness = MinecraftColor.RED; // 明るさマーカーの色
     public int alphaBrightness = 0x7F;                          // 明るさマーカーの透過度
