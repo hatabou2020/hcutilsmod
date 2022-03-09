@@ -31,7 +31,7 @@ public class HCKeyBinding extends KeyBinding {
         }
     };
 
-    private int action;
+    private final int action;
 
     public HCKeyBinding(String description, int key, int modifiers, int action) {
         super(description, KeyConflictContext.UNIVERSAL, MODIFIER_MAP.get(modifiers), InputMappings.Type.KEYSYM.getOrCreate(key), KEY_CATEGORY);

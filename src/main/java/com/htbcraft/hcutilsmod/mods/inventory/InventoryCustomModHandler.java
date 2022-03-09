@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -56,6 +57,13 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if ((Minecraft.getInstance().screen != null) &&
+            !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
+            !(Minecraft.getInstance().screen instanceof ChestScreen)) {
+            LOGGER.info("Displaying on screen");
+            return;
+        }
+
         if (sortEnable) {
             int key = event.getKey();
             int modifiers = event.getModifiers();
@@ -127,8 +135,8 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (sortEnable) {
-            if (event.side.isServer()) {
+        if (event.side.isServer()) {
+            if (sortEnable) {
                 // サーバー側で処理しないとソート結果は反映されない
                 if (sortInventory) {
                     sortInventory = false;
@@ -141,6 +149,13 @@ public class InventoryCustomModHandler {
                         sortChestInventory((ChestContainer) event.player.containerMenu);
                     }
                 }
+            }
+
+            if (destroyItem) {
+                destroyItem = false;
+
+                // 使い切ったアイテムを補充する
+                autoReplaceItem(event.player.inventory);
             }
         }
     }
@@ -182,14 +197,20 @@ public class InventoryCustomModHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
-        PlayerInventory inventory = event.getPlayer().inventory;
-        Hand hand = Objects.requireNonNull(event.getHand());
+    private class DestroyItemParam {
+        public Hand hand;
+        public ItemStack original;
 
-        ItemStack original = event.getOriginal();
-        LOGGER.info("PlayerDestroyItemEvent: " + original.toString());
+        public void init() {
+            hand = null;
+            original = null;
+        }
+    }
 
+    private DestroyItemParam destroyItemParam = new DestroyItemParam();
+    private Boolean destroyItem = false;
+
+    private void autoReplaceItem(PlayerInventory inventory) {
         for (int i = 0; i < inventory.items.size(); i++) {
             ItemStack itemStack = inventory.items.get(i);
             if (itemStack.isEmpty()) {
@@ -197,8 +218,8 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (original.sameItem(itemStack)) {
-                if (Hand.MAIN_HAND.equals(hand)) {
+            if (destroyItemParam.original.sameItem(itemStack)) {
+                if (destroyItemParam.hand.equals(Hand.MAIN_HAND)) {
                     inventory.items.set(inventory.selected, itemStack);
                 }
                 else {
@@ -208,5 +229,21 @@ public class InventoryCustomModHandler {
                 break;
             }
         }
+
+        destroyItemParam.init();
+    }
+
+    @SubscribeEvent
+    public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
+        if (event.getOriginal().getItem() == Items.BUCKET) {
+            // 牛乳もこのイベントがくるので捨てる
+            return;
+        }
+
+        destroyItemParam.hand = Objects.requireNonNull(event.getHand());
+        destroyItemParam.original = event.getOriginal();
+        LOGGER.info("PlayerDestroyItemEvent: " + destroyItemParam.original.toString() + " / " + destroyItemParam.hand);
+
+        destroyItem = true;
     }
 }
