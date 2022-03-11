@@ -178,7 +178,7 @@ public class BlockDirectionModHandler {
     public void onRenderGameOverlayPreLayer(RenderGameOverlayEvent.PreLayer event) {
         if (directMode) {
             // 十字カーソルを指アイコンに切り替え
-            if (event.getOverlay().equals(ForgeIngameGui.CROSSHAIR_ELEMENT)) {
+            if (event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT) {
                 int width = event.getWindow().getGuiScaledWidth();
                 int height = event.getWindow().getGuiScaledHeight();
                 int x = (width - DIRECT_ICON_SIZE) / 2;

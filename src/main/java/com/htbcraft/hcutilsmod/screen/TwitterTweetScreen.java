@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,11 +19,11 @@ public class TwitterTweetScreen extends Screen {
     private final String fileName;
 
     private MultiLineLabel message = MultiLineLabel.EMPTY;
-    private MultiLineLabel tweetLength = MultiLineLabel.EMPTY;
     private EditBox tweetEdit1 = null;
     private EditBox tweetEdit2 = null;
     private EditBox tweetEdit3 = null;
     private EditBox tweetEdit4 = null;
+    private Component tweetLength = null;
 
     public TwitterTweetScreen(TwitterTweetScreen.OnTweet callback, String fileName) {
         super(new TranslatableComponent("hcutilsmod.settings.twitter.tweet.title"));
@@ -105,9 +106,8 @@ public class TwitterTweetScreen extends Screen {
             len += this.tweetEdit4.getValue().length();
         }
 
-        this.tweetLength = MultiLineLabel.create(this.font,
-            new TranslatableComponent("hcutilsmod.settings.twitter.body.length").append("" + len),
-            this.width - 50);
+        this.tweetLength =
+                new TranslatableComponent("hcutilsmod.settings.twitter.body.length").append(String.valueOf(len));
     }
 
     // ツイート本文
@@ -122,7 +122,7 @@ public class TwitterTweetScreen extends Screen {
         this.renderBackground(matrixStack);
         drawString(matrixStack, this.font, this.title, 12, 40, 16777215);
         this.message.renderLeftAligned(matrixStack, 12, 60, 20, 16777215);
-        this.tweetLength.renderLeftAligned(matrixStack, this.width - 80, 155, 9, 16777215);
+        drawString(matrixStack, this.font, this.tweetLength, this.width - 80, 155, 16777215);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 

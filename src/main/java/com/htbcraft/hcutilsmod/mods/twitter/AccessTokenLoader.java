@@ -18,7 +18,7 @@ public class AccessTokenLoader {
     private static final String EXTENSION = ".token";
 
     private static String getFullPath() {
-        return HCCrypt.geDirectory() +
+        return HCCrypt.getDirectory() +
                 File.separator +
                 HCUtilsMod.MOD_ID + EXTENSION;
     }

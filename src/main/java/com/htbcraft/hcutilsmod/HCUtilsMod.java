@@ -82,7 +82,8 @@ public class HCUtilsMod {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
-        if (Minecraft.getInstance().screen != null) {
+        if ((Minecraft.getInstance().screen != null) &&
+            (Minecraft.getInstance().screen != mainSettingsScreen)) {
             LOGGER.info("Displaying on screen");
             return;
         }
@@ -93,15 +94,12 @@ public class HCUtilsMod {
 
         // 登録キー 押下
         if (BIND_KEY.test(key, modifiers, action)) {
-            if (Minecraft.getInstance().screen == null) {
-                if (mainSettingsScreen == null) {
-                    Minecraft.getInstance().setScreen(new MainSettingsScreen());
-                }
+            if (mainSettingsScreen == null) {
+                mainSettingsScreen = new MainSettingsScreen();
+                Minecraft.getInstance().setScreen(mainSettingsScreen);
             }
             else {
-                if (mainSettingsScreen != null) {
-                    Minecraft.getInstance().setScreen(null);
-                }
+                Minecraft.getInstance().setScreen(null);
             }
         }
     }
@@ -111,14 +109,6 @@ public class HCUtilsMod {
         Screen gui = event.getScreen();
         if (gui == null) {
             LOGGER.info("gui == null");
-            mainSettingsScreen = null;
-            return;
-        }
-
-        if (gui instanceof MainSettingsScreen) {
-            mainSettingsScreen = (MainSettingsScreen)gui;
-        }
-        else {
             mainSettingsScreen = null;
         }
     }

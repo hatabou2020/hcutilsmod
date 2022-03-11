@@ -9,6 +9,7 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
@@ -89,7 +90,7 @@ public class TwitterSettingsScreen extends SettingsScreen {
         Button destroyButton = this.addRenderableWidget(
             new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
             new TranslatableComponent("hcutilsmod.settings.twitter.destroy.title").append("..."),
-            (var1) -> {
+            (var1) ->
                 this.getMinecraft().setScreen(
                     new ConfirmScreen((result) -> {
                         if (result) {
@@ -102,8 +103,7 @@ public class TwitterSettingsScreen extends SettingsScreen {
                         this.getMinecraft().setScreen(this);
                     },
                     new TranslatableComponent("hcutilsmod.settings.twitter.destroy.title"),
-                    new TranslatableComponent("hcutilsmod.settings.twitter.destroy.text")));
-            }));
+                    new TranslatableComponent("hcutilsmod.settings.twitter.destroy.text")))));
 
         // アクセストークンを持っていれば認証ボタンを無効にして設定を開放する
         if (AccessTokenLoader.isExist()) {
@@ -132,7 +132,7 @@ public class TwitterSettingsScreen extends SettingsScreen {
     }
 
     // スクリーンショットのツイート：オン/オフ
-    private TranslatableComponent getEnableTwitterText() {
+    private Component getEnableTwitterText() {
         if (HCSettings.getInstance().enableTwitterMod) {
             return new TranslatableComponent("hcutilsmod.settings.twitter.enable");
         }

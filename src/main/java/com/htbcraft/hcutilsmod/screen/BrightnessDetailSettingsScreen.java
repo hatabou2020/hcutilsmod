@@ -7,6 +7,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.ProgressOption;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public class BrightnessDetailSettingsScreen extends SettingsScreen {
@@ -49,10 +50,11 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
             1.0D, 255.0D, 1.0F,
             (gameSettings) -> (double)HCSettings.getInstance().alphaBrightness,
             (gameSettings, value) -> HCSettings.getInstance().alphaBrightness = value.intValue(),
-            (gameSettings, translationKey) -> (new TranslatableComponent("hcutilsmod.settings.brightness.alpha"))
-                    .append(": " + HCSettings.getInstance().alphaBrightness));
+            (gameSettings, translationKey) ->
+	            (new TranslatableComponent("hcutilsmod.settings.brightness.alpha"))
+	                .append(": " + HCSettings.getInstance().alphaBrightness));
 
-    private TranslatableComponent getMarkerColorText() {
+    private Component getMarkerColorText() {
         if (HCSettings.getInstance().colorBrightness == MinecraftColor.WHITE) {
             return new TranslatableComponent("hcutilsmod.settings.brightness.color.white");
         }

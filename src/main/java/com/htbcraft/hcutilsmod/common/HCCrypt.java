@@ -26,7 +26,7 @@ public class HCCrypt {
         }
 
         // フォルダの作成
-        LOGGER.info(new File(geDirectory()).mkdir());
+        LOGGER.info(new File(getDirectory()).mkdir());
 
         // try-with-resources
         // https://qiita.com/NagaokaKenichi/items/124f0e14ce5dfcbd0b6b
@@ -44,8 +44,8 @@ public class HCCrypt {
     }
 
     public static void destroy() {
-        if (isAvailable()) {
-            String dirPath = geDirectory();
+        if (isExist()) {
+            String dirPath = getDirectory();
             File dir = new File(dirPath);
             String[] files = dir.list();
             if (files != null) {
@@ -73,14 +73,14 @@ public class HCCrypt {
         return isExist();
     }
 
-    public static String geDirectory() {
+    public static String getDirectory() {
         return System.getenv("LOCALAPPDATA") +
                 File.separator +
                 HCUtilsMod.MOD_ID;
     }
 
     private static String getFullPath() {
-        return geDirectory() +
+        return getDirectory() +
                 File.separator +
                 HCUtilsMod.MOD_ID + EXTENSION;
     }

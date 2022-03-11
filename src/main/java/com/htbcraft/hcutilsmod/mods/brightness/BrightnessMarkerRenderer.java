@@ -3,6 +3,8 @@ package com.htbcraft.hcutilsmod.mods.brightness;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class BrightnessMarkerRenderer {
@@ -10,6 +12,7 @@ public class BrightnessMarkerRenderer {
 
     private PoseStack matrixStack;
     private EntityRenderDispatcher renderManager;
+    private TextureManager textureManager;
 
     public BrightnessMarkerRenderer(Minecraft minecraft) {
         this.minecraft = minecraft;
@@ -26,6 +29,7 @@ public class BrightnessMarkerRenderer {
     public BrightnessMarkerRenderer update(PoseStack matrixStack) {
         this.matrixStack = matrixStack;
         this.renderManager = this.minecraft.getEntityRenderDispatcher();
+        this.textureManager = this.minecraft.getTextureManager();
         return this;
     }
 
@@ -43,6 +47,10 @@ public class BrightnessMarkerRenderer {
 
     public void addVertex(float x, float y, float z, float u, float v, int r, int g, int b, int alpha) {
         buffer().vertex(this.matrixStack.last().pose(), x, y, z).color(r, g, b, alpha).uv(u, v).endVertex();
+    }
+
+    public void bindTexture(ResourceLocation texture) {
+        this.textureManager.bindForSetup(texture);
     }
 
     public void push() {

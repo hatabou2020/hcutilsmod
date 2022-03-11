@@ -3,6 +3,7 @@ package com.htbcraft.hcutilsmod.screen;
 import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public class MainSettingsScreen extends SettingsScreen {
@@ -57,7 +58,7 @@ public class MainSettingsScreen extends SettingsScreen {
             (var1) -> this.getMinecraft().setScreen(null)));
     }
 
-    private TranslatableComponent getEnableCordsModText() {
+    private Component getEnableCordsModText() {
         if (HCSettings.getInstance().enableCordsMod) {
             return new TranslatableComponent("hcutilsmod.settings.cords.enable");
         }
@@ -66,7 +67,7 @@ public class MainSettingsScreen extends SettingsScreen {
         }
     }
 
-    private TranslatableComponent getInventorySortTypeText() {
+    private Component getInventorySortTypeText() {
         if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
             return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.category");
         }

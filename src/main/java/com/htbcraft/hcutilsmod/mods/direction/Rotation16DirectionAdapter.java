@@ -13,6 +13,7 @@ public class Rotation16DirectionAdapter implements IBlockDirection {
     @Override
     public BlockState change() {
         Integer rot = blockState.getValue(BlockStateProperties.ROTATION_16);
-        return blockState.setValue(BlockStateProperties.ROTATION_16, (rot + 1) % 16);
+        blockState = blockState.setValue(BlockStateProperties.ROTATION_16, (rot + 1) % 16);
+        return blockState;
     }
 }
