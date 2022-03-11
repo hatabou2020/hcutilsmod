@@ -6,7 +6,6 @@ import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.SliderPercentageOption;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -38,7 +37,7 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.return")),
+            new TranslationTextComponent("hcutilsmod.settings.brightness.return"),
                 (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
@@ -57,52 +56,52 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
 
     private ITextComponent getMarkerColorText() {
         if (HCSettings.getInstance().colorBrightness == MinecraftColor.WHITE) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.white"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.white");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.BLACK) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.black"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.black");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.GRAY) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.gray"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.gray");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.LIGHT_GRAY) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.light_gray"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.light_gray");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.BROWN) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.brown"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.brown");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.ORANGE) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.orange"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.orange");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.YELLOW) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.yellow"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.yellow");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.GREEN) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.green"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.green");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.LIME) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.lime"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.lime");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.BLUE) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.blue"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.blue");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.CYAN) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.cyan"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.cyan");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.LIGHT_BLUE) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.light_blue"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.light_blue");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.PURPLE) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.purple"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.purple");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.MAGENTA) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.magenta"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.magenta");
         }
         else if (HCSettings.getInstance().colorBrightness == MinecraftColor.PINK) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.pink"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.pink");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.color.red"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.color.red");
         }
     }
 }

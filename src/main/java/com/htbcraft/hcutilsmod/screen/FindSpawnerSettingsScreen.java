@@ -5,7 +5,6 @@ import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.SliderPercentageOption;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -36,16 +35,16 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.return")),
+            new TranslationTextComponent("hcutilsmod.settings.findspawner.return"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
     private ITextComponent getEnableFindSpawnerModText() {
         if (HCSettings.getInstance().enableFindSpawnerMod) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.enable"));
+            return new TranslationTextComponent("hcutilsmod.settings.findspawner.enable");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.disable"));
+            return new TranslationTextComponent("hcutilsmod.settings.findspawner.disable");
         }
     }
 

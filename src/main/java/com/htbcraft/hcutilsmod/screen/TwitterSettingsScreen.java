@@ -5,10 +5,9 @@ import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.mods.twitter.AccessTokenLoader;
 import com.htbcraft.hcutilsmod.mods.twitter.TwitterConsumer;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
@@ -85,13 +84,13 @@ public class TwitterSettingsScreen extends SettingsScreen {
         // ツイートのデフォルト本文
         Button defBoxyButton = this.addButton(
             new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.body.default.title") + "..."),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.body.default.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new TwitterDefaultBodyScreen(this))));
 
         // Twitter連携の解除
         Button destroyButton = this.addButton(
             new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.destroy.title") + "..."),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.destroy.title").append("..."),
             (var1) ->
                 this.getMinecraft().setScreen(
                     new ConfirmScreen((result) -> {
@@ -129,17 +128,17 @@ public class TwitterSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.return")),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.return"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
     // スクリーンショットのツイート：オン/オフ
     private ITextComponent getEnableTwitterText() {
         if (HCSettings.getInstance().enableTwitterMod) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.enable"));
+            return new TranslationTextComponent("hcutilsmod.settings.twitter.enable");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.disable"));
+            return new TranslationTextComponent("hcutilsmod.settings.twitter.disable");
         }
     }
 

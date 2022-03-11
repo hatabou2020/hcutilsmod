@@ -12,6 +12,7 @@ public class Rotation4DirectionAdapter implements IBlockDirection {
 
     @Override
     public BlockState change() {
-        return blockState.rotate(Rotation.CLOCKWISE_90);
+        blockState = blockState.rotate(Rotation.CLOCKWISE_90);
+        return blockState;
     }
 }

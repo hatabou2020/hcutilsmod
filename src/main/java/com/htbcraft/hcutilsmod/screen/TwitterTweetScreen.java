@@ -7,6 +7,7 @@ import net.minecraft.client.gui.IBidiRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,11 +19,11 @@ public class TwitterTweetScreen extends Screen {
     private final String fileName;
 
     private IBidiRenderer message = IBidiRenderer.EMPTY;
-    private IBidiRenderer tweetLength = IBidiRenderer.EMPTY;
     private TextFieldWidget tweetEdit1 = null;
     private TextFieldWidget tweetEdit2 = null;
     private TextFieldWidget tweetEdit3 = null;
     private TextFieldWidget tweetEdit4 = null;
+    private ITextComponent tweetLength = null;
 
     public TwitterTweetScreen(TwitterTweetScreen.OnTweet callback, String fileName) {
         super(new TranslationTextComponent("hcutilsmod.settings.twitter.tweet.title"));
@@ -105,9 +106,8 @@ public class TwitterTweetScreen extends Screen {
             len += this.tweetEdit4.getValue().length();
         }
 
-        this.tweetLength = IBidiRenderer.create(this.font,
-            new TranslationTextComponent("hcutilsmod.settings.twitter.body.length").append("" + len),
-            this.width - 50);
+        this.tweetLength =
+                new TranslationTextComponent("hcutilsmod.settings.twitter.body.length").append(String.valueOf(len));
     }
 
     // ツイート本文
@@ -122,7 +122,7 @@ public class TwitterTweetScreen extends Screen {
         this.renderBackground(matrixStack);
         drawString(matrixStack, this.font, this.title, 12, 40, 16777215);
         this.message.renderLeftAligned(matrixStack, 12, 60, 20, 16777215);
-        this.tweetLength.renderLeftAligned(matrixStack, this.width - 80, 155, 9, 16777215);
+        drawString(matrixStack, this.font, this.tweetLength, this.width - 80, 155, 16777215);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 

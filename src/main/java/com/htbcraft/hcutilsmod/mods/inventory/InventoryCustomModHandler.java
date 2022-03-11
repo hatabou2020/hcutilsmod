@@ -27,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -151,9 +150,7 @@ public class InventoryCustomModHandler {
                 }
             }
 
-            if (destroyItem) {
-                destroyItem = false;
-
+            if (destroyItemParam != null) {
                 // 使い切ったアイテムを補充する
                 autoReplaceItem(event.player.inventory);
             }
@@ -197,18 +194,25 @@ public class InventoryCustomModHandler {
         }
     }
 
-    private class DestroyItemParam {
-        public Hand hand;
-        public ItemStack original;
+    private static class DestroyItemParam {
+        private final Hand hand;
+        private final ItemStack original;
 
-        public void init() {
-            hand = null;
-            original = null;
+        public DestroyItemParam(Hand hand, ItemStack original) {
+            this.hand = hand;
+            this.original = original;
+        }
+
+        public Hand getHand() {
+            return this.hand;
+        }
+
+        public ItemStack getOriginalItem() {
+            return this.original;
         }
     }
 
-    private DestroyItemParam destroyItemParam = new DestroyItemParam();
-    private Boolean destroyItem = false;
+    private DestroyItemParam destroyItemParam = null;
 
     private void autoReplaceItem(PlayerInventory inventory) {
         for (int i = 0; i < inventory.items.size(); i++) {
@@ -218,8 +222,8 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (destroyItemParam.original.sameItem(itemStack)) {
-                if (destroyItemParam.hand.equals(Hand.MAIN_HAND)) {
+            if (destroyItemParam.getOriginalItem().sameItem(itemStack)) {
+                if (destroyItemParam.getHand().equals(Hand.MAIN_HAND)) {
                     inventory.items.set(inventory.selected, itemStack);
                 }
                 else {
@@ -230,7 +234,7 @@ public class InventoryCustomModHandler {
             }
         }
 
-        destroyItemParam.init();
+        destroyItemParam = null;
     }
 
     @SubscribeEvent
@@ -240,10 +244,7 @@ public class InventoryCustomModHandler {
             return;
         }
 
-        destroyItemParam.hand = Objects.requireNonNull(event.getHand());
-        destroyItemParam.original = event.getOriginal();
-        LOGGER.info("PlayerDestroyItemEvent: " + destroyItemParam.original.toString() + " / " + destroyItemParam.hand);
-
-        destroyItem = true;
+        destroyItemParam = new DestroyItemParam(event.getHand(), event.getOriginal());
+        LOGGER.info("PlayerDestroyItemEvent: " + event.getHand() + " / " + event.getOriginal());
     }
 }

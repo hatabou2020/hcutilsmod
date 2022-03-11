@@ -1,11 +1,10 @@
 package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.GameSettings;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.settings.SliderPercentageOption;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -36,12 +35,12 @@ public class BrightnessSettingsScreen extends SettingsScreen {
 
         // マーカーの詳細設定
         this.addButton(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.subtitle") + "..."),
+            new TranslationTextComponent("hcutilsmod.settings.brightness.subtitle").append("..."),
             (var1) -> this.getMinecraft().setScreen(new BrightnessDetailSettingsScreen(this))));
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.return")),
+            new TranslationTextComponent("hcutilsmod.settings.brightness.return"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
@@ -69,10 +68,10 @@ public class BrightnessSettingsScreen extends SettingsScreen {
 
     private ITextComponent getZombieBrightnessText() {
         if (HCSettings.getInstance().zombieBrightness) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.zombie.without"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.zombie.without");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.zombie.with"));
+            return new TranslationTextComponent("hcutilsmod.settings.brightness.zombie.with");
         }
     }
 }

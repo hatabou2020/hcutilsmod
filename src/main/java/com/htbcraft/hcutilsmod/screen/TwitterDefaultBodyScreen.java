@@ -2,10 +2,9 @@ package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.logging.log4j.LogManager;
@@ -18,8 +17,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
     private TextFieldWidget defTweetEdit2 = null;
     private TextFieldWidget defTweetEdit3 = null;
     private TextFieldWidget defTweetEdit4 = null;
-
-    private TranslationTextComponent tweetBodyDef;
+    private ITextComponent tweetBodyDef = null;
 
     public TwitterDefaultBodyScreen(Screen parent) {
         super(parent, new TranslationTextComponent("hcutilsmod.settings.twitter.body.default.title"), 260, 180);
@@ -65,7 +63,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
 
         // 戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.return")),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.return"),
             (var1) -> {
                 updateTweetText();
                 this.getMinecraft().setScreen(this.getParent());
@@ -90,7 +88,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         }
 
         this.tweetBodyDef =
-                (TranslationTextComponent) new TranslationTextComponent("hcutilsmod.settings.twitter.body.default.length").append("" + len);
+                new TranslationTextComponent("hcutilsmod.settings.twitter.body.default.length").append(String.valueOf(len));
     }
 
     // デフォルト本文の保存
@@ -104,6 +102,9 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        drawString(matrixStack, this.font, this.tweetBodyDef, getPosX() + 18, getPosY() + 30, 16777215);
+
+        if (this.tweetBodyDef != null) {
+            drawString(matrixStack, this.font, this.tweetBodyDef, getPosX() + 18, getPosY() + 30, 16777215);
+        }
     }
 }

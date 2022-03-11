@@ -2,11 +2,9 @@ package com.htbcraft.hcutilsmod.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.IBidiRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +32,7 @@ public class TwitterPinScreen extends SettingsScreen {
     protected void init() {
         super.init();
         this.message = IBidiRenderer.create(this.font,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.pin.text")),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.pin.text"),
             this.width - 50);
 
         Objects.requireNonNull(this.minecraft).keyboardHandler.setSendRepeatsToGui(true);
@@ -42,7 +40,7 @@ public class TwitterPinScreen extends SettingsScreen {
         // 認証する
         this.authButton = this.addButton(
             new Button(getPosX() + 18, getPosY() + 100, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.pin.auth")),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.pin.auth"),
             (var1) -> {
                 LOGGER.info("Push Auth");
                 this.callback.onAuth(this.pinEdit.getValue());
@@ -51,7 +49,7 @@ public class TwitterPinScreen extends SettingsScreen {
         // キャンセル
         this.addButton(
             new Button(getPosX() + (getWidth() - 118), getPosY() + 100, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.pin.cancel")),
+            new TranslationTextComponent("hcutilsmod.settings.twitter.pin.cancel"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
 
         // PINコード

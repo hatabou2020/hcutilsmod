@@ -3,7 +3,6 @@ package com.htbcraft.hcutilsmod.screen;
 import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -38,42 +37,42 @@ public class MainSettingsScreen extends SettingsScreen {
 
         // スポナーの検索設定
         this.addButton(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.findspawner.title") + "..."),
+            new TranslationTextComponent("hcutilsmod.settings.findspawner.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this))));
 
         // 明るさ表示設定
         this.addButton(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.brightness.title") + "..."),
+            new TranslationTextComponent("hcutilsmod.settings.brightness.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this))));
 
         if (HCCrypt.isSupportOS()) {
             // Twitter設定
             this.addButton(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 130, 180, 20,
-                ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.twitter.title") + "..."),
+                new TranslationTextComponent("hcutilsmod.settings.twitter.title").append("..."),
                 (var1) -> this.getMinecraft().setScreen(new TwitterSettingsScreen(this))));
         }
 
         // ゲームに戻る
         this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.return")),
+            new TranslationTextComponent("hcutilsmod.settings.return"),
             (var1) -> this.getMinecraft().setScreen(null)));
     }
 
     private ITextComponent getEnableCordsModText() {
         if (HCSettings.getInstance().enableCordsMod) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.cords.enable"));
+            return new TranslationTextComponent("hcutilsmod.settings.cords.enable");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.cords.disable"));
+            return new TranslationTextComponent("hcutilsmod.settings.cords.disable");
         }
     }
 
     private ITextComponent getInventorySortTypeText() {
         if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.inventory.sorttype.category"));
+            return new TranslationTextComponent("hcutilsmod.settings.inventory.sorttype.category");
         }
         else {
-            return ITextComponent.nullToEmpty(I18n.get("hcutilsmod.settings.inventory.sorttype.name"));
+            return new TranslationTextComponent("hcutilsmod.settings.inventory.sorttype.name");
         }
     }
 }
