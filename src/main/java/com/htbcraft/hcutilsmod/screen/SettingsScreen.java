@@ -9,25 +9,34 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SettingsScreen extends Screen {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation("textures/gui/advancements/window.png");
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("textures/gui/advancements/backgrounds/stone.png");
 
     private static final int WINDOW_WIDTH = 240;
-    private static final int WINDOW_HEIGHT = 180;
+    private static final int WINDOW_HEIGHT = 205;
 
-    private Screen parent;
-    private int win_x, win_y;
-    private int win_w, win_h;
+    private final Screen parent;
+    private int win_x;
+    private int win_y;
+    private final int win_w;
+    private final int win_h;
 
     public SettingsScreen(Screen parent, ITextComponent titleIn) {
+        this(parent, titleIn, WINDOW_WIDTH, WINDOW_HEIGHT);
+    }
+
+    public SettingsScreen(Screen parent, ITextComponent titleIn, int width, int height) {
         super(titleIn);
         this.parent = parent;
         win_x = 0;
         win_y = 0;
-        win_w = WINDOW_WIDTH;
-        win_h = WINDOW_HEIGHT;
+        win_w = width;
+        win_h = height;
     }
 
     protected Screen getParent() {
@@ -50,15 +59,15 @@ public class SettingsScreen extends Screen {
         return win_h;
     }
 
-    public void init(Minecraft minecraft, int width, int height) {
-        super.init(minecraft, width, height);
-
-        win_x = (width - WINDOW_WIDTH) / 2;
-        win_y = (height - WINDOW_HEIGHT) / 2;
-    }
-
-    public void closeScreen() {
-        super.closeScreen();
+    protected void init() {
+        win_x = (this.width - win_w) / 2;
+        win_y = (this.height - win_h) / 2;
+        LOGGER.info("win_x: " + win_x);
+        LOGGER.info("win_y: " + win_y);
+        LOGGER.info("win_w: " + win_w);
+        LOGGER.info("win_h: " + win_h);
+        LOGGER.info("width: " + width);
+        LOGGER.info("height: " + height);
     }
 
     public void onClose() {
@@ -67,7 +76,7 @@ public class SettingsScreen extends Screen {
 
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.renderBackground(matrixStack);
-        renderWindow(matrixStack, win_x, win_y, WINDOW_WIDTH, WINDOW_HEIGHT, this.title, BACKGROUND_TEXTURE);
+        renderWindow(matrixStack, win_x, win_y, win_w, win_h, this.title, BACKGROUND_TEXTURE);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 

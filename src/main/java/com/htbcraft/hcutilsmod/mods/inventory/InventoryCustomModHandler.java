@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -26,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -56,6 +56,13 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if ((Minecraft.getInstance().currentScreen != null) &&
+            !(Minecraft.getInstance().currentScreen instanceof InventoryScreen) &&
+            !(Minecraft.getInstance().currentScreen instanceof ChestScreen)) {
+            LOGGER.info("Displaying on screen");
+            return;
+        }
+
         if (sortEnable) {
             int key = event.getKey();
             int modifiers = event.getModifiers();
@@ -127,8 +134,8 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (sortEnable) {
-            if (event.side.isServer()) {
+        if (event.side.isServer()) {
+            if (sortEnable) {
                 // サーバー側で処理しないとソート結果は反映されない
                 if (sortInventory) {
                     sortInventory = false;
@@ -141,6 +148,11 @@ public class InventoryCustomModHandler {
                         sortChestInventory((ChestContainer) event.player.openContainer);
                     }
                 }
+            }
+
+            if (destroyItemParam != null) {
+                // 使い切ったアイテムを補充する
+                autoReplaceItem(event.player.inventory);
             }
         }
     }
@@ -182,14 +194,27 @@ public class InventoryCustomModHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
-        PlayerInventory inventory = event.getPlayer().inventory;
-        Hand hand = Objects.requireNonNull(event.getHand());
+    private static class DestroyItemParam {
+        private final Hand hand;
+        private final ItemStack original;
 
-        ItemStack original = event.getOriginal();
-        LOGGER.info("PlayerDestroyItemEvent: " + original.toString());
+        public DestroyItemParam(Hand hand, ItemStack original) {
+            this.hand = hand;
+            this.original = original;
+        }
 
+        public Hand getHand() {
+            return this.hand;
+        }
+
+        public ItemStack getOriginalItem() {
+            return this.original;
+        }
+    }
+
+    private DestroyItemParam destroyItemParam = null;
+
+    private void autoReplaceItem(PlayerInventory inventory) {
         for (int i = 0; i < inventory.mainInventory.size(); i++) {
             ItemStack itemStack = inventory.mainInventory.get(i);
             if (itemStack.isEmpty()) {
@@ -197,8 +222,8 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (original.isItemEqual(itemStack)) {
-                if (Hand.MAIN_HAND.equals(hand)) {
+            if (destroyItemParam.getOriginalItem().isItemEqual(itemStack)) {
+                if (destroyItemParam.getHand().equals(Hand.MAIN_HAND)) {
                     inventory.mainInventory.set(inventory.currentItem, itemStack);
                 }
                 else {
@@ -208,5 +233,18 @@ public class InventoryCustomModHandler {
                 break;
             }
         }
+
+        destroyItemParam = null;
+    }
+
+    @SubscribeEvent
+    public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
+        if (event.getOriginal().getItem() == Items.BUCKET) {
+            // 牛乳もこのイベントがくるので捨てる
+            return;
+        }
+
+        destroyItemParam = new DestroyItemParam(event.getHand(), event.getOriginal());
+        LOGGER.info("PlayerDestroyItemEvent: " + event.getHand() + " / " + event.getOriginal());
     }
 }

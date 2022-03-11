@@ -1,6 +1,5 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
-import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.AbstractGui;
@@ -18,13 +17,15 @@ public class FindSpawnerToast implements IToast {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final ResourceLocation SPAWNER_ICON = new ResourceLocation("textures/block/spawner.png");
-    private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<BlockPos>();
+    private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 
     private final BlockPos blockPos;
+    private final long timeout;
     private final Boolean visibility;
 
-    public FindSpawnerToast(BlockPos blockPos) {
+    public FindSpawnerToast(BlockPos blockPos, long timeout) {
         this.blockPos = blockPos;
+        this.timeout = timeout;
 
         // 表示している座標との重複をチェックするためにLinkedHashSetを使う
         this.visibility = blockPosList.add(blockPos);
@@ -40,7 +41,7 @@ public class FindSpawnerToast implements IToast {
         }
 
         // 設定されている時間だけ表示
-        if (p_230444_3_ > (HCSettings.getInstance().timeFindSpawner * 1000L)) {
+        if (p_230444_3_ > (this.timeout * 1000L)) {
             LOGGER.info("Time up!! " + this.blockPos);
             blockPosList.remove(this.blockPos);
             return Visibility.HIDE;

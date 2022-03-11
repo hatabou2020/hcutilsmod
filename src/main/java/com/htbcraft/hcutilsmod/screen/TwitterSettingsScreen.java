@@ -1,0 +1,204 @@
+package com.htbcraft.hcutilsmod.screen;
+
+import com.htbcraft.hcutilsmod.common.HCCrypt;
+import com.htbcraft.hcutilsmod.common.HCSettings;
+import com.htbcraft.hcutilsmod.mods.twitter.AccessTokenLoader;
+import com.htbcraft.hcutilsmod.mods.twitter.TwitterConsumer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.screen.ConfirmScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+
+public class TwitterSettingsScreen extends SettingsScreen {
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    private Button connectButton = null;
+    private static TranslationTextComponent restartText = null;
+
+
+    // 連携の状態（メニュー用）
+    private enum TwitterConnectStatus {
+        INIT("hcutilsmod.settings.twitter.connect"),
+        SUCCESS("hcutilsmod.settings.twitter.connect.success"),
+        FAILURE("hcutilsmod.settings.twitter.connect.failure"),
+        COMPLETE("hcutilsmod.settings.twitter.connect.complete");
+
+        private final TranslationTextComponent menuText;
+
+        TwitterConnectStatus(String lang) {
+            this.menuText = new TranslationTextComponent(lang);
+        }
+
+        public TranslationTextComponent getMenuText() {
+            if (this == FAILURE) {
+                Style style = this.menuText.getStyle().setColor(Color.fromInt(0xE01000));
+                this.menuText.setStyle(style);
+            }
+            else if (this == SUCCESS) {
+                Style style = this.menuText.getStyle().setColor(Color.fromInt(0x00E0E0));
+                this.menuText.setStyle(style);
+            }
+
+            return this.menuText;
+        }
+    }
+
+    private TwitterConnectStatus connectStatus = TwitterConnectStatus.INIT;
+
+    public TwitterSettingsScreen(Screen parent) {
+        super(parent, new TranslationTextComponent("hcutilsmod.settings.twitter.title"));
+    }
+
+    protected void init() {
+        super.init();
+
+        // Twitterと連携する
+        this.connectButton = this.addButton(
+            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
+            this.connectStatus.getMenuText().appendString("..."),
+            (var1) -> {
+                LOGGER.info("Push Connect");
+                connectTwitter();
+            }));
+
+        // スクリーンショットのツイート：オン/オフ
+        Button onoffButton = this.addButton(
+            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180, 20,
+            getEnableTwitterText(),
+            (var1) -> {
+                HCSettings.getInstance().enableTwitterMod = !HCSettings.getInstance().enableTwitterMod;
+                var1.setMessage(getEnableTwitterText());
+            }));
+
+        // ツイートのデフォルト本文
+        Button defBoxyButton = this.addButton(
+            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
+            new TranslationTextComponent("hcutilsmod.settings.twitter.body.default.title").appendString("..."),
+            (var1) -> this.getMinecraft().displayGuiScreen(new TwitterDefaultBodyScreen(this))));
+
+        // Twitter連携の解除
+        Button destroyButton = this.addButton(
+            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
+            new TranslationTextComponent("hcutilsmod.settings.twitter.destroy.title").appendString("..."),
+            (var1) ->
+                this.getMinecraft().displayGuiScreen(
+                    new ConfirmScreen((result) -> {
+                        if (result) {
+                            HCCrypt.destroy();
+                            this.connectStatus = TwitterConnectStatus.INIT;
+                            restartText = new TranslationTextComponent("hcutilsmod.settings.twitter.destroy.restart");
+                            Style style = restartText.getStyle().setBold(true).setUnderlined(true);
+                            restartText.setStyle(style);
+                        }
+                        this.getMinecraft().displayGuiScreen(this);
+                    },
+                    new TranslationTextComponent("hcutilsmod.settings.twitter.destroy.title"),
+                    new TranslationTextComponent("hcutilsmod.settings.twitter.destroy.text")))));
+
+        // アクセストークンを持っていれば認証ボタンを無効にして設定を開放する
+        if (AccessTokenLoader.isExist()) {
+            if (this.connectStatus == TwitterConnectStatus.SUCCESS) {
+                LOGGER.info("Success");
+            }
+            else {
+                LOGGER.info("Authorized");
+                this.connectStatus = TwitterConnectStatus.COMPLETE;
+                this.connectButton.setMessage(this.connectStatus.getMenuText());
+            }
+            this.connectButton.active = false;
+        }
+        else {
+            onoffButton.active = false;
+            defBoxyButton.active = false;
+            destroyButton.active = false;
+            HCSettings.getInstance().enableTwitterMod = false;  // 強制的にOFFにする
+            onoffButton.setMessage(getEnableTwitterText());
+        }
+
+        // 戻る
+        this.addButton(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
+            new TranslationTextComponent("hcutilsmod.settings.twitter.return"),
+            (var1) -> this.getMinecraft().displayGuiScreen(this.getParent())));
+    }
+
+    // スクリーンショットのツイート：オン/オフ
+    private ITextComponent getEnableTwitterText() {
+        if (HCSettings.getInstance().enableTwitterMod) {
+            return new TranslationTextComponent("hcutilsmod.settings.twitter.enable");
+        }
+        else {
+            return new TranslationTextComponent("hcutilsmod.settings.twitter.disable");
+        }
+    }
+
+    // Twitter連携
+    private void connectTwitter() {
+        Twitter twitter = new TwitterFactory().getInstance();
+
+        try {
+            TwitterConsumer consumer = TwitterConsumer.INSTANCE;
+            twitter.setOAuthConsumer(consumer.getKey(), consumer.getSecret());
+            RequestToken requestToken = twitter.getOAuthRequestToken("oob");
+            String authorizationURL = requestToken.getAuthorizationURL();
+
+            this.getMinecraft().displayGuiScreen(
+                new ConfirmScreen((result) -> {
+                    if (result) {
+                        // ブラウザを起動して認証サイトへ
+                        Util.getOSType().openURI(authorizationURL);
+
+                        // PINコード入力待ち
+                        this.getMinecraft().displayGuiScreen(
+                            new TwitterPinScreen(this, (pin) -> {
+                                try {
+                                    // PINコードが入力されたらアクセストークンを取得
+                                    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, pin);
+                                    // アクセストークンの永続化
+                                    AccessTokenLoader.save(accessToken);
+                                    this.connectStatus = TwitterConnectStatus.SUCCESS;
+                                } catch (Exception e) {
+                                    this.connectStatus = TwitterConnectStatus.FAILURE;
+                                    e.printStackTrace();
+                                }
+                                this.getMinecraft().displayGuiScreen(this);
+                            }
+                        ));
+                    }
+                    else {
+                        this.getMinecraft().displayGuiScreen(this);
+                    }
+                },
+                new TranslationTextComponent("hcutilsmod.settings.twitter.connect.title"),
+                new TranslationTextComponent("hcutilsmod.settings.twitter.connect.text", authorizationURL)
+            ));
+        } catch (Exception e) {
+            this.connectStatus = TwitterConnectStatus.FAILURE;
+            this.connectButton.setMessage(this.connectStatus.getMenuText());
+            e.printStackTrace();
+        }
+    }
+
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+
+        if (restartText != null) {
+            int x = getPosX() + (getWidth() / 2) - (this.font.getStringPropertyWidth(restartText) / 2) - 2;
+            int y = getPosY() + 140 - 2;
+            int w = x + 2 + this.font.getStringPropertyWidth(restartText) + 2;
+            int h = y + 2 + this.font.FONT_HEIGHT + 2;
+            fill(matrixStack, x, y, w, h, -1873784752);
+            drawCenteredString(matrixStack, this.font, restartText, getPosX() + (getWidth() / 2), getPosY() + 140, 0xE01000);
+        }
+    }
+}

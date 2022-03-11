@@ -26,13 +26,11 @@ public class InventoryNameSort implements Comparator<ItemStack> {
             return -1;
         }
 
-        int ret = s1.compareTo(s2);
-
-        // 同じ名前ならスタック数の多い方を前に
-        if (ret == 0) {
+        // 同じならスタック数の多い方を前に
+        if (o1.isItemEqual(o2)) {
             return o2.getCount() - o1.getCount();
         }
 
-        return ret;
+        return s1.compareTo(s2);
     }
 }
