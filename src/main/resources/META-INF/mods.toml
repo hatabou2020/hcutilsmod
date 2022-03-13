@@ -27,7 +27,10 @@ displayName="サバイバルで便利なMOD集" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://www.curseforge.com/minecraft/mc-mods/hcutilsmod" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-# logoFile="examplemod.png" #optional
+logoFile="icon.png" #optional
+# 素材提供
+# https://icon-icons.com/ja/%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3/%E3%81%8A%E4%BA%92%E3%81%84%E3%81%AB%E5%B9%B4%E9%BD%A2%E3%81%AF%E5%90%8C%E5%B9%B4%E4%BB%A3%E3%81%A7-%E6%89%80%E5%B1%9E/94415
+# https://hpgpixer.jp/
 # A text field displayed in the mod UI
 # credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
@@ -37,20 +40,44 @@ description='''
 マイクラのサバイバルで便利なMODを作ります。
 ※当MODの使用は自己責任でお願いします。
 
-#01 ブロックの方向を変える
+#01 ブロックの方向を変える（シングルプレイのみ）
 #02 座標だけ表示する
-#03 インベントリを整理する
-#04 手持ちを使い切ったら自動で補充する
+#03 インベントリを整理する（シングルプレイのみ）
+#04 手持ちを使い切ったら自動で補充する（シングルプレイのみ）
 #05 スポナーを見つける
+#06 明るさマーカーを表示する（Ver.1.53～）
+#07 スクリーンショットのツイート（Windows版のみ Ver.1.6～）
+
+※当MODは「#07 スクリーンショットのツイート」でtwitter4jを
+  利用しています。感謝！
+  https://twitter4j.org/ja/
+  暗号化を行うためあなたのユーザーディレクトリにファイルを作成します。
+  ご了承ください。
 
 --------
-2021/12/01
+Ver.1.6
+--------
+2022/3/13
+・ブロックの方向を変えるデフォルトキーを[SHIFT+r]から[r]に変更した。
+（OptiFineと一緒に導入するとなぜかSHIFTが無効化されてしまうので・・・）
+・明るさマーカーを表示する機能の追加
+（ブロックの変化による更新をちゃんと検知できてない）
+・設定の誤字などを修正。
+・通じるかわからんが英語に対応してみた。※一部英訳できず。
+・牛から牛乳を汲み取ったらバケツが消えるバグの修正
+・チャットなどの文字入力でMODのキーが反応してしまっていたバグの修正
+・「#07 スクリーンショットのツイート」を追加した。
+・forge-1.17.1-37.1.1-mdkでビルド
+--------
 Ver.1.51
+--------
+2021/12/01
 ・forge-1.17.1-37.1.0-mdkでビルド
 ・スタックできないアイテムの自動補充のバグを修正
 --------
-2021/10/02
 Ver.1.5
+--------
+2021/10/02
 ・インベントリのソートにカテゴリ順を追加
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.

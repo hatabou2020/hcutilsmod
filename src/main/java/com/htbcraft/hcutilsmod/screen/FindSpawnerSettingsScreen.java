@@ -6,6 +6,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.ProgressOption;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public class FindSpawnerSettingsScreen extends SettingsScreen {
@@ -18,10 +19,11 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
 
         // オンオフ
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-                getEnableFindSpawnerModText(), (var1) -> {
-            HCSettings.getInstance().enableFindSpawnerMod = !HCSettings.getInstance().enableFindSpawnerMod;
-            var1.setMessage(getEnableFindSpawnerModText());
-        }));
+            getEnableFindSpawnerModText(),
+            (var1) -> {
+	            HCSettings.getInstance().enableFindSpawnerMod = !HCSettings.getInstance().enableFindSpawnerMod;
+	            var1.setMessage(getEnableFindSpawnerModText());
+	        }));
 
         Options options = Minecraft.getInstance().options;
 
@@ -33,11 +35,11 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                        new TranslatableComponent("hcutilsmod.settings.findspawner.return"),
-                        (var1) -> this.getMinecraft().setScreen(this.getParent())));
+            new TranslatableComponent("hcutilsmod.settings.findspawner.return"),
+            (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
-    private TranslatableComponent getEnableFindSpawnerModText() {
+    private Component getEnableFindSpawnerModText() {
         if (HCSettings.getInstance().enableFindSpawnerMod) {
             return new TranslatableComponent("hcutilsmod.settings.findspawner.enable");
         }
@@ -55,19 +57,17 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
             16.0D, 64.0D, 16.0F,
             (gameSettings) -> (double)HCSettings.getInstance().rangeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
-            (gameSettings, translationKey) -> {
-                return (new TranslatableComponent("hcutilsmod.settings.findspawner.range"))
-                        .append(": " + HCSettings.getInstance().rangeFindSpawner);
-            });
+            (gameSettings, translationKey) ->
+                (new TranslatableComponent("hcutilsmod.settings.findspawner.range"))
+                    .append(": " + HCSettings.getInstance().rangeFindSpawner + " blocks"));
 
     // 座標の表示時間
     public static final ProgressOption TIME = new ProgressOption("hcutilsmod.settings.findspawner.time",
             10.0D, 60.0D, 10.0F,
             (gameSettings) -> (double)HCSettings.getInstance().timeFindSpawner,
             (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
-            (gameSettings, translationKey) -> {
-                return (new TranslatableComponent("hcutilsmod.settings.findspawner.time"))
-                        .append(": " + HCSettings.getInstance().timeFindSpawner)
-                        .append(new TranslatableComponent("hcutilsmod.settings.findspawner.seconds"));
-            });
+            (gameSettings, translationKey) ->
+                (new TranslatableComponent("hcutilsmod.settings.findspawner.time"))
+                    .append(": " + HCSettings.getInstance().timeFindSpawner + " ")
+                    .append(new TranslatableComponent("hcutilsmod.settings.findspawner.seconds")));
 }
