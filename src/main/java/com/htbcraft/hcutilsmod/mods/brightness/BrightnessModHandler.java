@@ -196,6 +196,10 @@ public class BrightnessModHandler {
 
     @SubscribeEvent
     public void onRenderGameOverlayPreLayer(RenderGameOverlayEvent.PreLayer event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.LAYER) {
+            return;
+        }
+
         // マーカー表示中がわかるように画面の左下にアイコン出す
         if (dispBrightness) {
             int x = 1;

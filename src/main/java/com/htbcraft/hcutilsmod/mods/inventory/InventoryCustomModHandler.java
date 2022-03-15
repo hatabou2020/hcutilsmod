@@ -15,18 +15,17 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.event.ScreenOpenEvent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.client.ClientRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -151,9 +150,7 @@ public class InventoryCustomModHandler {
                 }
             }
 
-            if (destroyItem) {
-                destroyItem = false;
-
+            if (destroyItemParam != null) {
                 // 使い切ったアイテムを補充する
                 autoReplaceItem(event.player.getInventory());
             }
@@ -197,18 +194,25 @@ public class InventoryCustomModHandler {
         }
     }
 
-    private class DestroyItemParam {
-        public InteractionHand hand;
-        public ItemStack original;
+    private static class DestroyItemParam {
+        private final InteractionHand hand;
+        private final ItemStack original;
 
-        public void init() {
-            hand = null;
-            original = null;
+        public DestroyItemParam(InteractionHand hand, ItemStack original) {
+            this.hand = hand;
+            this.original = original;
+        }
+
+        public InteractionHand getHand() {
+            return this.hand;
+        }
+
+        public ItemStack getOriginalItem() {
+            return this.original;
         }
     }
 
-    private DestroyItemParam destroyItemParam = new DestroyItemParam();
-    private Boolean destroyItem = false;
+    private DestroyItemParam destroyItemParam = null;
 
     private void autoReplaceItem(Inventory inventory) {
         for (int i = 0; i < inventory.items.size(); i++) {
@@ -218,8 +222,8 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (destroyItemParam.original.sameItem(itemStack)) {
-                if (destroyItemParam.hand.equals(InteractionHand.MAIN_HAND)) {
+            if (destroyItemParam.getOriginalItem().sameItem(itemStack)) {
+                if (destroyItemParam.getHand().equals(InteractionHand.MAIN_HAND)) {
                     inventory.items.set(inventory.selected, itemStack);
                 }
                 else {
@@ -230,7 +234,7 @@ public class InventoryCustomModHandler {
             }
         }
 
-        destroyItemParam.init();
+        destroyItemParam = null;
     }
 
     @SubscribeEvent
@@ -240,10 +244,7 @@ public class InventoryCustomModHandler {
             return;
         }
 
-        destroyItemParam.hand = Objects.requireNonNull(event.getHand());
-        destroyItemParam.original = event.getOriginal();
-        LOGGER.info("PlayerDestroyItemEvent: " + destroyItemParam.original.toString() + " / " + destroyItemParam.hand);
-
-        destroyItem = true;
+        destroyItemParam = new DestroyItemParam(event.getHand(), event.getOriginal());
+        LOGGER.info("PlayerDestroyItemEvent: " + event.getHand() + " / " + event.getOriginal());
     }
 }

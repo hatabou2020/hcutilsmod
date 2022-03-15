@@ -2,29 +2,41 @@ package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SettingsScreen extends Screen {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation("textures/gui/advancements/window.png");
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("textures/gui/advancements/backgrounds/stone.png");
 
     private static final int WINDOW_WIDTH = 240;
-    private static final int WINDOW_HEIGHT = 180;
+    private static final int WINDOW_HEIGHT = 205;
 
     private final Screen parent;
-    private int win_x, win_y;
+    private int win_x;
+    private int win_y;
+    private final int win_w;
+    private final int win_h;
 
     public SettingsScreen(Screen parent, Component titleIn) {
+        this(parent, titleIn, WINDOW_WIDTH, WINDOW_HEIGHT);
+    }
+
+    public SettingsScreen(Screen parent, Component titleIn, int width, int height) {
         super(titleIn);
         this.parent = parent;
         win_x = 0;
         win_y = 0;
+        win_w = width;
+        win_h = height;
     }
 
     protected Screen getParent() {
@@ -40,16 +52,22 @@ public class SettingsScreen extends Screen {
     }
 
     public int getWidth() {
-        return WINDOW_WIDTH;
+        return win_w;
     }
 
     public int getHeight() {
-        return WINDOW_HEIGHT;
+        return win_h;
     }
 
     protected void init() {
-        win_x = (this.width - WINDOW_WIDTH) / 2;
-        win_y = (this.height - WINDOW_HEIGHT) / 2;
+        win_x = (this.width - win_w) / 2;
+        win_y = (this.height - win_h) / 2;
+        LOGGER.info("win_x: " + win_x);
+        LOGGER.info("win_y: " + win_y);
+        LOGGER.info("win_w: " + win_w);
+        LOGGER.info("win_h: " + win_h);
+        LOGGER.info("width: " + width);
+        LOGGER.info("height: " + height);
     }
 
     public void onClose() {
@@ -58,7 +76,7 @@ public class SettingsScreen extends Screen {
 
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.renderBackground(matrixStack);
-        renderWindow(matrixStack, win_x, win_y, WINDOW_WIDTH, WINDOW_HEIGHT, this.title, BACKGROUND_TEXTURE);
+        renderWindow(matrixStack, win_x, win_y, win_w, win_h, this.title, BACKGROUND_TEXTURE);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 

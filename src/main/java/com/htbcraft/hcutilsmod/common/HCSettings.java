@@ -35,6 +35,11 @@ public class HCSettings {
     public Boolean zombieBrightness = true;                     // ゾンビが湧くことができないブロック：除外する(true)／除外しない(false)
     public MinecraftColor colorBrightness = MinecraftColor.RED; // 明るさマーカーの色
     public int alphaBrightness = 0x7F;                          // 明るさマーカーの透過度
+    public Boolean enableTwitterMod = false;                    // スクリーンショットのツイート
+    public String twitterText1 = "";                            // ツイートのデフォルト本文１
+    public String twitterText2 = "";                            // ツイートのデフォルト本文２
+    public String twitterText3 = "";                            // ツイートのデフォルト本文３
+    public String twitterText4 = " #Minecraft #マインクラフト #hcutilsmod";// ツイートのデフォルト本文４
 
     public HCSettings(Minecraft mcIn) {
         instance = this;
@@ -103,6 +108,23 @@ public class HCSettings {
                     if ("brightnessmod.alpha".equals(s)) {
                         alphaBrightness = Integer.parseInt(s1);
                     }
+                    if (HCCrypt.isSupportOS()) {
+                        if ("twittermod".equals(s)) {
+                            enableTwitterMod = Boolean.valueOf(s1);
+                        }
+                        if ("twittermod.text1".equals(s)) {
+                            twitterText1 = s1;
+                        }
+                        if ("twittermod.text2".equals(s)) {
+                            twitterText2 = s1;
+                        }
+                        if ("twittermod.text3".equals(s)) {
+                            twitterText3 = s1;
+                        }
+                        if ("twittermod.text4".equals(s)) {
+                            twitterText4 = s1;
+                        }
+                    }
                 } catch (Exception exception) {
                     LOGGER.warn("Skipping bad option: {}:{}", s, s1);
                 }
@@ -126,6 +148,13 @@ public class HCSettings {
             printwriter.println("brightnessmod.zombie:" + zombieBrightness);
             printwriter.println("brightnessmod.color:" + colorBrightness.ordinal());
             printwriter.println("brightnessmod.alpha:" + alphaBrightness);
+            if (HCCrypt.isSupportOS()) {
+                printwriter.println("twittermod:" + enableTwitterMod);
+                printwriter.println("twittermod.text1:" + twitterText1);
+                printwriter.println("twittermod.text2:" + twitterText2);
+                printwriter.println("twittermod.text3:" + twitterText3);
+                printwriter.println("twittermod.text4:" + twitterText4);
+            }
         } catch (Exception exception) {
             LOGGER.error("Failed to save options", exception);
         }

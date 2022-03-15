@@ -158,6 +158,11 @@ repositories {
     // }
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    extraLibs
+}
+
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
@@ -175,6 +180,21 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    extraLibs 'org.twitter4j:twitter4j-core:4.0.7'
+}
+
+processResources {
+    from {
+        copy {
+            from '../TwitterConsumer/jna'
+            into getDestinationDir().toString().concat("/jna")
+        }
+        configurations.extraLibs.collect {
+            zipTree(it)
+        }
+    }
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
