@@ -6,7 +6,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +19,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
     private Component tweetBodyDef = null;
 
     public TwitterDefaultBodyScreen(Screen parent) {
-        super(parent, new TranslatableComponent("hcutilsmod.settings.twitter.body.default.title"), 260, 180);
+        super(parent, Component.translatable("hcutilsmod.settings.twitter.body.default.title"), 260, 180);
     }
 
     protected void init() {
@@ -29,7 +28,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         // デフォルト本文１
         this.defTweetEdit1 = this.addRenderableWidget(
             new EditBox(this.font, getPosX() + (getWidth() - 220) / 2, getPosY() + 40, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.defTweetEdit1.setMaxLength(35);
         this.defTweetEdit1.setResponder((val) -> this.dispTweetTextLength());
         this.defTweetEdit1.setValue(HCSettings.getInstance().twitterText1);
@@ -37,7 +36,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         // デフォルト本文２
         this.defTweetEdit2 = this.addRenderableWidget(
             new EditBox(this.font, getPosX() + (getWidth() - 220) / 2, getPosY() + 63, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.defTweetEdit2.setMaxLength(35);
         this.defTweetEdit2.setResponder((val) -> this.dispTweetTextLength());
         this.defTweetEdit2.setValue(HCSettings.getInstance().twitterText2);
@@ -45,7 +44,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         // デフォルト本文３
         this.defTweetEdit3 = this.addRenderableWidget(
             new EditBox(this.font, getPosX() + (getWidth() - 220) / 2, getPosY() + 86, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.defTweetEdit3.setMaxLength(35);
         this.defTweetEdit3.setResponder((val) -> this.dispTweetTextLength());
         this.defTweetEdit3.setValue(HCSettings.getInstance().twitterText3);
@@ -53,7 +52,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         // デフォルト本文４
         this.defTweetEdit4 = this.addRenderableWidget(
             new EditBox(this.font, getPosX() + (getWidth() - 220) / 2, getPosY() + 109, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.defTweetEdit4.setMaxLength(35);
         this.defTweetEdit4.setResponder((val) -> this.dispTweetTextLength());
         this.defTweetEdit4.setValue(HCSettings.getInstance().twitterText4);
@@ -63,7 +62,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.return"),
+            Component.translatable("hcutilsmod.settings.twitter.return"),
             (var1) -> {
                 updateTweetText();
                 this.getMinecraft().setScreen(this.getParent());
@@ -88,7 +87,7 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         }
 
         this.tweetBodyDef =
-                new TranslatableComponent("hcutilsmod.settings.twitter.body.default.length").append(String.valueOf(len));
+                Component.translatable("hcutilsmod.settings.twitter.body.default.length").append(String.valueOf(len));
     }
 
     // デフォルト本文の保存

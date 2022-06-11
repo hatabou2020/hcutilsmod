@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,7 +60,7 @@ public class FindSpawnerToast implements Toast {
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        p_94897_.getMinecraft().font.draw(p_94896_, new TranslatableComponent("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
+        p_94897_.getMinecraft().font.draw(p_94896_, Component.translatable("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
         p_94897_.getMinecraft().font.draw(p_94896_, text, 36.0F, 18.0F, 14737632);
 
         return Visibility.SHOW;

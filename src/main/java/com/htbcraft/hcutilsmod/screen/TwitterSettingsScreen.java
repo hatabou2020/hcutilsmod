@@ -10,8 +10,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import twitter4j.Twitter;
@@ -23,7 +23,7 @@ public class TwitterSettingsScreen extends SettingsScreen {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Button connectButton = null;
-    private static TranslatableComponent restartText = null;
+    private static MutableComponent restartText = null;
 
 
     // 連携の状態（メニュー用）
@@ -33,13 +33,13 @@ public class TwitterSettingsScreen extends SettingsScreen {
         FAILURE("hcutilsmod.settings.twitter.connect.failure"),
         COMPLETE("hcutilsmod.settings.twitter.connect.complete");
 
-        private final TranslatableComponent menuText;
+        private final MutableComponent menuText;
 
         TwitterConnectStatus(String lang) {
-            this.menuText = new TranslatableComponent(lang);
+            this.menuText = Component.translatable(lang);
         }
 
-        public TranslatableComponent getMenuText() {
+        public MutableComponent getMenuText() {
             if (this == FAILURE) {
                 Style style = this.menuText.getStyle().withColor(0xE01000);
                 this.menuText.setStyle(style);
@@ -56,7 +56,7 @@ public class TwitterSettingsScreen extends SettingsScreen {
     private TwitterConnectStatus connectStatus = TwitterConnectStatus.INIT;
 
     public TwitterSettingsScreen(Screen parent) {
-        super(parent, new TranslatableComponent("hcutilsmod.settings.twitter.title"));
+        super(parent, Component.translatable("hcutilsmod.settings.twitter.title"));
     }
 
     protected void init() {
@@ -83,27 +83,27 @@ public class TwitterSettingsScreen extends SettingsScreen {
         // ツイートのデフォルト本文
         Button defBoxyButton = this.addRenderableWidget(
             new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.body.default.title").append("..."),
+            Component.translatable("hcutilsmod.settings.twitter.body.default.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new TwitterDefaultBodyScreen(this))));
 
         // Twitter連携の解除
         Button destroyButton = this.addRenderableWidget(
             new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.destroy.title").append("..."),
+            Component.translatable("hcutilsmod.settings.twitter.destroy.title").append("..."),
             (var1) ->
                 this.getMinecraft().setScreen(
                     new ConfirmScreen((result) -> {
                         if (result) {
                             HCCrypt.destroy();
                             this.connectStatus = TwitterConnectStatus.INIT;
-                            restartText = new TranslatableComponent("hcutilsmod.settings.twitter.destroy.restart");
+                            restartText = Component.translatable("hcutilsmod.settings.twitter.destroy.restart");
                             Style style = restartText.getStyle().withBold(true).withUnderlined(true);
                             restartText.setStyle(style);
                         }
                         this.getMinecraft().setScreen(this);
                     },
-                    new TranslatableComponent("hcutilsmod.settings.twitter.destroy.title"),
-                    new TranslatableComponent("hcutilsmod.settings.twitter.destroy.text")))));
+                    Component.translatable("hcutilsmod.settings.twitter.destroy.title"),
+                    Component.translatable("hcutilsmod.settings.twitter.destroy.text")))));
 
         // アクセストークンを持っていれば認証ボタンを無効にして設定を開放する
         if (AccessTokenLoader.isExist()) {
@@ -127,17 +127,17 @@ public class TwitterSettingsScreen extends SettingsScreen {
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.return"),
+            Component.translatable("hcutilsmod.settings.twitter.return"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
     }
 
     // スクリーンショットのツイート：オン/オフ
     private Component getEnableTwitterText() {
         if (HCSettings.getInstance().enableTwitterMod) {
-            return new TranslatableComponent("hcutilsmod.settings.twitter.enable");
+            return Component.translatable("hcutilsmod.settings.twitter.enable");
         }
         else {
-            return new TranslatableComponent("hcutilsmod.settings.twitter.disable");
+            return Component.translatable("hcutilsmod.settings.twitter.disable");
         }
     }
 
@@ -178,8 +178,8 @@ public class TwitterSettingsScreen extends SettingsScreen {
                         this.getMinecraft().setScreen(this);
                     }
                 },
-                new TranslatableComponent("hcutilsmod.settings.twitter.connect.title"),
-                new TranslatableComponent("hcutilsmod.settings.twitter.connect.text", authorizationURL)
+                Component.translatable("hcutilsmod.settings.twitter.connect.title"),
+                Component.translatable("hcutilsmod.settings.twitter.connect.text", authorizationURL)
             ));
         } catch (Exception e) {
             this.connectStatus = TwitterConnectStatus.FAILURE;

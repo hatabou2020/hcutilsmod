@@ -5,7 +5,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +21,7 @@ public class TwitterPinScreen extends SettingsScreen {
     private Button authButton;
 
     public TwitterPinScreen(Screen parent, TwitterPinScreen.OnAuth callback) {
-        super(parent, new TranslatableComponent("hcutilsmod.settings.twitter.pin.title"), 240, 150);
+        super(parent, Component.translatable("hcutilsmod.settings.twitter.pin.title"), 240, 150);
         this.callback = callback;
     }
 
@@ -32,7 +32,7 @@ public class TwitterPinScreen extends SettingsScreen {
     protected void init() {
         super.init();
         this.message = MultiLineLabel.create(this.font,
-            new TranslatableComponent("hcutilsmod.settings.twitter.pin.text"),
+            Component.translatable("hcutilsmod.settings.twitter.pin.text"),
             this.width - 50);
 
         Objects.requireNonNull(this.minecraft).keyboardHandler.setSendRepeatsToGui(true);
@@ -40,7 +40,7 @@ public class TwitterPinScreen extends SettingsScreen {
         // 認証する
         this.authButton = this.addRenderableWidget(
             new Button(getPosX() + 18, getPosY() + 100, 100, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.pin.auth"),
+            Component.translatable("hcutilsmod.settings.twitter.pin.auth"),
             (var1) -> {
                 LOGGER.info("Push Auth");
                 this.callback.onAuth(this.pinEdit.getValue());
@@ -49,13 +49,13 @@ public class TwitterPinScreen extends SettingsScreen {
         // キャンセル
         this.addRenderableWidget(
             new Button(getPosX() + (getWidth() - 118), getPosY() + 100, 100, 20,
-            new TranslatableComponent("hcutilsmod.settings.twitter.pin.cancel"),
+            Component.translatable("hcutilsmod.settings.twitter.pin.cancel"),
             (var1) -> this.getMinecraft().setScreen(this.getParent())));
 
         // PINコード
         this.pinEdit = this.addRenderableWidget(
             new EditBox(this.font, getPosX() + (getWidth() - 100) / 2, getPosY() + 60, 100, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.pinEdit.setMaxLength(7);
         this.pinEdit.setFocus(true);
         this.pinEdit.setResponder((val) -> this.updateAuthButtonStatus());

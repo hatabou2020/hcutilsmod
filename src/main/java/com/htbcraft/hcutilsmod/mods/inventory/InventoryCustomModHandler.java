@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -97,7 +97,7 @@ public class InventoryCustomModHandler {
 
         LOGGER.info(gui.getTitle().getString());
 
-        TranslatableComponent keyName = new TranslatableComponent(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
+        Component keyName = Component.translatable(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
         int width = Minecraft.getInstance().font.width(keyName.getString());
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ContainerScreen)) {

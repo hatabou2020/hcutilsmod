@@ -22,7 +22,7 @@ public class CoordsModHandler {
     @SubscribeEvent
     public void onRenderGameOverlayText(RenderGameOverlayEvent.Text event) {
         if ((!Minecraft.getInstance().options.renderDebug) && (HCSettings.getInstance().enableCordsMod)) {
-            coordsOverlayGui.render(event.getMatrixStack());
+            coordsOverlayGui.render(event.getPoseStack());
         }
     }
 }

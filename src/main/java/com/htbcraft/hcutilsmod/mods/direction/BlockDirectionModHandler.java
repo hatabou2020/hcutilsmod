@@ -192,7 +192,7 @@ public class BlockDirectionModHandler {
                 }
 
                 RenderSystem.enableBlend();
-                GuiComponent.blit(event.getMatrixStack(),
+                GuiComponent.blit(event.getPoseStack(),
                         x,
                         y + 12,
                         0,

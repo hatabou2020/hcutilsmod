@@ -4,11 +4,10 @@ import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class MainSettingsScreen extends SettingsScreen {
     public MainSettingsScreen() {
-        super(null, new TranslatableComponent("hcutilsmod.settings.title"));
+        super(null, Component.translatable("hcutilsmod.settings.title"));
     }
 
     protected void init() {
@@ -37,42 +36,42 @@ public class MainSettingsScreen extends SettingsScreen {
 
         // スポナーの検索設定
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            new TranslatableComponent("hcutilsmod.settings.findspawner.title").append("..."),
+            Component.translatable("hcutilsmod.settings.findspawner.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this))));
 
         // 明るさ表示設定
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            new TranslatableComponent("hcutilsmod.settings.brightness.title").append("..."),
+            Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
             (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this))));
 
         if (HCCrypt.isSupportOS()) {
             // Twitter設定
             this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 130, 180, 20,
-                new TranslatableComponent("hcutilsmod.settings.twitter.title").append("..."),
+                Component.translatable("hcutilsmod.settings.twitter.title").append("..."),
                 (var1) -> this.getMinecraft().setScreen(new TwitterSettingsScreen(this))));
         }
 
         // ゲームに戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            new TranslatableComponent("hcutilsmod.settings.return"),
+            Component.translatable("hcutilsmod.settings.return"),
             (var1) -> this.getMinecraft().setScreen(null)));
     }
 
     private Component getEnableCordsModText() {
         if (HCSettings.getInstance().enableCordsMod) {
-            return new TranslatableComponent("hcutilsmod.settings.cords.enable");
+            return Component.translatable("hcutilsmod.settings.cords.enable");
         }
         else {
-            return new TranslatableComponent("hcutilsmod.settings.cords.disable");
+            return Component.translatable("hcutilsmod.settings.cords.disable");
         }
     }
 
     private Component getInventorySortTypeText() {
         if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
-            return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.category");
+            return Component.translatable("hcutilsmod.settings.inventory.sorttype.category");
         }
         else {
-            return new TranslatableComponent("hcutilsmod.settings.inventory.sorttype.name");
+            return Component.translatable("hcutilsmod.settings.inventory.sorttype.name");
         }
     }
 }

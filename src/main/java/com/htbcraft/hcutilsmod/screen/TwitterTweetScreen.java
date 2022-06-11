@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +25,7 @@ public class TwitterTweetScreen extends Screen {
     private Component tweetLength = null;
 
     public TwitterTweetScreen(TwitterTweetScreen.OnTweet callback, String fileName) {
-        super(new TranslatableComponent("hcutilsmod.settings.twitter.tweet.title"));
+        super(Component.translatable("hcutilsmod.settings.twitter.tweet.title"));
         this.callback = callback;
         this.fileName = fileName;
     }
@@ -34,7 +33,7 @@ public class TwitterTweetScreen extends Screen {
     protected void init() {
         super.init();
         this.message = MultiLineLabel.create(this.font,
-            new TranslatableComponent("hcutilsmod.settings.twitter.tweet.text", this.fileName),
+            Component.translatable("hcutilsmod.settings.twitter.tweet.text", this.fileName),
             this.width - 50);
 
         // はい
@@ -56,7 +55,7 @@ public class TwitterTweetScreen extends Screen {
         // 本文１
         this.tweetEdit1 = this.addRenderableWidget(
             new EditBox(this.font, this.width - 230, 60, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.tweetEdit1.setMaxLength(35);
         this.tweetEdit1.setResponder((val) -> this.dispTweetTextLength());
         this.tweetEdit1.setValue(HCSettings.getInstance().twitterText1);
@@ -64,7 +63,7 @@ public class TwitterTweetScreen extends Screen {
         // 本文２
         this.tweetEdit2 = this.addRenderableWidget(
             new EditBox(this.font, this.width - 230, 83, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.tweetEdit2.setMaxLength(35);
         this.tweetEdit2.setResponder((val) -> this.dispTweetTextLength());
         this.tweetEdit2.setValue(HCSettings.getInstance().twitterText2);
@@ -72,7 +71,7 @@ public class TwitterTweetScreen extends Screen {
         // 本文３
         this.tweetEdit3 = this.addRenderableWidget(
             new EditBox(this.font, this.width - 230, 106, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.tweetEdit3.setMaxLength(35);
         this.tweetEdit3.setResponder((val) -> this.dispTweetTextLength());
         this.tweetEdit3.setValue(HCSettings.getInstance().twitterText3);
@@ -80,7 +79,7 @@ public class TwitterTweetScreen extends Screen {
         // 本文４
         this.tweetEdit4 = this.addRenderableWidget(
             new EditBox(this.font, this.width - 230, 129, 220, 20,
-            new TranslatableComponent("")));
+            Component.translatable("")));
         this.tweetEdit4.setMaxLength(35);
         this.tweetEdit4.setResponder((val) -> this.dispTweetTextLength());
         this.tweetEdit4.setValue(HCSettings.getInstance().twitterText4);
@@ -107,7 +106,7 @@ public class TwitterTweetScreen extends Screen {
         }
 
         this.tweetLength =
-                new TranslatableComponent("hcutilsmod.settings.twitter.body.length").append(String.valueOf(len));
+                Component.translatable("hcutilsmod.settings.twitter.body.length").append(String.valueOf(len));
     }
 
     // ツイート本文
