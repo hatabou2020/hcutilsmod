@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,11 +18,11 @@ public class BrightnessSettingsScreen extends SettingsScreen {
 
         Options options = Minecraft.getInstance().options;
 
-//        // 表示の範囲
-//        this.addRenderableWidget(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180));
-//
-//        // 明るさの閾値
-//        this.addRenderableWidget(THRESHOLD.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+        // 表示の範囲
+        this.addRenderableWidget(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180));
+
+        // 明るさの閾値
+        this.addRenderableWidget(THRESHOLD.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // ゾンビが湧くことができないブロックを除外するか
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
@@ -46,23 +47,35 @@ public class BrightnessSettingsScreen extends SettingsScreen {
         return false;
     }   // この画面はESCをはじく
 
-//    // 表示の範囲
-//    public static final ProgressOption RENGE = new ProgressOption("hcutilsmod.settings.brightness.range",
-//            1.0D, 16.0D, 1.0F,
-//            (gameSettings) -> (double)HCSettings.getInstance().rangeBrightness,
-//            (gameSettings, value) -> HCSettings.getInstance().rangeBrightness = value.intValue(),
-//            (gameSettings, translationKey) ->
-//	            (Component.translatable("hcutilsmod.settings.brightness.range"))
-//                    .append(": " + HCSettings.getInstance().rangeBrightness + " blocks"));
-//
-//    // 明るさの閾値
-//    public static final ProgressOption THRESHOLD = new ProgressOption("hcutilsmod.settings.brightness.threshold",
-//            0.0D, 14.0D, 1.0F,
-//            (gameSettings) -> (double)HCSettings.getInstance().thresholdBrightness,
-//            (gameSettings, value) -> HCSettings.getInstance().thresholdBrightness = value.intValue(),
-//            (gameSettings, translationKey) ->
-//                (Component.translatable("hcutilsmod.settings.brightness.threshold"))
-//                    .append(": brightness ≦ " + HCSettings.getInstance().thresholdBrightness));
+    // 表示の範囲
+    private static final OptionInstance<Integer> RENGE = new OptionInstance<>(
+        "hcutilsmod.settings.brightness.range",
+        OptionInstance.noTooltip(),
+        (label, value) -> {
+            return Component.translatable("hcutilsmod.settings.brightness.range")
+                    .append(": " + HCSettings.getInstance().rangeBrightness + " blocks");
+        },
+        new OptionInstance.IntRange(1, 16),
+        HCSettings.getInstance().rangeBrightness,
+        (value) -> {
+            HCSettings.getInstance().rangeBrightness = value;
+        }
+    );
+
+    // 明るさの閾値
+    private static final OptionInstance<Integer> THRESHOLD = new OptionInstance<>(
+        "hcutilsmod.settings.brightness.threshold",
+        OptionInstance.noTooltip(),
+        (label, value) -> {
+            return Component.translatable("hcutilsmod.settings.brightness.threshold")
+                    .append(": brightness ≦ " + HCSettings.getInstance().thresholdBrightness);
+        },
+        new OptionInstance.IntRange(0, 14),
+        HCSettings.getInstance().thresholdBrightness,
+        (value) -> {
+            HCSettings.getInstance().thresholdBrightness = value;
+        }
+    );
 
     private Component getZombieBrightnessText() {
         if (HCSettings.getInstance().zombieBrightness) {

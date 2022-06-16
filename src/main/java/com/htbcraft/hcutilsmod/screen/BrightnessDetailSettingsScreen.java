@@ -3,10 +3,11 @@ package com.htbcraft.hcutilsmod.screen;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.client.Options;
 
 public class BrightnessDetailSettingsScreen extends SettingsScreen {
     public BrightnessDetailSettingsScreen(Screen parent) {
@@ -30,8 +31,8 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
             var1.setMessage(getMarkerColorText());
         }));
 
-//        // マーカーの透過度
-//        this.addRenderableWidget(ALPHA.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+        // マーカーの透過度
+        this.addRenderableWidget(ALPHA.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
@@ -44,13 +45,19 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
     }   // この画面はESCをはじく
 
     // マーカーの透過度
-//    public static final ProgressOption ALPHA = new ProgressOption("hcutilsmod.settings.brightness.alpha",
-//            1.0D, 255.0D, 1.0F,
-//            (gameSettings) -> (double)HCSettings.getInstance().alphaBrightness,
-//            (gameSettings, value) -> HCSettings.getInstance().alphaBrightness = value.intValue(),
-//            (gameSettings, translationKey) ->
-//	            (Component.translatable("hcutilsmod.settings.brightness.alpha"))
-//	                .append(": " + HCSettings.getInstance().alphaBrightness));
+    private static final OptionInstance<Integer> ALPHA = new OptionInstance<>(
+        "hcutilsmod.settings.brightness.alpha",
+        OptionInstance.noTooltip(),
+        (label, value) -> {
+            return Component.translatable("hcutilsmod.settings.brightness.alpha")
+                    .append(": " + HCSettings.getInstance().alphaBrightness);
+        },
+        new OptionInstance.IntRange(1, 255),
+        HCSettings.getInstance().alphaBrightness,
+        (value) -> {
+            HCSettings.getInstance().alphaBrightness = value;
+        }
+    );
 
     private Component getMarkerColorText() {
         if (HCSettings.getInstance().colorBrightness == MinecraftColor.WHITE) {

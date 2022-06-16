@@ -1,7 +1,9 @@
 package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
+import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -25,11 +27,11 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
 
         Options options = Minecraft.getInstance().options;
 
-//        // 検索の範囲
-//        this.addRenderableWidget(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
-//
-//        // 座標の表示時間
-//        this.addRenderableWidget(TIME.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
+        // 検索の範囲
+        this.addRenderableWidget(RENGE.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
+
+        // 座標の表示時間
+        this.addRenderableWidget(TIME.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
 
         // 戻る
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
@@ -50,22 +52,48 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
         return false;
     }   // この画面はESCをはじく
 
-//    // 検索の範囲
-//    public static final ProgressOption RENGE = new ProgressOption("hcutilsmod.settings.findspawner.range",
-//            16.0D, 64.0D, 16.0F,
-//            (gameSettings) -> (double)HCSettings.getInstance().rangeFindSpawner,
-//            (gameSettings, value) -> HCSettings.getInstance().rangeFindSpawner = value.intValue(),
-//            (gameSettings, translationKey) ->
-//                (Component.translatable("hcutilsmod.settings.findspawner.range"))
-//                    .append(": " + HCSettings.getInstance().rangeFindSpawner + " blocks"));
-//
-//    // 座標の表示時間
-//    public static final ProgressOption TIME = new ProgressOption("hcutilsmod.settings.findspawner.time",
-//            10.0D, 60.0D, 10.0F,
-//            (gameSettings) -> (double)HCSettings.getInstance().timeFindSpawner,
-//            (gameSettings, value) -> HCSettings.getInstance().timeFindSpawner = value.longValue(),
-//            (gameSettings, translationKey) ->
-//                (Component.translatable("hcutilsmod.settings.findspawner.time"))
-//                    .append(": " + HCSettings.getInstance().timeFindSpawner + " ")
-//                    .append(Component.translatable("hcutilsmod.settings.findspawner.seconds")));
+    // 検索の範囲
+    private static final OptionInstance<Integer> RENGE = new OptionInstance<>(
+        "hcutilsmod.settings.findspawner.range",
+        OptionInstance.noTooltip(),
+        (label, value) -> {
+            return Component.translatable("hcutilsmod.settings.findspawner.range")
+                    .append(": " + HCSettings.getInstance().rangeFindSpawner + " blocks");
+        },
+        (new OptionInstance.IntRange(1, 4)).xmap(
+                (value) -> {
+                    return value * 16;
+                },
+                (value) -> {
+                    return value / 16;
+                }
+        ),
+        HCSettings.getInstance().rangeFindSpawner,
+        (value) -> {
+            HCSettings.getInstance().rangeFindSpawner = value;
+        }
+    );
+
+    // 座標の表示時間
+    private static final OptionInstance<Integer> TIME = new OptionInstance<>(
+        "hcutilsmod.settings.findspawner.time",
+        OptionInstance.noTooltip(),
+        (label, value) -> {
+            return Component.translatable("hcutilsmod.settings.findspawner.time")
+                    .append(": " + HCSettings.getInstance().timeFindSpawner + " ")
+                    .append(Component.translatable("hcutilsmod.settings.findspawner.seconds"));
+        },
+        (new OptionInstance.IntRange(1, 6)).xmap(
+            (value) -> {
+                return value * 10;
+            },
+            (value) -> {
+                return value / 10;
+            }
+        ),
+        (int)HCSettings.getInstance().timeFindSpawner,
+        (value) -> {
+            HCSettings.getInstance().timeFindSpawner = value;
+        }
+    );
 }
