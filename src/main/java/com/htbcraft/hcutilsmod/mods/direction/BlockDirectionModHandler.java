@@ -12,12 +12,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
-import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
-import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
@@ -46,17 +45,22 @@ public class BlockDirectionModHandler {
             GLFW_REPEAT
     );
 
-    static {
-        ClientRegistry.registerKeyBinding(BIND_KEY);
+    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(BIND_KEY);
     }
 
     @SubscribeEvent
-    public void onGuiOpen(ScreenOpenEvent event) {
-        guiOpened = (event.getScreen() != null);
+    public void onScreenOpening(ScreenEvent.Opening event) {
+        guiOpened = true;
     }
 
     @SubscribeEvent
-    public void onKeyInput(KeyInputEvent event) {
+    public void onScreenClosing(ScreenEvent.Closing event) {
+        guiOpened = false;
+    }
+
+    @SubscribeEvent
+    public void onKeyInput(InputEvent.Key event) {
         if (Minecraft.getInstance().screen != null) {
             LOGGER.info("Displaying on screen");
             return;
@@ -73,7 +77,7 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onMouseInput(MouseInputEvent event) {
+    public void onMouseInput(InputEvent.MouseButton event) {
         if (directMode) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_RIGHT) {
                 mouseClick = (event.getAction() == GLFW_PRESS);
@@ -88,7 +92,7 @@ public class BlockDirectionModHandler {
             // サーバーでメインハンドだけを処理する
             if (event.getSide().isServer() && event.getHand().equals(InteractionHand.MAIN_HAND)) {
                 // ブロックの方向を変える
-                boolean ret = change(event.getWorld(), event.getPos());
+                boolean ret = change(event.getLevel(), event.getPos());
                 LOGGER.info("change: " + ret);
             }
 
@@ -175,10 +179,10 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGameOverlayPreLayer(RenderGameOverlayEvent.PreLayer event) {
+    public void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
         if (directMode) {
             // 十字カーソルを指アイコンに切り替え
-            if (event.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT) {
+            if (event.getOverlay().id() == VanillaGuiOverlay.CROSSHAIR.id()) {
                 int width = event.getWindow().getGuiScaledWidth();
                 int height = event.getWindow().getGuiScaledHeight();
                 int x = (width - DIRECT_ICON_SIZE) / 2;
@@ -203,9 +207,6 @@ public class BlockDirectionModHandler {
                         DIRECT_ICON_SIZE,
                         DIRECT_ICON_SIZE);
                 RenderSystem.disableBlend();
-
-                // 右クリック指示テキスト
-//                mc.fontRenderer.func_238421_b_(event.getMatrixStack(), I18n.format("hcutilsmod.direction.icon"), (float)x + DIRECT_ICON_SIZE, (float)y + DIRECT_ICON_SIZE, 14737632);
 
                 event.setCanceled(true);
             }

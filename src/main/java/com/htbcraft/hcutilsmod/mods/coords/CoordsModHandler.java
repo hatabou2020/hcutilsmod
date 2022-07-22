@@ -2,7 +2,8 @@ package com.htbcraft.hcutilsmod.mods.coords;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,11 @@ public class CoordsModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGameOverlayText(RenderGameOverlayEvent.Text event) {
+    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay().id() != VanillaGuiOverlay.DEBUG_TEXT.id()) {
+            return;
+        }
+
         if ((!Minecraft.getInstance().options.renderDebug) && (HCSettings.getInstance().enableCordsMod)) {
             coordsOverlayGui.render(event.getPoseStack());
         }

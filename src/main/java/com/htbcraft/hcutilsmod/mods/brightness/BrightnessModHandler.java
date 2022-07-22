@@ -14,13 +14,10 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,8 +47,8 @@ public class BrightnessModHandler {
             GLFW_RELEASE
     );
 
-    static {
-        ClientRegistry.registerKeyBinding(BIND_KEY);
+    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(BIND_KEY);
     }
 
     public BrightnessModHandler() {
@@ -65,7 +62,7 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
+    public void onKeyInput(InputEvent.Key event) {
         if (Minecraft.getInstance().screen != null) {
             LOGGER.info("Displaying on screen");
             return;
@@ -84,11 +81,9 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onGuiOpen(ScreenOpenEvent event) {
+    public void onScreenClosing(ScreenEvent.Closing event) {
         // 設定変更されたら更新
-        if (event.getScreen() == null) {
-            prevPlayerPos = BlockPos.ZERO;
-        }
+        prevPlayerPos = BlockPos.ZERO;
     }
 
     @SubscribeEvent
@@ -188,6 +183,12 @@ public class BrightnessModHandler {
 
     @SubscribeEvent
     public void onRenderLevelLast(RenderLevelLastEvent event) {
+// TODO: RenderLevelLastEventが削除されたら考える
+//    public void onRenderLevelStage(RenderLevelStageEvent event) {
+//        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
+//            return;
+//        }
+//
         if (tergetMarkers != null) {
             tergetMarkers.forEach(
                     m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
@@ -195,8 +196,8 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGameOverlayPreLayer(RenderGameOverlayEvent.PreLayer event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.LAYER) {
+    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
+        if (event.getOverlay().id() != VanillaGuiOverlay.AIR_LEVEL.id()) {
             return;
         }
 

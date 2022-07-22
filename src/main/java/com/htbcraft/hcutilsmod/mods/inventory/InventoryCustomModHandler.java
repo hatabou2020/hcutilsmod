@@ -15,10 +15,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,12 +48,12 @@ public class InventoryCustomModHandler {
             GLFW_RELEASE
     );
 
-    static {
-        ClientRegistry.registerKeyBinding(BIND_KEY);
+    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(BIND_KEY);
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent event) {
+    public void onKeyInput(InputEvent.Key event) {
         if ((Minecraft.getInstance().screen != null) &&
             !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
             !(Minecraft.getInstance().screen instanceof ContainerScreen)) {
@@ -76,7 +75,7 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onMouseReleased(ScreenEvent.MouseReleasedEvent event) {
+    public void onMouseReleased(ScreenEvent.MouseButtonReleased event) {
         if (sortEnable) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
                 inventorySortButton.mouseClicked(event.getMouseX(), event.getMouseY(), 0);
@@ -85,16 +84,10 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onGuiOpen(ScreenOpenEvent event) {
+    public void onScreenOpening(ScreenEvent.Opening event) {
         sortEnable = false;
 
         Screen gui = event.getScreen();
-        if (gui == null) {
-            LOGGER.info("gui == null");
-            inventorySortButton = null;
-            return;
-        }
-
         LOGGER.info(gui.getTitle().getString());
 
         Component keyName = Component.translatable(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
@@ -111,14 +104,15 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onDrawScreen(ScreenEvent.DrawScreenEvent event) {
+    public void onScreenClosing(ScreenEvent.Closing event) {
+        sortEnable = false;
+        inventorySortButton = null;
+    }
+
+    @SubscribeEvent
+    public void onDrawScreen(ScreenEvent.Render event) {
         if (sortEnable) {
             Screen gui = event.getScreen();
-            if (gui == null) {
-                LOGGER.info("gui == null");
-                return;
-            }
-
             double mouseX = event.getMouseX();
             double mouseY = event.getMouseY();
 
@@ -194,15 +188,7 @@ public class InventoryCustomModHandler {
         }
     }
 
-    private static class DestroyItemParam {
-        private final InteractionHand hand;
-        private final ItemStack original;
-
-        public DestroyItemParam(InteractionHand hand, ItemStack original) {
-            this.hand = hand;
-            this.original = original;
-        }
-
+    private record DestroyItemParam(InteractionHand hand, ItemStack original) {
         public InteractionHand getHand() {
             return this.hand;
         }
