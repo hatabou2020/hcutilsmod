@@ -12,8 +12,12 @@
     "hcutilsmod.settings.cords.enable" : "Coordinates : Shown",
     "hcutilsmod.settings.cords.disable" : "Coordinates : Hidden",
 
+    "hcutilsmod.settings.inventory.title" : "Inventory settings",
     "hcutilsmod.settings.inventory.sorttype.name" : "Sort Inventory : ABC order",
     "hcutilsmod.settings.inventory.sorttype.category" : "Sort Inventory : Category order",
+    "hcutilsmod.settings.inventory.autoreplaceitem.enable" : "Automatically get items : On",
+    "hcutilsmod.settings.inventory.autoreplaceitem.disable" : "Automatically get items : Off",
+    "hcutilsmod.settings.inventory.return" : "Done",
 
     "hcutilsmod.settings.findspawner.title" : "Spawner search settings",
     "hcutilsmod.settings.findspawner.enable" : "Spawner search : On",

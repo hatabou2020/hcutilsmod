@@ -225,6 +225,10 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
+        if (!HCSettings.getInstance().enableAutoReplaceItem) {
+            return;
+        }
+
         if (event.getOriginal().is(Items.BUCKET)) {
             // 牛乳もこのイベントがくるので捨てる
             return;

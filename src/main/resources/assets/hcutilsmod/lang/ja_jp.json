@@ -12,8 +12,12 @@
     "hcutilsmod.settings.cords.enable" : "プレイヤー座標 ： 表示",
     "hcutilsmod.settings.cords.disable" : "プレイヤー座標 ： 非表示",
 
+    "hcutilsmod.settings.inventory.title" : "インベントリ設定",
     "hcutilsmod.settings.inventory.sorttype.name" : "インベントリの整理 ： 名前順",
     "hcutilsmod.settings.inventory.sorttype.category" : "インベントリの整理 ： カテゴリ順",
+    "hcutilsmod.settings.inventory.autoreplaceitem.enable" : "手持ちアイテムの自動補充 ： オン",
+    "hcutilsmod.settings.inventory.autoreplaceitem.disable" : "手持ちアイテムの自動補充 ： オフ",
+    "hcutilsmod.settings.inventory.return" : "戻る",
 
     "hcutilsmod.settings.findspawner.title" : "スポナー検索設定",
     "hcutilsmod.settings.findspawner.enable" : "スポナーの検索 ： オン",

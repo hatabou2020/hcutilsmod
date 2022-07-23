@@ -21,18 +21,10 @@ public class MainSettingsScreen extends SettingsScreen {
                 var1.setMessage(getEnableCordsModText());
             }));
 
-        // インベントリのソート種類
+        // インベントリ設定
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180, 20,
-            getInventorySortTypeText(),
-            (var1) -> {
-                HCSettings.SortType[] values = HCSettings.SortType.values();
-                int sortType = HCSettings.getInstance().sortType.ordinal();
-                if (++sortType >= values.length) {
-                    sortType = 0;
-                }
-                HCSettings.getInstance().sortType = values[sortType];
-                var1.setMessage(getInventorySortTypeText());
-            }));
+            Component.translatable("hcutilsmod.settings.inventory.title").append("..."),
+            (var1) -> this.getMinecraft().setScreen(new InventorySettingsScreen(this))));
 
         // スポナーの検索設定
         this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
@@ -63,15 +55,6 @@ public class MainSettingsScreen extends SettingsScreen {
         }
         else {
             return Component.translatable("hcutilsmod.settings.cords.disable");
-        }
-    }
-
-    private Component getInventorySortTypeText() {
-        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
-            return Component.translatable("hcutilsmod.settings.inventory.sorttype.category");
-        }
-        else {
-            return Component.translatable("hcutilsmod.settings.inventory.sorttype.name");
         }
     }
 }

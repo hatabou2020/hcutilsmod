@@ -27,6 +27,7 @@ public class HCSettings {
 
     public Boolean enableCordsMod = false;                      // プレイヤー座標の表示
     public SortType sortType = SortType.NAME;                   // インベントリのソート種類
+    public Boolean enableAutoReplaceItem = true;                // 手持ちアイテムの自動補充
     public Boolean enableFindSpawnerMod = false;                // スポナー検索
     public int rangeFindSpawner = 64;                           // スポナー検索の範囲
     public long timeFindSpawner = 30L;                          // スポナー座標の表示時間
@@ -84,6 +85,9 @@ public class HCSettings {
                         SortType[] values = SortType.values();
                         sortType = values[Integer.parseInt(s1)];
                     }
+                    if ("inventorymod.autoreplaceitem".equals(s)) {
+                        enableAutoReplaceItem = Boolean.valueOf(s1);
+                    }
                     if ("findspawnermod".equals(s)) {
                         enableFindSpawnerMod = Boolean.valueOf(s1);
                     }
@@ -140,6 +144,7 @@ public class HCSettings {
         try (PrintWriter printwriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.optionsFile), StandardCharsets.UTF_8))) {
             printwriter.println("cordsmod:" + enableCordsMod);
             printwriter.println("inventorymod:" + sortType.ordinal());
+            printwriter.println("inventorymod.autoreplaceitem:" + enableAutoReplaceItem);
             printwriter.println("findspawnermod:" + enableFindSpawnerMod);
             printwriter.println("findspawnermod.range:" + rangeFindSpawner);
             printwriter.println("findspawnermod.time:" + timeFindSpawner);
