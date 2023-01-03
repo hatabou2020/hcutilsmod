@@ -35,22 +35,28 @@ public class TwitterPinScreen extends SettingsScreen {
             Component.translatable("hcutilsmod.settings.twitter.pin.text"),
             this.width - 50);
 
-        Objects.requireNonNull(this.minecraft).keyboardHandler.setSendRepeatsToGui(true);
+//        Objects.requireNonNull(this.minecraft).keyboardHandler.setSendRepeatsToGui(true);
 
         // 認証する
         this.authButton = this.addRenderableWidget(
-            new Button(getPosX() + 18, getPosY() + 100, 100, 20,
-            Component.translatable("hcutilsmod.settings.twitter.pin.auth"),
-            (var1) -> {
-                LOGGER.info("Push Auth");
-                this.callback.onAuth(this.pinEdit.getValue());
-            }));
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.twitter.pin.auth"),
+                (var1) -> {
+                    LOGGER.info("Push Auth");
+                    this.callback.onAuth(this.pinEdit.getValue());
+                })
+            .pos(getPosX() + 18, getPosY() + 100)
+            .size(100, 20)
+            .build());
 
         // キャンセル
         this.addRenderableWidget(
-            new Button(getPosX() + (getWidth() - 118), getPosY() + 100, 100, 20,
-            Component.translatable("hcutilsmod.settings.twitter.pin.cancel"),
-            (var1) -> this.getMinecraft().setScreen(this.getParent())));
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.twitter.pin.cancel"),
+                (var1) -> this.getMinecraft().setScreen(this.getParent()))
+            .pos(getPosX() + (getWidth() - 118), getPosY() + 100)
+            .size(100, 20)
+            .build());
 
         // PINコード
         this.pinEdit = this.addRenderableWidget(

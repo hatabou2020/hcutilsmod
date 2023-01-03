@@ -61,12 +61,16 @@ public class TwitterDefaultBodyScreen extends SettingsScreen {
         dispTweetTextLength();
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            Component.translatable("hcutilsmod.settings.twitter.return"),
-            (var1) -> {
-                updateTweetText();
-                this.getMinecraft().setScreen(this.getParent());
-            }));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.twitter.return"),
+                    (var1) -> {
+                        updateTweetText();
+                        this.getMinecraft().setScreen(this.getParent());
+                    })
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 140)
+                .size(100, 20)
+                .build());
     }
 
     // ツイート本文の文字数

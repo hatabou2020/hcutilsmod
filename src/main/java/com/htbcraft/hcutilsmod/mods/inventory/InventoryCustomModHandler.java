@@ -95,11 +95,14 @@ public class InventoryCustomModHandler {
 
         if ((gui instanceof InventoryScreen) || (gui instanceof ContainerScreen)) {
             sortEnable = true;
-            inventorySortButton = new Button(0, 0, width + 10, 20, keyName,
-                (var1) -> {
-                    sortInventory = true;
-                    inventorySortButton.active = false;
-                });
+            inventorySortButton = Button.builder(keyName,
+                                                (var1) -> {
+                                                    sortInventory = true;
+                                                    inventorySortButton.active = false;
+                                                })
+                                            .pos(0, 0)
+                                            .size(width + 10, 20)
+                                            .build();
         }
     }
 
@@ -116,8 +119,8 @@ public class InventoryCustomModHandler {
             double mouseX = event.getMouseX();
             double mouseY = event.getMouseY();
 
-            inventorySortButton.x = gui.width - inventorySortButton.getWidth();
-            inventorySortButton.y = 0;
+            inventorySortButton.setX(gui.width - inventorySortButton.getWidth());
+            inventorySortButton.setY(0);
             inventorySortButton.render(event.getPoseStack(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {

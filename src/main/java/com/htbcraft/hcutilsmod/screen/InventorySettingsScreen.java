@@ -14,30 +14,42 @@ public class InventorySettingsScreen extends SettingsScreen {
         super.init();
 
         // インベントリのソート種類
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-            getInventorySortTypeText(),
-            (var1) -> {
-                HCSettings.SortType[] values = HCSettings.SortType.values();
-                int sortType = HCSettings.getInstance().sortType.ordinal();
-                if (++sortType >= values.length) {
-                    sortType = 0;
-                }
-                HCSettings.getInstance().sortType = values[sortType];
-                var1.setMessage(getInventorySortTypeText());
-            }));
+        this.addRenderableWidget(
+                Button.builder(
+                    getInventorySortTypeText(),
+                    (var1) -> {
+                        HCSettings.SortType[] values = HCSettings.SortType.values();
+                        int sortType = HCSettings.getInstance().sortType.ordinal();
+                        if (++sortType >= values.length) {
+                            sortType = 0;
+                        }
+                        HCSettings.getInstance().sortType = values[sortType];
+                        var1.setMessage(getInventorySortTypeText());
+                    })
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 30)
+                .size(180, 20)
+                .build());
 
         // オンオフ
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180, 20,
-            getEnableAutoReplaceItemText(),
-            (var1) -> {
-                HCSettings.getInstance().enableAutoReplaceItem = !HCSettings.getInstance().enableAutoReplaceItem;
-                var1.setMessage(getEnableAutoReplaceItemText());
-            }));
+        this.addRenderableWidget(
+                Button.builder(
+                    getEnableAutoReplaceItemText(),
+                    (var1) -> {
+                        HCSettings.getInstance().enableAutoReplaceItem = !HCSettings.getInstance().enableAutoReplaceItem;
+                        var1.setMessage(getEnableAutoReplaceItemText());
+                    })
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 55)
+                .size(180, 20)
+                .build());
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            Component.translatable("hcutilsmod.settings.inventory.return"),
-            (var1) -> this.getMinecraft().setScreen(this.getParent())));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.inventory.return"),
+                    (var1) -> this.getMinecraft().setScreen(this.getParent()))
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 140)
+                .size(100, 20)
+                .build());
     }
 
     private Component getInventorySortTypeText() {

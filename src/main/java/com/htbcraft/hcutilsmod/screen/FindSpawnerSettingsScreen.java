@@ -18,12 +18,16 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
         super.init();
 
         // オンオフ
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-            getEnableFindSpawnerModText(),
-            (var1) -> {
-	            HCSettings.getInstance().enableFindSpawnerMod = !HCSettings.getInstance().enableFindSpawnerMod;
-	            var1.setMessage(getEnableFindSpawnerModText());
-	        }));
+        this.addRenderableWidget(
+                Button.builder(
+                    getEnableFindSpawnerModText(),
+                    (var1) -> {
+                        HCSettings.getInstance().enableFindSpawnerMod = !HCSettings.getInstance().enableFindSpawnerMod;
+                        var1.setMessage(getEnableFindSpawnerModText());
+                    })
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 30)
+                .size(180, 20)
+                .build());
 
         Options options = Minecraft.getInstance().options;
 
@@ -34,9 +38,13 @@ public class FindSpawnerSettingsScreen extends SettingsScreen {
         this.addRenderableWidget(TIME.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180));
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            Component.translatable("hcutilsmod.settings.findspawner.return"),
-            (var1) -> this.getMinecraft().setScreen(this.getParent())));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.findspawner.return"),
+                    (var1) -> this.getMinecraft().setScreen(this.getParent()))
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 140)
+                .size(100, 20)
+                .build());
     }
 
     private Component getEnableFindSpawnerModText() {

@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod.mods.inventory;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,18 +48,15 @@ public class InventoryCategorySort implements Comparator<ItemStack> {
          * 8.戦闘
          * 9.醸造
          */
-        for (CreativeModeTab tab : CreativeModeTab.TABS) {
+        for (CreativeModeTab tab : CreativeModeTabs.tabs()) {
             // 余分なタブは省く
-            if ((tab == CreativeModeTab.TAB_SEARCH) ||
-                (tab == CreativeModeTab.TAB_HOTBAR) ||
-                (tab == CreativeModeTab.TAB_INVENTORY)) {
+            if ((tab == CreativeModeTabs.SEARCH) ||
+                (tab == CreativeModeTabs.HOTBAR) ||
+                (tab == CreativeModeTabs.INVENTORY)) {
                 continue;
             }
 
-            items.clear();
-            tab.fillItemList(items);
-
-            for (ItemStack item : items) {
+            for (ItemStack item : tab.getDisplayItems()) {
                 if (o1.sameItem(item)) {
                     ret = -1;
                     break;

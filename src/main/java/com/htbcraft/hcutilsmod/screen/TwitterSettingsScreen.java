@@ -64,46 +64,58 @@ public class TwitterSettingsScreen extends SettingsScreen {
 
         // Twitterと連携する
         this.connectButton = this.addRenderableWidget(
-            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-            this.connectStatus.getMenuText().append("..."),
-            (var1) -> {
-                LOGGER.info("Push Connect");
-                connectTwitter();
-            }));
+            Button.builder(
+                this.connectStatus.getMenuText().append("..."),
+                (var1) -> {
+                    LOGGER.info("Push Connect");
+                    connectTwitter();
+                })
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 30)
+            .size(180, 20)
+            .build());
 
         // スクリーンショットのツイート：オン/オフ
         Button onoffButton = this.addRenderableWidget(
-            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180, 20,
-            getEnableTwitterText(),
-            (var1) -> {
-                HCSettings.getInstance().enableTwitterMod = !HCSettings.getInstance().enableTwitterMod;
-                var1.setMessage(getEnableTwitterText());
-            }));
+            Button.builder(
+                getEnableTwitterText(),
+                (var1) -> {
+                    HCSettings.getInstance().enableTwitterMod = !HCSettings.getInstance().enableTwitterMod;
+                    var1.setMessage(getEnableTwitterText());
+                })
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 55)
+            .size(180, 20)
+            .build());
 
         // ツイートのデフォルト本文
         Button defBoxyButton = this.addRenderableWidget(
-            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            Component.translatable("hcutilsmod.settings.twitter.body.default.title").append("..."),
-            (var1) -> this.getMinecraft().setScreen(new TwitterDefaultBodyScreen(this))));
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.twitter.body.default.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new TwitterDefaultBodyScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 80)
+            .size(180, 20)
+            .build());
 
         // Twitter連携の解除
         Button destroyButton = this.addRenderableWidget(
-            new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            Component.translatable("hcutilsmod.settings.twitter.destroy.title").append("..."),
-            (var1) ->
-                this.getMinecraft().setScreen(
-                    new ConfirmScreen((result) -> {
-                        if (result) {
-                            HCCrypt.destroy();
-                            this.connectStatus = TwitterConnectStatus.INIT;
-                            restartText = Component.translatable("hcutilsmod.settings.twitter.destroy.restart");
-                            Style style = restartText.getStyle().withBold(true).withUnderlined(true);
-                            restartText.setStyle(style);
-                        }
-                        this.getMinecraft().setScreen(this);
-                    },
-                    Component.translatable("hcutilsmod.settings.twitter.destroy.title"),
-                    Component.translatable("hcutilsmod.settings.twitter.destroy.text")))));
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.twitter.destroy.title").append("..."),
+                (var1) ->
+                    this.getMinecraft().setScreen(
+                        new ConfirmScreen((result) -> {
+                            if (result) {
+                                HCCrypt.destroy();
+                                this.connectStatus = TwitterConnectStatus.INIT;
+                                restartText = Component.translatable("hcutilsmod.settings.twitter.destroy.restart");
+                                Style style = restartText.getStyle().withBold(true).withUnderlined(true);
+                                restartText.setStyle(style);
+                            }
+                            this.getMinecraft().setScreen(this);
+                        },
+                        Component.translatable("hcutilsmod.settings.twitter.destroy.title"),
+                        Component.translatable("hcutilsmod.settings.twitter.destroy.text"))))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
+            .size(180, 20)
+            .build());
 
         // アクセストークンを持っていれば認証ボタンを無効にして設定を開放する
         if (AccessTokenLoader.isExist()) {
@@ -126,9 +138,13 @@ public class TwitterSettingsScreen extends SettingsScreen {
         }
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            Component.translatable("hcutilsmod.settings.twitter.return"),
-            (var1) -> this.getMinecraft().setScreen(this.getParent())));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.twitter.return"),
+                    (var1) -> this.getMinecraft().setScreen(this.getParent()))
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 165)
+                .size(100, 20)
+                .build());
     }
 
     // スクリーンショットのツイート：オン/オフ

@@ -37,20 +37,28 @@ public class TwitterTweetScreen extends Screen {
             this.width - 50);
 
         // はい
-        this.addRenderableWidget(new Button(this.width / 2 - 155, 180, 150, 20,
-            CommonComponents.GUI_YES,
-            (var1) -> {
-                LOGGER.info("Push YES");
-                this.callback.onTweet(true, getTweetTextBody());
-            }));
+        this.addRenderableWidget(
+                Button.builder(
+                    CommonComponents.GUI_YES,
+                    (var1) -> {
+                        LOGGER.info("Push YES");
+                        this.callback.onTweet(true, getTweetTextBody());
+                    })
+                .pos(this.width / 2 - 155, 180)
+                .size(150, 20)
+                .build());
 
         // いいえ
-        this.addRenderableWidget(new Button(this.width / 2 - 155 + 160, 180, 150, 20,
-            CommonComponents.GUI_NO,
-            (var1) -> {
-                LOGGER.info("Push NO");
-                this.callback.onTweet(false, getTweetTextBody());
-            }));
+        this.addRenderableWidget(
+                Button.builder(
+                    CommonComponents.GUI_NO,
+                    (var1) -> {
+                        LOGGER.info("Push NO");
+                        this.callback.onTweet(false, getTweetTextBody());
+                    })
+                .pos(this.width / 2 - 155 + 160, 180)
+                .size(150, 20)
+                .build());
 
         // 本文１
         this.tweetEdit1 = this.addRenderableWidget(

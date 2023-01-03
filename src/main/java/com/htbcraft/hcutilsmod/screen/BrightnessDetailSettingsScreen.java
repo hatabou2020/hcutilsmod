@@ -20,24 +20,33 @@ public class BrightnessDetailSettingsScreen extends SettingsScreen {
         Options options = Minecraft.getInstance().options;
 
         // マーカーの色
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-                getMarkerColorText(), (var1) -> {
-            MinecraftColor[] values = MinecraftColor.values();
-            int color = HCSettings.getInstance().colorBrightness.ordinal();
-            if (++color >= values.length) {
-                color = 0;
-            }
-            HCSettings.getInstance().colorBrightness = values[color];
-            var1.setMessage(getMarkerColorText());
-        }));
+        this.addRenderableWidget(
+                Button.builder(
+                    getMarkerColorText(),
+                    (var1) -> {
+                        MinecraftColor[] values = MinecraftColor.values();
+                        int color = HCSettings.getInstance().colorBrightness.ordinal();
+                        if (++color >= values.length) {
+                            color = 0;
+                        }
+                        HCSettings.getInstance().colorBrightness = values[color];
+                        var1.setMessage(getMarkerColorText());
+                    })
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 30)
+                .size(180, 20)
+                .build());
 
         // マーカーの透過度
         this.addRenderableWidget(ALPHA.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-                Component.translatable("hcutilsmod.settings.brightness.return"),
-                (var1) -> this.getMinecraft().setScreen(this.getParent())));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.brightness.return"),
+                    (var1) -> this.getMinecraft().setScreen(this.getParent()))
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 140)
+                .size(100, 20)
+                .build());
     }
 
     public boolean shouldCloseOnEsc() {

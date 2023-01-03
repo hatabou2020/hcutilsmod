@@ -14,39 +14,63 @@ public class MainSettingsScreen extends SettingsScreen {
         super.init();
 
         // プレイヤー座標の表示・非表示
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 30, 180, 20,
-            getEnableCordsModText(),
-            (var1) -> {
-                HCSettings.getInstance().enableCordsMod = !HCSettings.getInstance().enableCordsMod;
-                var1.setMessage(getEnableCordsModText());
-            }));
+        this.addRenderableWidget(
+            Button.builder(
+                getEnableCordsModText(),
+                (var1) -> {
+                    HCSettings.getInstance().enableCordsMod = !HCSettings.getInstance().enableCordsMod;
+                    var1.setMessage(getEnableCordsModText());
+                })
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 30)
+            .size(180, 20)
+            .build());
 
         // インベントリ設定
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180, 20,
-            Component.translatable("hcutilsmod.settings.inventory.title").append("..."),
-            (var1) -> this.getMinecraft().setScreen(new InventorySettingsScreen(this))));
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.inventory.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new InventorySettingsScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 55)
+            .size(180, 20)
+            .build());
 
         // スポナーの検索設定
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            Component.translatable("hcutilsmod.settings.findspawner.title").append("..."),
-            (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this))));
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.findspawner.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new FindSpawnerSettingsScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 80)
+            .size(180, 20)
+            .build());
 
         // 明るさ表示設定
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
-            (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this))));
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
+            .size(180, 20)
+            .build());
 
         if (HCCrypt.isSupportOS()) {
             // Twitter設定
-            this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 130, 180, 20,
-                Component.translatable("hcutilsmod.settings.twitter.title").append("..."),
-                (var1) -> this.getMinecraft().setScreen(new TwitterSettingsScreen(this))));
+            this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.twitter.title").append("..."),
+                    (var1) -> this.getMinecraft().setScreen(new TwitterSettingsScreen(this)))
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 130)
+                .size(180, 20)
+                .build());
         }
 
         // ゲームに戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 165, 100, 20,
-            Component.translatable("hcutilsmod.settings.return"),
-            (var1) -> this.getMinecraft().setScreen(null)));
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.return"),
+                (var1) -> this.getMinecraft().setScreen(null))
+            .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 165)
+            .size(100, 20)
+            .build());
     }
 
     private Component getEnableCordsModText() {

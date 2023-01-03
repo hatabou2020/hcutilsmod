@@ -25,22 +25,34 @@ public class BrightnessSettingsScreen extends SettingsScreen {
         this.addRenderableWidget(THRESHOLD.createButton(options, getPosX() + (getWidth() - 180) / 2, getPosY() + 55, 180));
 
         // ゾンビが湧くことができないブロックを除外するか
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 80, 180, 20,
-            getZombieBrightnessText(),
-            (var1) -> {
-	            HCSettings.getInstance().zombieBrightness = !HCSettings.getInstance().zombieBrightness;
-	            var1.setMessage(getZombieBrightnessText());
-	        }));
+        this.addRenderableWidget(
+                Button.builder(
+                    getZombieBrightnessText(),
+                    (var1) -> {
+                        HCSettings.getInstance().zombieBrightness = !HCSettings.getInstance().zombieBrightness;
+                        var1.setMessage(getZombieBrightnessText());
+                    })
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 80)
+                .size(180, 20)
+                .build());
 
         // マーカーの詳細設定
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 180) / 2, getPosY() + 105, 180, 20,
-            Component.translatable("hcutilsmod.settings.brightness.subtitle").append("..."),
-            (var1) -> this.getMinecraft().setScreen(new BrightnessDetailSettingsScreen(this))));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.brightness.subtitle").append("..."),
+                    (var1) -> this.getMinecraft().setScreen(new BrightnessDetailSettingsScreen(this)))
+                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
+                .size(180, 20)
+                .build());
 
         // 戻る
-        this.addRenderableWidget(new Button(getPosX() + (getWidth() - 100) / 2, getPosY() + 140, 100, 20,
-            Component.translatable("hcutilsmod.settings.brightness.return"),
-            (var1) -> this.getMinecraft().setScreen(this.getParent())));
+        this.addRenderableWidget(
+                Button.builder(
+                    Component.translatable("hcutilsmod.settings.brightness.return"),
+                    (var1) -> this.getMinecraft().setScreen(this.getParent()))
+                .pos(getPosX() + (getWidth() - 100) / 2, getPosY() + 140)
+                .size(100, 20)
+                .build());
     }
 
     public boolean shouldCloseOnEsc() {
