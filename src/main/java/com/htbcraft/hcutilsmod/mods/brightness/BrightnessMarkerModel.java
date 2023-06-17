@@ -37,7 +37,7 @@ public class BrightnessMarkerModel {
 
     public void draw(BrightnessMarkerRenderer renderer) {
         RenderSystem.enableBlend();
-        RenderSystem.enableTexture();
+//        RenderSystem.enableTexture();
         renderer.bindTexture(MARKER);
         renderer.beginVertex();
         renderer.addVertex(this.minX, this.Y, this.minZ, 0.0F, 0.0F, this.red, this.green, this.blue, this.alpha);
@@ -45,7 +45,7 @@ public class BrightnessMarkerModel {
         renderer.addVertex(this.maxX, this.Y, this.maxZ, 0.5F, 0.5F, this.red, this.green, this.blue, this.alpha);
         renderer.addVertex(this.maxX, this.Y, this.minZ, 0.5F, 0.0F, this.red, this.green, this.blue, this.alpha);
         renderer.endVertex();
-        RenderSystem.disableTexture();
+//        RenderSystem.disableTexture();
         RenderSystem.disableBlend();
     }
 }

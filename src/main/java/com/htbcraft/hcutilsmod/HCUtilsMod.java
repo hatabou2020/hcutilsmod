@@ -1,6 +1,5 @@
 package com.htbcraft.hcutilsmod;
 
-import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.mods.brightness.BrightnessModHandler;
@@ -8,7 +7,6 @@ import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
 import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
 import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
 import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
-import com.htbcraft.hcutilsmod.mods.twitter.TwitterModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.InputEvent;
@@ -56,14 +54,13 @@ public class HCUtilsMod {
         InventoryCustomModHandler inventoryCustomModHandler = new InventoryCustomModHandler();
         FindSpawnerModHandler findSpawnerModHandler = new FindSpawnerModHandler();
         BrightnessModHandler brightnessModHandler = new BrightnessModHandler();
-        TwitterModHandler twitterModHandler = new TwitterModHandler();
 
         // キー登録のハンドラを登録
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onRegisterKeyMappings);
         modEventBus.addListener(blockDirectionModHandler::onRegisterKeyMappings);
         modEventBus.addListener(inventoryCustomModHandler::onRegisterKeyMappings);
-        modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
+//        modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
 
         // MODのハンドラを登録
         MinecraftForge.EVENT_BUS.register(this);
@@ -71,16 +68,7 @@ public class HCUtilsMod {
         MinecraftForge.EVENT_BUS.register(blockDirectionModHandler);
         MinecraftForge.EVENT_BUS.register(inventoryCustomModHandler);
         MinecraftForge.EVENT_BUS.register(findSpawnerModHandler);
-        MinecraftForge.EVENT_BUS.register(brightnessModHandler);
-
-        if (HCCrypt.isSupportOS()) {
-            try {
-                HCCrypt.init();
-                MinecraftForge.EVENT_BUS.register(twitterModHandler);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        MinecraftForge.EVENT_BUS.register(brightnessModHandler);
     }
 
     @SubscribeEvent

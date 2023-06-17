@@ -6,7 +6,7 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[44,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[45,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="All rights reserved"
@@ -53,15 +53,15 @@ description='''
 #03 インベントリを整理する（シングルプレイのみ）
 #04 手持ちを使い切ったら自動で補充する（シングルプレイのみ）
 #05 スポナーを見つける
-#06 明るさマーカーを表示する（Ver.1.53～）
-#07 スクリーンショットのツイート（Windows版のみ Ver.1.6～）
+#06 明るさマーカーを表示する（Ver.1.53～） ※封鎖中
 
-※当MODは「#07 スクリーンショットのツイート」でtwitter4jを
-  利用しています。感謝！
-  https://twitter4j.org/ja/
-  暗号化を行うためあなたのユーザーディレクトリにファイルを作成します。
-  ご了承ください。
-
+--------
+Ver.1.74
+--------
+2023/6/17
+・forge-1.19.4-45.1.0-mdkに更新。正式リリース。
+・TwitterAPIの規約変更のため「#07 スクリーンショットのツイート」の機能を削除しました。
+・「#06 明るさマーカーを表示する」が動作しなくなったため一時的に使えなくしました。
 --------
 Ver.1.73
 --------
@@ -146,7 +146,7 @@ Ver.1.5
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[44,)" #mandatory
+    versionRange="[45,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -156,6 +156,6 @@ Ver.1.5
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[1.19.3,1.20)"
+    versionRange="[1.19.4,1.20)"
     ordering="NONE"
     side="BOTH"

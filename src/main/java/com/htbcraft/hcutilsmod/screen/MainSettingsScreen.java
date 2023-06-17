@@ -44,24 +44,13 @@ public class MainSettingsScreen extends SettingsScreen {
             .build());
 
         // 明るさ表示設定
-        this.addRenderableWidget(
-            Button.builder(
-                Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
-                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this)))
-            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
-            .size(180, 20)
-            .build());
-
-        if (HCCrypt.isSupportOS()) {
-            // Twitter設定
-            this.addRenderableWidget(
-                Button.builder(
-                    Component.translatable("hcutilsmod.settings.twitter.title").append("..."),
-                    (var1) -> this.getMinecraft().setScreen(new TwitterSettingsScreen(this)))
-                .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 130)
-                .size(180, 20)
-                .build());
-        }
+//        this.addRenderableWidget(
+//            Button.builder(
+//                Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
+//                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this)))
+//            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
+//            .size(180, 20)
+//            .build());
 
         // ゲームに戻る
         this.addRenderableWidget(
