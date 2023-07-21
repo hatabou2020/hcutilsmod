@@ -7,12 +7,14 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.InputEvent;
@@ -121,7 +123,7 @@ public class InventoryCustomModHandler {
 
             inventorySortButton.setX(gui.width - inventorySortButton.getWidth());
             inventorySortButton.setY(0);
-            inventorySortButton.render(event.getPoseStack(), (int) mouseX, (int) mouseY, 0.0F);
+            inventorySortButton.render(event.getGuiGraphics(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {
                 inventorySortButton.active = true;
@@ -161,6 +163,13 @@ public class InventoryCustomModHandler {
         List<ItemStack> itemStacks = inInventory.subList(hotbarSize, inventorySize);
 
         if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // クリエイティブモードのタブをロード
+            CreativeModeTabs.tryRebuildTabContents(
+                    Minecraft.getInstance().player.connection.enabledFeatures(),
+                    Minecraft.getInstance().player.canUseGameMasterBlocks(),
+                    Minecraft.getInstance().player.level().registryAccess()
+            );
+
             // カテゴリ順でソート
             itemStacks.sort(new InventoryCategorySort());
         }
@@ -211,7 +220,7 @@ public class InventoryCustomModHandler {
             }
 
             // 手に持っていたアイテムと同じものがインベントリにあれば取り出す
-            if (destroyItemParam.getOriginalItem().sameItem(itemStack)) {
+            if (destroyItemParam.getOriginalItem().is(itemStack.getItem())) {
                 if (destroyItemParam.getHand().equals(InteractionHand.MAIN_HAND)) {
                     inventory.items.set(inventory.selected, itemStack);
                 }

@@ -27,7 +27,7 @@ public class InventoryNameSort implements Comparator<ItemStack> {
         }
 
         // 同じならスタック数の多い方を前に
-        if (o1.sameItem(o2)) {
+        if (o1.is(o2.getItem())) {
             return o2.getCount() - o1.getCount();
         }
 

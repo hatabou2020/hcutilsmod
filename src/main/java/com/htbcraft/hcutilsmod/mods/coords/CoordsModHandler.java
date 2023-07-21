@@ -27,7 +27,7 @@ public class CoordsModHandler {
         }
 
         if ((!Minecraft.getInstance().options.renderDebug) && (HCSettings.getInstance().enableCordsMod)) {
-            coordsOverlayGui.render(event.getPoseStack());
+            coordsOverlayGui.render(event.getGuiGraphics());
         }
     }
 }

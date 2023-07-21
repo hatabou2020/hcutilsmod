@@ -1,15 +1,14 @@
 package com.htbcraft.hcutilsmod.mods.coords;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
-public class CoordsOverlayGui extends GuiComponent {
+public class CoordsOverlayGui {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final Minecraft mc;
@@ -20,7 +19,7 @@ public class CoordsOverlayGui extends GuiComponent {
         this.mc = mc;
     }
 
-    public void render(PoseStack matrixStack) {
+    public void render(GuiGraphics guiGraphics) {
         BlockPos blockpos = Objects.requireNonNull(this.mc.getCameraEntity()).blockPosition();
 
         if ((oldBlockPos == null) || !oldBlockPos.equals(blockpos)) {
@@ -31,7 +30,7 @@ public class CoordsOverlayGui extends GuiComponent {
 
         int w = this.mc.font.width(textCoords);
         int h = this.mc.font.lineHeight;
-        fill(matrixStack, 1, 1, 1 + w + 1, 1 + h + 1, -1873784752);
-        this.mc.font.draw(matrixStack, textCoords, 2.0F, 2.0F, 14737632);
+        guiGraphics.fill(1, 1, 1 + w + 1, 1 + h + 1, -1873784752);
+        guiGraphics.drawString(this.mc.font, textCoords, 2, 2, 14737632);
     }
 }

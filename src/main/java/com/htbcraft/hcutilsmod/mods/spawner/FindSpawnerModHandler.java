@@ -32,7 +32,7 @@ public class FindSpawnerModHandler {
                 // 1マス歩くごとに検索
                 new Thread(() ->
                         hitBlockPos = findSpawnerPosInArea(
-                            event.player.level,
+                            event.player.level(),
                             playerPos,
                             HCSettings.getInstance().rangeFindSpawner)
                 ).start();

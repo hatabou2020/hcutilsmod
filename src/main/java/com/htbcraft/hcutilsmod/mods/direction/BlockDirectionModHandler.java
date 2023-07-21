@@ -4,7 +4,6 @@ import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -188,15 +187,18 @@ public class BlockDirectionModHandler {
                 int x = (width - DIRECT_ICON_SIZE) / 2;
                 int y = (height - DIRECT_ICON_SIZE) / 2;
 
+                ResourceLocation resourceLocation;
                 if (mouseClick) {
-                    RenderSystem.setShaderTexture(0, DIRECT_DOWN_ICON);
+                    resourceLocation = DIRECT_DOWN_ICON;
+//                    RenderSystem.setShaderTexture(0, DIRECT_DOWN_ICON);
                 }
                 else {
-                    RenderSystem.setShaderTexture(0, DIRECT_UP_ICON);
+                    resourceLocation = DIRECT_UP_ICON;
+//                    RenderSystem.setShaderTexture(0, DIRECT_UP_ICON);
                 }
 
                 RenderSystem.enableBlend();
-                GuiComponent.blit(event.getPoseStack(),
+                event.getGuiGraphics().blit(resourceLocation,
                         x,
                         y + 12,
                         0,

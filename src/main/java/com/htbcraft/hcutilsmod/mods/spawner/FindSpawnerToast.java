@@ -1,8 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.core.BlockPos;
@@ -32,7 +31,7 @@ public class FindSpawnerToast implements Toast {
     }
 
     @Override
-    public Toast.Visibility render(PoseStack p_94896_, ToastComponent p_94897_, long p_94898_) {
+    public Toast.Visibility render(GuiGraphics p_94896_, ToastComponent p_94897_, long p_94898_) {
         // すでに表示している座標の場合は即非表示
         if (!this.visibility) {
             LOGGER.info("Already displayed!! " + this.blockPos);
@@ -48,20 +47,20 @@ public class FindSpawnerToast implements Toast {
         }
 
         // トーストの枠
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderFogColor(1.0F, 1.0F, 1.0F);
-        p_94897_.blit(p_94896_, 0, 0, 0, 0, this.width(), this.height());
+        p_94896_.blit(TEXTURE, 0, 0, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
-        RenderSystem.setShaderTexture(0, SPAWNER_ICON);
+//        RenderSystem.setShaderTexture(0, SPAWNER_ICON);
         RenderSystem.enableBlend();
-        GuiComponent.blit(p_94896_, 6, 6, 0, 0, 0, 20, 20, 20, 20);
+        p_94896_.blit(SPAWNER_ICON, 6, 6, 0, 0, 0, 20, 20, 20, 20);
         RenderSystem.enableBlend();
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        p_94897_.getMinecraft().font.draw(p_94896_, Component.translatable("hcutilsmod.findspawner.text"), 30.0F, 7.0F, 14737632);
-        p_94897_.getMinecraft().font.draw(p_94896_, text, 36.0F, 18.0F, 14737632);
+        p_94896_.drawString(p_94897_.getMinecraft().font, Component.translatable("hcutilsmod.findspawner.text"), 30, 7, 14737632);
+        p_94896_.drawString(p_94897_.getMinecraft().font, text, 36, 18, 14737632);
 
         return Visibility.SHOW;
     }
