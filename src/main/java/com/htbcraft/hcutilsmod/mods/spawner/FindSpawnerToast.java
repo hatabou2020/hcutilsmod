@@ -50,7 +50,7 @@ public class FindSpawnerToast implements Toast {
         // トーストの枠
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderFogColor(1.0F, 1.0F, 1.0F);
-        p_94897_.blit(p_94896_, 0, 0, 0, 0, this.width(), this.height());
+        GuiComponent.blit(p_94896_, 0, 0, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
         RenderSystem.setShaderTexture(0, SPAWNER_ICON);

@@ -3,6 +3,7 @@ package com.htbcraft.hcutilsmod.mods.brightness;
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class BrightnessMarkerModel {
@@ -36,16 +37,15 @@ public class BrightnessMarkerModel {
     }
 
     public void draw(BrightnessMarkerRenderer renderer) {
+        RenderSystem.setShaderTexture(0, MARKER);
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.enableBlend();
-//        RenderSystem.enableTexture();
-        renderer.bindTexture(MARKER);
         renderer.beginVertex();
         renderer.addVertex(this.minX, this.Y, this.minZ, 0.0F, 0.0F, this.red, this.green, this.blue, this.alpha);
         renderer.addVertex(this.minX, this.Y, this.maxZ, 0.0F, 0.5F, this.red, this.green, this.blue, this.alpha);
         renderer.addVertex(this.maxX, this.Y, this.maxZ, 0.5F, 0.5F, this.red, this.green, this.blue, this.alpha);
         renderer.addVertex(this.maxX, this.Y, this.minZ, 0.5F, 0.0F, this.red, this.green, this.blue, this.alpha);
         renderer.endVertex();
-//        RenderSystem.disableTexture();
         RenderSystem.disableBlend();
     }
 }

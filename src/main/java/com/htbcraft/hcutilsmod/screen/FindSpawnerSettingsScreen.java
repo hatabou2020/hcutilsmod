@@ -1,7 +1,6 @@
 package com.htbcraft.hcutilsmod.screen;
 
 import com.htbcraft.hcutilsmod.common.HCSettings;
-import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;

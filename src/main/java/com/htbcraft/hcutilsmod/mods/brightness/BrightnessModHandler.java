@@ -182,13 +182,11 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderLevelLast(RenderLevelLastEvent event) {
-// TODO: RenderLevelLastEventが削除されたら考える
-//    public void onRenderLevelStage(RenderLevelStageEvent event) {
-//        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
-//            return;
-//        }
-//
+    public void onRenderLevelStage(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            return;
+        }
+
         if (tergetMarkers != null) {
             tergetMarkers.forEach(
                     m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));

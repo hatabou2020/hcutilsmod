@@ -13,6 +13,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.InputEvent;
@@ -161,6 +162,13 @@ public class InventoryCustomModHandler {
         List<ItemStack> itemStacks = inInventory.subList(hotbarSize, inventorySize);
 
         if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+            // クリエイティブモードのタブをロード
+            CreativeModeTabs.tryRebuildTabContents(
+                    Minecraft.getInstance().player.connection.enabledFeatures(),
+                    Minecraft.getInstance().player.canUseGameMasterBlocks(),
+                    Minecraft.getInstance().player.level.registryAccess()
+            );
+
             // カテゴリ順でソート
             itemStacks.sort(new InventoryCategorySort());
         }

@@ -6,9 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class InventoryCategorySort implements Comparator<ItemStack> {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -25,18 +23,6 @@ public class InventoryCategorySort implements Comparator<ItemStack> {
      *  9.材料
      * 10.スポーンエッグ
      */
-    private static final List<CreativeModeTab> TABS = Arrays.asList(
-        CreativeModeTabs.BUILDING_BLOCKS,
-        CreativeModeTabs.COLORED_BLOCKS,
-        CreativeModeTabs.NATURAL_BLOCKS,
-        CreativeModeTabs.FUNCTIONAL_BLOCKS,
-        CreativeModeTabs.REDSTONE_BLOCKS,
-        CreativeModeTabs.TOOLS_AND_UTILITIES,
-        CreativeModeTabs.COMBAT,
-        CreativeModeTabs.FOOD_AND_DRINKS,
-        CreativeModeTabs.INGREDIENTS,
-        CreativeModeTabs.SPAWN_EGGS
-    );
 
     @Override
     public int compare(ItemStack o1, ItemStack o2) {
@@ -62,7 +48,11 @@ public class InventoryCategorySort implements Comparator<ItemStack> {
 
         int ret = 0;
 
-        for (CreativeModeTab tab : TABS) {
+        for (CreativeModeTab tab : CreativeModeTabs.allTabs()) {
+            if (tab.getType() != CreativeModeTab.Type.CATEGORY) {
+                continue;
+            }
+
             for (ItemStack item : tab.getDisplayItems()) {
                 if (o1.sameItem(item)) {
                     ret = -1;

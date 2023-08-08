@@ -1,6 +1,5 @@
 package com.htbcraft.hcutilsmod.screen;
 
-import com.htbcraft.hcutilsmod.common.HCCrypt;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -44,13 +43,13 @@ public class MainSettingsScreen extends SettingsScreen {
             .build());
 
         // 明るさ表示設定
-//        this.addRenderableWidget(
-//            Button.builder(
-//                Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
-//                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this)))
-//            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
-//            .size(180, 20)
-//            .build());
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.brightness.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new BrightnessSettingsScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 105)
+            .size(180, 20)
+            .build());
 
         // ゲームに戻る
         this.addRenderableWidget(
