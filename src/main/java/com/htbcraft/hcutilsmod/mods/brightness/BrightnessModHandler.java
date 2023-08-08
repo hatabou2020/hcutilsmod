@@ -13,10 +13,7 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -183,19 +180,17 @@ public class BrightnessModHandler {
         return -1;
     }
 
-//    @SubscribeEvent
-//    public void onRenderLevelLast(RenderLevelLastEvent event) {
-//// TODO: RenderLevelLastEventが削除されたら考える
-////    public void onRenderLevelStage(RenderLevelStageEvent event) {
-////        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SOLID_BLOCKS) {
-////            return;
-////        }
-////
-//        if (tergetMarkers != null) {
-//            tergetMarkers.forEach(
-//                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
-//        }
-//    }
+    @SubscribeEvent
+    public void onRenderLevelStage(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            return;
+        }
+
+        if (tergetMarkers != null) {
+            tergetMarkers.forEach(
+                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
+        }
+    }
 
     @SubscribeEvent
     public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
@@ -208,7 +203,6 @@ public class BrightnessModHandler {
             int x = 1;
             int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
 
-//            RenderSystem.setShaderTexture(0, LIGHT_ICON);
             RenderSystem.enableBlend();
             event.getGuiGraphics().blit(LIGHT_ICON,
                     x,

@@ -60,7 +60,7 @@ public class HCUtilsMod {
         modEventBus.addListener(this::onRegisterKeyMappings);
         modEventBus.addListener(blockDirectionModHandler::onRegisterKeyMappings);
         modEventBus.addListener(inventoryCustomModHandler::onRegisterKeyMappings);
-//        modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
+        modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
 
         // MODのハンドラを登録
         MinecraftForge.EVENT_BUS.register(this);
@@ -68,7 +68,7 @@ public class HCUtilsMod {
         MinecraftForge.EVENT_BUS.register(blockDirectionModHandler);
         MinecraftForge.EVENT_BUS.register(inventoryCustomModHandler);
         MinecraftForge.EVENT_BUS.register(findSpawnerModHandler);
-//        MinecraftForge.EVENT_BUS.register(brightnessModHandler);
+        MinecraftForge.EVENT_BUS.register(brightnessModHandler);
     }
 
     @SubscribeEvent

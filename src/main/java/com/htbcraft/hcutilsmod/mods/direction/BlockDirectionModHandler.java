@@ -190,11 +190,9 @@ public class BlockDirectionModHandler {
                 ResourceLocation resourceLocation;
                 if (mouseClick) {
                     resourceLocation = DIRECT_DOWN_ICON;
-//                    RenderSystem.setShaderTexture(0, DIRECT_DOWN_ICON);
                 }
                 else {
                     resourceLocation = DIRECT_UP_ICON;
-//                    RenderSystem.setShaderTexture(0, DIRECT_UP_ICON);
                 }
 
                 RenderSystem.enableBlend();

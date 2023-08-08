@@ -103,13 +103,11 @@ public class SettingsScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // ウィンドウ背景の描画
-//        RenderSystem.setShaderTexture(0, background);
         RenderSystem.enableBlend();
         guiGraphics.blit(background, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
         RenderSystem.disableBlend();
 
         // ウィンドウ枠の描画
-//        RenderSystem.setShaderTexture(0, WINDOW_TEXTURE);
         RenderSystem.enableBlend();
 
         // ウィンドウ枠の4隅
