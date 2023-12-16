@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 public class FindSpawnerToast implements Toast {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/toasts.png");
     private static final ResourceLocation SPAWNER_ICON = new ResourceLocation("textures/block/spawner.png");
     private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 

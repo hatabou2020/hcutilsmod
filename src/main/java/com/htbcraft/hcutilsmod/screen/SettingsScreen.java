@@ -74,7 +74,7 @@ public class SettingsScreen extends Screen {
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        super.renderBackground(guiGraphics);
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         renderWindow(guiGraphics, win_x, win_y, win_w, win_h, this.title, BACKGROUND_TEXTURE);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
     }
