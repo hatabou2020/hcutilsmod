@@ -33,7 +33,7 @@ logoFile="icon.png" #optional
 # https://icon-icons.com/ja/%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3/%E3%81%8A%E4%BA%92%E3%81%84%E3%81%AB%E5%B9%B4%E9%BD%A2%E3%81%AF%E5%90%8C%E5%B9%B4%E4%BB%A3%E3%81%A7-%E6%89%80%E5%B1%9E/94415
 # https://hpgpixer.jp/
 # A text field displayed in the mod UI
-# credits="Thanks for this example mod goes to Java" #optional
+#credits="" #optional
 # A text field displayed in the mod UI
 authors="${mod_authors}" #optional
 # Display Test controls the display for your mod in the server connection screen
@@ -42,7 +42,7 @@ authors="${mod_authors}" #optional
 # IGNORE_ALL_VERSION means that your mod will not cause a red X if it's present on the client or the server. This is a special case and should only be used if your mod has no server component.
 # NONE means that no display test is set on your mod. You need to do this yourself, see IExtensionPoint.DisplayTest for more information. You can define any scheme you wish with this value.
 # IMPORTANT NOTE: this is NOT an instruction as to which environments (CLIENT or DEDICATED SERVER) your mod loads on. Your mod should load (and maybe do nothing!) whereever it finds itself.
-#displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
+#displayTest="MATCH_VERSION" # if nothing is specified, MATCH_VERSION is the default when clientSideOnly=false, otherwise IGNORE_ALL_VERSION when clientSideOnly=true (#optional)
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
@@ -59,6 +59,8 @@ description='''
 --------
 Ver.1.76
 --------
+2024/06/23
+・forge-1.20.6-50.1.0-mdkに更新。
 2024/05/01
 ・forge-1.20.4-49.0.49-mdkに更新。
 2023/12/16

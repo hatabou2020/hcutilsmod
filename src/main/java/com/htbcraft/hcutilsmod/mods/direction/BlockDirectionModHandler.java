@@ -1,27 +1,59 @@
 package com.htbcraft.hcutilsmod.mods.direction;
 
+import static org.lwjgl.glfw.GLFW.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
-import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.AnvilBlock;
+import net.minecraft.world.level.block.BannerBlock;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.BlastFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.ComparatorBlock;
+import net.minecraft.world.level.block.DetectorRailBlock;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.EndRodBlock;
+import net.minecraft.world.level.block.EnderChestBlock;
+import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.GlazedTerracottaBlock;
+import net.minecraft.world.level.block.GrindstoneBlock;
+import net.minecraft.world.level.block.HopperBlock;
+import net.minecraft.world.level.block.LecternBlock;
+import net.minecraft.world.level.block.LoomBlock;
+import net.minecraft.world.level.block.ObserverBlock;
+import net.minecraft.world.level.block.PoweredRailBlock;
+import net.minecraft.world.level.block.RailBlock;
+import net.minecraft.world.level.block.RepeaterBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SmokerBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.StandingSignBlock;
+import net.minecraft.world.level.block.StonecutterBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import static org.lwjgl.glfw.GLFW.*;
 
 public class BlockDirectionModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -177,39 +209,39 @@ public class BlockDirectionModHandler {
         return ret;
     }
 
-    @SubscribeEvent
-    public void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
-        if (directMode) {
-            // 十字カーソルを指アイコンに切り替え
-            if (event.getOverlay().id() == VanillaGuiOverlay.CROSSHAIR.id()) {
-                int width = event.getWindow().getGuiScaledWidth();
-                int height = event.getWindow().getGuiScaledHeight();
-                int x = (width - DIRECT_ICON_SIZE) / 2;
-                int y = (height - DIRECT_ICON_SIZE) / 2;
-
-                ResourceLocation resourceLocation;
-                if (mouseClick) {
-                    resourceLocation = DIRECT_DOWN_ICON;
-                }
-                else {
-                    resourceLocation = DIRECT_UP_ICON;
-                }
-
-                RenderSystem.enableBlend();
-                event.getGuiGraphics().blit(resourceLocation,
-                        x,
-                        y + 12,
-                        0,
-                        0,
-                        0,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE);
-                RenderSystem.disableBlend();
-
-                event.setCanceled(true);
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
+//        if (directMode) {
+//            // 十字カーソルを指アイコンに切り替え
+//            if (event.getOverlay().id() == VanillaGuiOverlay.CROSSHAIR.id()) {
+//                int width = event.getWindow().getGuiScaledWidth();
+//                int height = event.getWindow().getGuiScaledHeight();
+//                int x = (width - DIRECT_ICON_SIZE) / 2;
+//                int y = (height - DIRECT_ICON_SIZE) / 2;
+//
+//                ResourceLocation resourceLocation;
+//                if (mouseClick) {
+//                    resourceLocation = DIRECT_DOWN_ICON;
+//                }
+//                else {
+//                    resourceLocation = DIRECT_UP_ICON;
+//                }
+//
+//                RenderSystem.enableBlend();
+//                event.getGuiGraphics().blit(resourceLocation,
+//                        x,
+//                        y + 12,
+//                        0,
+//                        0,
+//                        0,
+//                        DIRECT_ICON_SIZE,
+//                        DIRECT_ICON_SIZE,
+//                        DIRECT_ICON_SIZE,
+//                        DIRECT_ICON_SIZE);
+//                RenderSystem.disableBlend();
+//
+//                event.setCanceled(true);
+//            }
+//        }
+//    }
 }
