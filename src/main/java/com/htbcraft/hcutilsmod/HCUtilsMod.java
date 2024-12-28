@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-@Mod("hcutilsmod")
+@Mod(HCUtilsMod.MOD_ID)
 public class HCUtilsMod {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "hcutilsmod";
@@ -45,7 +45,7 @@ public class HCUtilsMod {
         event.register(BIND_KEY);
     }
 
-    public HCUtilsMod() {
+    public HCUtilsMod(FMLJavaModLoadingContext context) {
         settings = new HCSettings(Minecraft.getInstance());
         settings.loadOptions();
 
@@ -56,7 +56,7 @@ public class HCUtilsMod {
         BrightnessModHandler brightnessModHandler = new BrightnessModHandler();
 
         // キー登録のハンドラを登録
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::onRegisterKeyMappings);
         modEventBus.addListener(blockDirectionModHandler::onRegisterKeyMappings);
         modEventBus.addListener(inventoryCustomModHandler::onRegisterKeyMappings);

@@ -1,10 +1,17 @@
 package com.htbcraft.hcutilsmod.mods.brightness;
 
+import static org.lwjgl.glfw.GLFW.*;
+
+import java.util.ArrayList;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
-import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -13,24 +20,18 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_B;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class BrightnessModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation LIGHT_ICON = new ResourceLocation(HCUtilsMod.MOD_ID, "textures/gui/light.png");
+    private static final ResourceLocation LIGHT_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/light.png");
 
     private final BrightnessMarkerRenderer brightnessMarkerRenderer;
 
@@ -164,7 +165,7 @@ public class BrightnessModHandler {
 
     private int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, Boolean zombie) {
         // ゾンビが湧くことができないブロックは除外する
-        if (zombie && !SpawnPlacements.Type.ON_GROUND.canSpawnAt(world, pos, EntityType.ZOMBIE)) {
+        if (zombie && !SpawnPlacements.isSpawnPositionOk(EntityType.ZOMBIE, world, pos)) {
             return -1;
         }
 
@@ -180,41 +181,41 @@ public class BrightnessModHandler {
         return -1;
     }
 
-    @SubscribeEvent
-    public void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
-            return;
-        }
+//    @SubscribeEvent
+//    public void onRenderLevelStage(RenderLevelStageEvent event) {
+//        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+//            return;
+//        }
+//
+//        if (tergetMarkers != null) {
+//            tergetMarkers.forEach(
+//                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
+//        }
+//    }
 
-        if (tergetMarkers != null) {
-            tergetMarkers.forEach(
-                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
-        }
-    }
-
-    @SubscribeEvent
-    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay().id() != VanillaGuiOverlay.AIR_LEVEL.id()) {
-            return;
-        }
-
-        // マーカー表示中がわかるように画面の左下にアイコン出す
-        if (dispBrightness) {
-            int x = 1;
-            int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
-
-            RenderSystem.enableBlend();
-            event.getGuiGraphics().blit(LIGHT_ICON,
-                    x,
-                    y,
-                    0,
-                    0,
-                    0,
-                    20,
-                    20,
-                    20,
-                    20);
-            RenderSystem.disableBlend();
-        }
-    }
+//    @SubscribeEvent
+//    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
+//        if (event.getOverlay().id() != VanillaGuiOverlay.AIR_LEVEL.id()) {
+//            return;
+//        }
+//
+//        // マーカー表示中がわかるように画面の左下にアイコン出す
+//        if (dispBrightness) {
+//            int x = 1;
+//            int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
+//
+//            RenderSystem.enableBlend();
+//            event.getGuiGraphics().blit(LIGHT_ICON,
+//                    x,
+//                    y,
+//                    0,
+//                    0,
+//                    0,
+//                    20,
+//                    20,
+//                    20,
+//                    20);
+//            RenderSystem.disableBlend();
+//        }
+//    }
 }

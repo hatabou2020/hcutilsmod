@@ -1,6 +1,9 @@
 package com.htbcraft.hcutilsmod.mods.brightness;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.phys.Vec3;
@@ -20,7 +23,8 @@ public class BrightnessMarkerRenderer {
     }
 
     private BufferBuilder buffer() {
-        return tesselator().getBuilder();
+//        return tesselator().getBuilder();
+        return null;
     }
 
     public BrightnessMarkerRenderer update(PoseStack matrixStack) {
@@ -34,15 +38,15 @@ public class BrightnessMarkerRenderer {
     }
 
     public void beginVertex() {
-        buffer().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+//        buffer().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
     }
 
     public void endVertex() {
-        tesselator().end();
+//        tesselator().end();
     }
 
     public void addVertex(float x, float y, float z, float u, float v, int r, int g, int b, int alpha) {
-        buffer().vertex(this.matrixStack.last().pose(), x, y, z).color(r, g, b, alpha).uv(u, v).endVertex();
+//        buffer().vertex(this.matrixStack.last().pose(), x, y, z).color(r, g, b, alpha).uv(u, v).endVertex();
     }
 
     public void push() {

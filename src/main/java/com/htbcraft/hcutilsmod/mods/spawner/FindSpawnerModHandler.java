@@ -1,6 +1,10 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.htbcraft.hcutilsmod.common.HCSettings;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -8,8 +12,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class FindSpawnerModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -49,7 +51,7 @@ public class FindSpawnerModHandler {
         if (hitBlockPos != null) {
             if (prevHitBlockPos.compareTo(hitBlockPos) != 0) {
                 LOGGER.info("Add Toast!! " + hitBlockPos);
-                Minecraft.getInstance().getToasts().addToast(
+                Minecraft.getInstance().getToastManager().addToast(
                         new FindSpawnerToast(
                                 hitBlockPos,
                                 HCSettings.getInstance().timeFindSpawner));
