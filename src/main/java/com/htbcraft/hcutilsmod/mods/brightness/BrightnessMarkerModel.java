@@ -10,7 +10,7 @@ public class BrightnessMarkerModel {
     private static final float MARKER_SIZE = 0.6F;
     private static final float MARKER_OFFSET = 0.01F;
 
-    private static final ResourceLocation MARKER = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/marker.png");
+    private static final ResourceLocation MARKER = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "icon/marker");
 
     private final float minX;
     private final float maxX;

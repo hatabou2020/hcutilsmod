@@ -2,7 +2,9 @@ package com.htbcraft.hcutilsmod.mods.direction;
 
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
+import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -26,8 +28,8 @@ public class BlockDirectionModHandler {
     private static final int STATE_INFO_FLAGS = (1 | 2);
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation DIRECT_UP_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/direct_up_icon.png");
-    private static final ResourceLocation DIRECT_DOWN_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/direct_down_icon.png");
+    private static final ResourceLocation DIRECT_UP = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_up");
+    private static final ResourceLocation DIRECT_DOWN = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_down");
     private static final int DIRECT_ICON_SIZE = 24;
 
     private boolean directMode = false;
@@ -177,41 +179,20 @@ public class BlockDirectionModHandler {
 
     @SubscribeEvent
     public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
-    }
+        if (directMode) {
+            int width = event.getWindow().getGuiScaledWidth();
+            int height = event.getWindow().getGuiScaledHeight();
+            int x = (width - DIRECT_ICON_SIZE) / 2;
+            int y = (height - DIRECT_ICON_SIZE) / 2;
 
-//    @SubscribeEvent
-//    public void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
-//        if (directMode) {
-//            // 十字カーソルを指アイコンに切り替え
-//            if (event.getOverlay().id() == VanillaGuiOverlay.CROSSHAIR.id()) {
-//                int width = event.getWindow().getGuiScaledWidth();
-//                int height = event.getWindow().getGuiScaledHeight();
-//                int x = (width - DIRECT_ICON_SIZE) / 2;
-//                int y = (height - DIRECT_ICON_SIZE) / 2;
-//
-//                ResourceLocation resourceLocation;
-//                if (mouseClick) {
-//                    resourceLocation = DIRECT_DOWN_ICON;
-//                }
-//                else {
-//                    resourceLocation = DIRECT_UP_ICON;
-//                }
-//
-//                RenderSystem.enableBlend();
-//                event.getGuiGraphics().blit(resourceLocation,
-//                        x,
-//                        y + 12,
-//                        0,
-//                        0,
-//                        0,
-//                        DIRECT_ICON_SIZE,
-//                        DIRECT_ICON_SIZE,
-//                        DIRECT_ICON_SIZE,
-//                        DIRECT_ICON_SIZE);
-//                RenderSystem.disableBlend();
-//
-//                event.setCanceled(true);
-//            }
-//        }
-//    }
+            // 十字カーソルを指アイコンに切り替え
+            event.getGuiGraphics().blitSprite(
+                    RenderType::crosshair,
+                    mouseClick ? DIRECT_DOWN : DIRECT_UP,
+                    x,
+                    y + 12,
+                    DIRECT_ICON_SIZE,
+                    DIRECT_ICON_SIZE);
+        }
+    }
 }

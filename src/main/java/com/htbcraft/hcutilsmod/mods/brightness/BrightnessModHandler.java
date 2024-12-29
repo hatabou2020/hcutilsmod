@@ -4,6 +4,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.renderer.RenderType;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,13 +33,13 @@ public class BrightnessModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation LIGHT_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/light.png");
+    private static final ResourceLocation LIGHT = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/light");
 
     private final BrightnessMarkerRenderer brightnessMarkerRenderer;
 
     private Boolean dispBrightness = false;
     private BlockPos prevPlayerPos = BlockPos.ZERO;
-    private ArrayList<BrightnessMarker> tergetMarkers = null;
+    private ArrayList<BrightnessMarker> targetMarkers = null;
 
     // デフォルトキー：[b]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
@@ -108,7 +110,7 @@ public class BrightnessModHandler {
                 prevPlayerPos = playerPos;
 
                 new Thread(() ->
-                    tergetMarkers = makeBrightnessMarkers(
+                    targetMarkers = makeBrightnessMarkers(
                                         event.player.level(),
                                         playerPos,
                                         HCSettings.getInstance().rangeBrightness,
@@ -120,8 +122,8 @@ public class BrightnessModHandler {
             }
         }
         else {
-            if (tergetMarkers != null) {
-                tergetMarkers = null;
+            if (targetMarkers != null) {
+                targetMarkers = null;
                 prevPlayerPos = BlockPos.ZERO;
             }
         }
@@ -187,35 +189,26 @@ public class BrightnessModHandler {
 //            return;
 //        }
 //
-//        if (tergetMarkers != null) {
-//            tergetMarkers.forEach(
+//        if (targetMarkers != null) {
+//            targetMarkers.forEach(
 //                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
 //        }
 //    }
 
-//    @SubscribeEvent
-//    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
-//        if (event.getOverlay().id() != VanillaGuiOverlay.AIR_LEVEL.id()) {
-//            return;
-//        }
-//
-//        // マーカー表示中がわかるように画面の左下にアイコン出す
-//        if (dispBrightness) {
-//            int x = 1;
-//            int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
-//
-//            RenderSystem.enableBlend();
-//            event.getGuiGraphics().blit(LIGHT_ICON,
-//                    x,
-//                    y,
-//                    0,
-//                    0,
-//                    0,
-//                    20,
-//                    20,
-//                    20,
-//                    20);
-//            RenderSystem.disableBlend();
-//        }
-//    }
+    @SubscribeEvent
+    public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
+        // マーカー表示中がわかるように画面の左下にアイコン出す
+        if (dispBrightness) {
+            int x = 1;
+            int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
+
+            event.getGuiGraphics().blitSprite(
+                    RenderType::guiTextured,
+                    LIGHT,
+                    x,
+                    y,
+                    20,
+                    20);
+        }
+    }
 }
