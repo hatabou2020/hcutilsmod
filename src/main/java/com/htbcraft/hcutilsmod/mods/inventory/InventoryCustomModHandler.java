@@ -245,7 +245,7 @@ public class InventoryCustomModHandler {
             return;
         }
 
-        destroyItemParam = new DestroyItemParam(event.getHand(), event.getOriginal());
-        LOGGER.info("PlayerDestroyItemEvent: " + event.getHand() + " / " + event.getOriginal());
+        destroyItemParam = new DestroyItemParam(event.getEntity().getUsedItemHand(), event.getOriginal());
+        LOGGER.info("PlayerDestroyItemEvent: " + event.getEntity().getUsedItemHand() + " / " + event.getOriginal());
     }
 }

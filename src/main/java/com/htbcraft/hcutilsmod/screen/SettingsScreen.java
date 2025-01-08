@@ -73,14 +73,13 @@ public class SettingsScreen extends Screen {
         HCSettings.getInstance().saveOptions();
     }
 
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
-        renderWindow(guiGraphics, win_x, win_y, win_w, win_h, this.title, BACKGROUND_TEXTURE);
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+    @Override
+    public void renderBackground(GuiGraphics p_283688_, int p_299421_, int p_298679_, float p_297268_) {
+        super.renderBackground(p_283688_, p_299421_, p_298679_, p_297268_);
+        renderWindow(p_283688_, this.title, win_x, win_y, win_w, win_h);
     }
 
-    // このメソッドはライブラリ化したい
-    public static void renderWindow(GuiGraphics guiGraphics, int x, int y, int width, int height, Component title, ResourceLocation background) {
+    private void renderWindow(GuiGraphics guiGraphics, Component title, int x, int y, int width, int height) {
         if (x < 0) {
             x = 0;
         }
@@ -104,7 +103,7 @@ public class SettingsScreen extends Screen {
 
         // ウィンドウ背景の描画
         RenderSystem.enableBlend();
-        guiGraphics.blit(background, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
+        guiGraphics.blit(BACKGROUND_TEXTURE, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
         RenderSystem.disableBlend();
 
         // ウィンドウ枠の描画

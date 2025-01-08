@@ -4,7 +4,9 @@ import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,7 +31,7 @@ public class BrightnessModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation LIGHT_ICON = new ResourceLocation(HCUtilsMod.MOD_ID, "textures/gui/light.png");
+    private static final ResourceLocation LIGHT = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/light");
 
     private final BrightnessMarkerRenderer brightnessMarkerRenderer;
 
@@ -164,7 +165,7 @@ public class BrightnessModHandler {
 
     private int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, Boolean zombie) {
         // ゾンビが湧くことができないブロックは除外する
-        if (zombie && !SpawnPlacements.Type.ON_GROUND.canSpawnAt(world, pos, EntityType.ZOMBIE)) {
+        if (zombie && !SpawnPlacements.isSpawnPositionOk(EntityType.ZOMBIE, world, pos)) {
             return -1;
         }
 
@@ -188,33 +189,34 @@ public class BrightnessModHandler {
 
         if (tergetMarkers != null) {
             tergetMarkers.forEach(
-                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
+                    m -> m.draw(brightnessMarkerRenderer.update(new PoseStack())));
         }
     }
 
     @SubscribeEvent
-    public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay().id() != VanillaGuiOverlay.AIR_LEVEL.id()) {
-            return;
-        }
-
+    public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
         // マーカー表示中がわかるように画面の左下にアイコン出す
         if (dispBrightness) {
             int x = 1;
             int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
 
             RenderSystem.enableBlend();
-            event.getGuiGraphics().blit(LIGHT_ICON,
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SourceFactor.SRC_ALPHA,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+            );
+
+            event.getGuiGraphics().blitSprite(
+                    LIGHT,
                     x,
                     y,
-                    0,
-                    0,
-                    0,
-                    20,
-                    20,
                     20,
                     20);
-            RenderSystem.disableBlend();
+
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
         }
     }
 }

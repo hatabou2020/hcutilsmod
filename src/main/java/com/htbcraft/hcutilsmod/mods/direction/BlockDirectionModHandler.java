@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod.mods.direction;
 
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -11,11 +12,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +28,8 @@ public class BlockDirectionModHandler {
     private static final int STATE_INFO_FLAGS = (1 | 2);
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation DIRECT_UP_ICON = new ResourceLocation(HCUtilsMod.MOD_ID, "textures/gui/direct_up_icon.png");
-    private static final ResourceLocation DIRECT_DOWN_ICON = new ResourceLocation(HCUtilsMod.MOD_ID, "textures/gui/direct_down_icon.png");
+    private static final ResourceLocation DIRECT_UP = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/direct_up");
+    private static final ResourceLocation DIRECT_DOWN = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/direct_down");
     private static final int DIRECT_ICON_SIZE = 24;
 
     private boolean directMode = false;
@@ -178,38 +178,31 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGuiOverlayPre(RenderGuiOverlayEvent.Pre event) {
+    public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
         if (directMode) {
+            int width = event.getWindow().getGuiScaledWidth();
+            int height = event.getWindow().getGuiScaledHeight();
+            int x = (width - DIRECT_ICON_SIZE) / 2;
+            int y = (height - DIRECT_ICON_SIZE) / 2;
+
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO
+            );
+
             // 十字カーソルを指アイコンに切り替え
-            if (event.getOverlay().id() == VanillaGuiOverlay.CROSSHAIR.id()) {
-                int width = event.getWindow().getGuiScaledWidth();
-                int height = event.getWindow().getGuiScaledHeight();
-                int x = (width - DIRECT_ICON_SIZE) / 2;
-                int y = (height - DIRECT_ICON_SIZE) / 2;
+            event.getGuiGraphics().blitSprite(
+                    mouseClick ? DIRECT_DOWN : DIRECT_UP,
+                    x,
+                    y + 12,
+                    DIRECT_ICON_SIZE,
+                    DIRECT_ICON_SIZE);
 
-                ResourceLocation resourceLocation;
-                if (mouseClick) {
-                    resourceLocation = DIRECT_DOWN_ICON;
-                }
-                else {
-                    resourceLocation = DIRECT_UP_ICON;
-                }
-
-                RenderSystem.enableBlend();
-                event.getGuiGraphics().blit(resourceLocation,
-                        x,
-                        y + 12,
-                        0,
-                        0,
-                        0,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE,
-                        DIRECT_ICON_SIZE);
-                RenderSystem.disableBlend();
-
-                event.setCanceled(true);
-            }
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
         }
     }
 }

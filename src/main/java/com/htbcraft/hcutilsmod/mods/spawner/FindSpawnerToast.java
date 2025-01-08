@@ -1,5 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
+import com.htbcraft.hcutilsmod.HCUtilsMod;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
@@ -15,8 +17,8 @@ import java.util.LinkedHashSet;
 public class FindSpawnerToast implements Toast {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/toasts.png");
-    private static final ResourceLocation SPAWNER_ICON = new ResourceLocation("textures/block/spawner.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation("toast/advancement");
+    private static final ResourceLocation SPAWNER_ICON = new ResourceLocation(HCUtilsMod.MOD_ID, "toast/spawner");
     private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 
     private final BlockPos blockPos;
@@ -47,14 +49,22 @@ public class FindSpawnerToast implements Toast {
             return Visibility.HIDE;
         }
 
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
+        );
+
         // トーストの枠
-        RenderSystem.setShaderFogColor(1.0F, 1.0F, 1.0F);
-        p_94896_.blit(TEXTURE, 0, 0, 0, 0, this.width(), this.height());
+        p_94896_.blitSprite(TEXTURE, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
+        p_94896_.blitSprite(SPAWNER_ICON, 6, 6, 20, 20);
+
         RenderSystem.enableBlend();
-        p_94896_.blit(SPAWNER_ICON, 6, 6, 0, 0, 0, 20, 20, 20, 20);
-        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
