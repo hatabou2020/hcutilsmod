@@ -3,14 +3,14 @@ package com.htbcraft.hcutilsmod.mods.brightness;
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.resources.ResourceLocation;
 
 public class BrightnessMarkerModel {
     private static final float MARKER_SIZE = 0.6F;
     private static final float MARKER_OFFSET = 0.01F;
 
-    private static final ResourceLocation MARKER = new ResourceLocation(HCUtilsMod.MOD_ID, "textures/gui/marker.png");
+    private static final ResourceLocation MARKER = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "textures/gui/marker.png");
 
     private final float minX;
     private final float maxX;
@@ -38,7 +38,7 @@ public class BrightnessMarkerModel {
 
     public void draw(BrightnessMarkerRenderer renderer) {
         RenderSystem.setShaderTexture(0, MARKER);
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX_COLOR);
         RenderSystem.enableBlend();
         renderer.beginVertex();
         renderer.addVertex(this.minX, this.Y, this.minZ, 0.0F, 0.0F, this.red, this.green, this.blue, this.alpha);

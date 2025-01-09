@@ -4,21 +4,21 @@ import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +31,7 @@ public class BrightnessModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation LIGHT = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/light");
+    private static final ResourceLocation LIGHT = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/light");
 
     private final BrightnessMarkerRenderer brightnessMarkerRenderer;
 
@@ -87,29 +87,62 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onBlock(BlockEvent event) {
-        // ブロックに変化があったら更新
+    public void onBlockBlockToolModification(BlockEvent.BlockToolModificationEvent event) {
         prevPlayerPos = BlockPos.ZERO;
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side.isServer()) {
+    public void onBlockPortalSpawn(BlockEvent.PortalSpawnEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockFarmlandTrample(BlockEvent.FarmlandTrampleEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockFluidPlaceBlock(BlockEvent.FluidPlaceBlockEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockEntityMultiPlace(BlockEvent.EntityMultiPlaceEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockEntityPlace(BlockEvent.EntityPlaceEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent event) {
+        prevPlayerPos = BlockPos.ZERO;
+    }
+
+    @SubscribeEvent
+    public void onPlayerTickPost(PlayerTickEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer) {
             return;
         }
-
         if (!isOverWorld()) {
             dispBrightness = false;
         }
 
         if (dispBrightness) {
-            BlockPos playerPos = event.player.blockPosition();
+            BlockPos playerPos = event.getEntity().blockPosition();
             if (prevPlayerPos.compareTo(playerPos) != 0) {
                 prevPlayerPos = playerPos;
 
                 new Thread(() ->
                     tergetMarkers = makeBrightnessMarkers(
-                                        event.player.level(),
+                                        event.getEntity().level(),
                                         playerPos,
                                         HCSettings.getInstance().rangeBrightness,
                                         HCSettings.getInstance().thresholdBrightness,
@@ -183,7 +216,7 @@ public class BrightnessModHandler {
 
     @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) {
             return;
         }
 
@@ -194,29 +227,19 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
-    public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
+    public void onRenderGuiPost(RenderGuiEvent.Post event) {
         // マーカー表示中がわかるように画面の左下にアイコン出す
         if (dispBrightness) {
             int x = 1;
-            int y = event.getWindow().getGuiScaledHeight() - 20 - 1;
-
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(
-                    GlStateManager.SourceFactor.SRC_ALPHA,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                    GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA
-            );
+            int y = Minecraft.getInstance().getWindow().getGuiScaledHeight() - 20 - 1;
 
             event.getGuiGraphics().blitSprite(
+                    RenderType::guiTextured,
                     LIGHT,
                     x,
                     y,
                     20,
                     20);
-
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
         }
     }
 }

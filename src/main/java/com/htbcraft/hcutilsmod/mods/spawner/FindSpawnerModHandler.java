@@ -3,11 +3,12 @@ package com.htbcraft.hcutilsmod.mods.spawner;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,20 +20,20 @@ public class FindSpawnerModHandler {
     private BlockPos hitBlockPos = null;
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side.isServer()) {
+    public void onPlayerTickPost(PlayerTickEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer) {
             return;
         }
 
         if (HCSettings.getInstance().enableFindSpawnerMod) {
-            BlockPos playerPos = event.player.blockPosition();
+            BlockPos playerPos = event.getEntity().blockPosition();
             if (prevPlayerPos.compareTo(playerPos) != 0) {
                 prevPlayerPos = playerPos;
 
                 // 1マス歩くごとに検索
                 new Thread(() ->
                         hitBlockPos = findSpawnerPosInArea(
-                            event.player.level(),
+                            event.getEntity().level(),
                             playerPos,
                             HCSettings.getInstance().rangeFindSpawner)
                 ).start();
@@ -49,7 +50,7 @@ public class FindSpawnerModHandler {
         if (hitBlockPos != null) {
             if (prevHitBlockPos.compareTo(hitBlockPos) != 0) {
                 LOGGER.info("Add Toast!! " + hitBlockPos);
-                Minecraft.getInstance().getToasts().addToast(
+                Minecraft.getInstance().getToastManager().addToast(
                         new FindSpawnerToast(
                                 hitBlockPos,
                                 HCSettings.getInstance().timeFindSpawner));

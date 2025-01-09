@@ -11,16 +11,10 @@ public class BrightnessMarkerRenderer {
     private PoseStack matrixStack;
     private EntityRenderDispatcher renderManager;
 
+    private BufferBuilder bufferBuilder;
+
     public BrightnessMarkerRenderer(Minecraft minecraft) {
         this.minecraft = minecraft;
-    }
-
-    private Tesselator tesselator() {
-        return Tesselator.getInstance();
-    }
-
-    private BufferBuilder buffer() {
-        return tesselator().getBuilder();
     }
 
     public BrightnessMarkerRenderer update(PoseStack matrixStack) {
@@ -34,15 +28,18 @@ public class BrightnessMarkerRenderer {
     }
 
     public void beginVertex() {
-        buffer().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
+        this.bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
     }
 
     public void endVertex() {
-        tesselator().end();
+        BufferUploader.drawWithShader(this.bufferBuilder.buildOrThrow());
     }
 
     public void addVertex(float x, float y, float z, float u, float v, int r, int g, int b, int alpha) {
-        buffer().vertex(this.matrixStack.last().pose(), x, y, z).color(r, g, b, alpha).uv(u, v).endVertex();
+        this.bufferBuilder
+                .addVertex(this.matrixStack.last().pose(), x, y, z)
+                .setUv(u, v)
+                .setColor(r, g, b, alpha);
     }
 
     public void push() {

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 public class SettingsScreen extends Screen {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation("textures/gui/advancements/window.png");
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("textures/gui/advancements/backgrounds/stone.png");
+    private static final ResourceLocation WINDOW_TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/advancements/window.png");
+    private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.withDefaultNamespace("textures/gui/advancements/backgrounds/stone.png");
 
     private static final int WINDOW_WIDTH = 240;
     private static final int WINDOW_HEIGHT = 205;
@@ -103,17 +104,17 @@ public class SettingsScreen extends Screen {
 
         // ウィンドウ背景の描画
         RenderSystem.enableBlend();
-        guiGraphics.blit(BACKGROUND_TEXTURE, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
+        guiGraphics.blit(RenderType::guiTextured, BACKGROUND_TEXTURE, x + 10, y + 10, 0, 0, width - 20, height - 20, 16, 16);
         RenderSystem.disableBlend();
 
         // ウィンドウ枠の描画
         RenderSystem.enableBlend();
 
         // ウィンドウ枠の4隅
-        guiGraphics.blit(WINDOW_TEXTURE, x, y, 0, 0, 20, 30, 256, 256);
-        guiGraphics.blit(WINDOW_TEXTURE, x + width - 20, y, 252 - 20, 0, 20, 30, 256, 256);
-        guiGraphics.blit(WINDOW_TEXTURE, x, y + height - 20, 0, 140 - 20, 20, 20, 256, 256);
-        guiGraphics.blit(WINDOW_TEXTURE, x + width - 20, y + height - 20, 252 - 20, 140 - 20, 20, 20, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x, y, 0, 0, 20, 30, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x + width - 20, y, 252 - 20, 0, 20, 30, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x, y + height - 20, 0, 140 - 20, 20, 20, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x + width - 20, y + height - 20, 252 - 20, 140 - 20, 20, 20, 256, 256);
 
         int x1, y1, texture_x, texture_y, texture_width, texture_height, count;
 
@@ -130,7 +131,7 @@ public class SettingsScreen extends Screen {
             }
             texture_height = 30;
 
-            guiGraphics.blit(WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の下線
@@ -145,7 +146,7 @@ public class SettingsScreen extends Screen {
             }
             texture_height = 20;
 
-            guiGraphics.blit(WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の左線
@@ -161,7 +162,7 @@ public class SettingsScreen extends Screen {
                 texture_height = (140 - 50) + (height - 50) - ((140 - 50) * (i + 1));
             }
 
-            guiGraphics.blit(WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         // ウィンドウ枠の右線
@@ -176,7 +177,7 @@ public class SettingsScreen extends Screen {
                 texture_height = (140 - 50) + (height - 50) - ((140 - 50) * (i + 1));
             }
 
-            guiGraphics.blit(WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, WINDOW_TEXTURE, x1, y1, texture_x, texture_y, texture_width, texture_height, 256, 256);
         }
 
         RenderSystem.disableBlend();

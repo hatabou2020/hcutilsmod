@@ -35,6 +35,6 @@ public class CoordsOverlayGui {
         int w = this.mc.font.width(textCoords);
         int h = this.mc.font.lineHeight;
         guiGraphics.fill(1, 1, 1 + w + 1, 1 + h + 1, -1873784752);
-        guiGraphics.drawString(this.mc.font, textCoords, 2, 2, 14737632);
+        guiGraphics.drawString(this.mc.font, textCoords, 2, 2, 14737632, false);
     }
 }

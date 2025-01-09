@@ -9,23 +9,23 @@ import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
 import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-@Mod("hcutilsmod")
+@Mod(HCUtilsMod.MOD_ID)
 public class HCUtilsMod {
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "hcutilsmod";
@@ -45,7 +45,7 @@ public class HCUtilsMod {
         event.register(BIND_KEY);
     }
 
-    public HCUtilsMod() {
+    public HCUtilsMod(IEventBus modEventBus, ModContainer modContainer) {
         settings = new HCSettings(Minecraft.getInstance());
         settings.loadOptions();
 
@@ -56,19 +56,18 @@ public class HCUtilsMod {
         BrightnessModHandler brightnessModHandler = new BrightnessModHandler();
 
         // キー登録のハンドラを登録
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onRegisterKeyMappings);
         modEventBus.addListener(blockDirectionModHandler::onRegisterKeyMappings);
         modEventBus.addListener(inventoryCustomModHandler::onRegisterKeyMappings);
         modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
 
         // MODのハンドラを登録
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(coordsModHandler);
-        MinecraftForge.EVENT_BUS.register(blockDirectionModHandler);
-        MinecraftForge.EVENT_BUS.register(inventoryCustomModHandler);
-        MinecraftForge.EVENT_BUS.register(findSpawnerModHandler);
-        MinecraftForge.EVENT_BUS.register(brightnessModHandler);
+        NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(coordsModHandler);
+        NeoForge.EVENT_BUS.register(blockDirectionModHandler);
+        NeoForge.EVENT_BUS.register(inventoryCustomModHandler);
+        NeoForge.EVENT_BUS.register(findSpawnerModHandler);
+        NeoForge.EVENT_BUS.register(brightnessModHandler);
     }
 
     @SubscribeEvent

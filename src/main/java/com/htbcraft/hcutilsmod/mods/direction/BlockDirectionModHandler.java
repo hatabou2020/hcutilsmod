@@ -2,9 +2,8 @@ package com.htbcraft.hcutilsmod.mods.direction;
 
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -12,12 +11,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +27,8 @@ public class BlockDirectionModHandler {
     private static final int STATE_INFO_FLAGS = (1 | 2);
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation DIRECT_UP = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/direct_up");
-    private static final ResourceLocation DIRECT_DOWN = new ResourceLocation(HCUtilsMod.MOD_ID, "hud/direct_down");
+    private static final ResourceLocation DIRECT_UP = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_up");
+    private static final ResourceLocation DIRECT_DOWN = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_down");
     private static final int DIRECT_ICON_SIZE = 24;
 
     private boolean directMode = false;
@@ -76,7 +75,7 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onMouseInput(InputEvent.MouseButton event) {
+    public void onInputMouseButtonPost(InputEvent.MouseButton.Post event) {
         if (directMode) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_RIGHT) {
                 mouseClick = (event.getAction() == GLFW_PRESS);
@@ -178,31 +177,27 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onCustomizeGuiOverlay(CustomizeGuiOverlayEvent event) {
+    public void onRenderGuiLayerPre(RenderGuiLayerEvent.Pre event) {
         if (directMode) {
-            int width = event.getWindow().getGuiScaledWidth();
-            int height = event.getWindow().getGuiScaledHeight();
+            if (!event.getName().getPath().equals("crosshair")) {
+                return;
+            }
+
+            int width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+            int height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
             int x = (width - DIRECT_ICON_SIZE) / 2;
             int y = (height - DIRECT_ICON_SIZE) / 2;
 
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(
-                    GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR,
-                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
-                    GlStateManager.SourceFactor.ONE,
-                    GlStateManager.DestFactor.ZERO
-            );
-
             // 十字カーソルを指アイコンに切り替え
             event.getGuiGraphics().blitSprite(
+                    RenderType::crosshair,
                     mouseClick ? DIRECT_DOWN : DIRECT_UP,
                     x,
                     y + 12,
                     DIRECT_ICON_SIZE,
                     DIRECT_ICON_SIZE);
 
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
+            event.setCanceled(true);
         }
     }
 }

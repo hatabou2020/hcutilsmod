@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,12 +17,12 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerDestroyItemEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -76,7 +77,7 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onMouseReleased(ScreenEvent.MouseButtonReleased event) {
+    public void onScreenMouseButtonReleasedPost(ScreenEvent.MouseButtonReleased.Post event) {
         if (sortEnable) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
                 inventorySortButton.mouseClicked(event.getMouseX(), event.getMouseY(), 0);
@@ -114,7 +115,7 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onDrawScreen(ScreenEvent.Render event) {
+    public void onScreenRenderPost(ScreenEvent.Render.Post event) {
         if (sortEnable) {
             Screen gui = event.getScreen();
             double mouseX = event.getMouseX();
@@ -131,26 +132,26 @@ public class InventoryCustomModHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side.isServer()) {
+    public void onPlayerTickPost(PlayerTickEvent.Post event) {
+        if (event.getEntity() instanceof ServerPlayer) {
             if (sortEnable) {
                 // サーバー側で処理しないとソート結果は反映されない
                 if (sortInventory) {
                     sortInventory = false;
 
                     // インベントリのソート
-                    sortPlayerInventory(event.player.getInventory().items);
+                    sortPlayerInventory(event.getEntity().getInventory().items);
 
-                    if (event.player.containerMenu instanceof ChestMenu) {
+                    if (event.getEntity().containerMenu instanceof ChestMenu) {
                         // チェストのソート
-                        sortChestInventory((ChestMenu) event.player.containerMenu);
+                        sortChestInventory((ChestMenu) event.getEntity().containerMenu);
                     }
                 }
             }
 
             if (destroyItemParam != null) {
                 // 使い切ったアイテムを補充する
-                autoReplaceItem(event.player.getInventory());
+                autoReplaceItem(event.getEntity().getInventory());
             }
         }
     }
