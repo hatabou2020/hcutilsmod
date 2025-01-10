@@ -47,6 +47,22 @@ authors="${mod_authors}" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
+マイクラのサバイバルで便利なMODを作ります。
+※当MODの使用は自己責任でお願いします。
+
+#01 ブロックの方向を変える（シングルプレイのみ）
+#02 座標だけ表示する
+#03 インベントリを整理する（シングルプレイのみ）
+#04 手持ちを使い切ったら自動で補充する（シングルプレイのみ）
+#05 スポナーを見つける
+#06 明るさマーカーを表示する（Ver.1.53～）
+
+--------
+Ver.2.00
+--------
+※このバージョンからNeoForgeに移行する
+2025/01/10
+・NeoForge-21.4.50-beta に対応
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
