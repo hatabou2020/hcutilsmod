@@ -4,7 +4,6 @@ import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -37,7 +37,7 @@ public class BrightnessModHandler {
 
     private Boolean dispBrightness = false;
     private BlockPos prevPlayerPos = BlockPos.ZERO;
-    private ArrayList<BrightnessMarker> tergetMarkers = null;
+    private ArrayList<BrightnessMarker> targetMarkers = null;
 
     // デフォルトキー：[b]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
@@ -141,7 +141,7 @@ public class BrightnessModHandler {
                 prevPlayerPos = playerPos;
 
                 new Thread(() ->
-                    tergetMarkers = makeBrightnessMarkers(
+                    targetMarkers = makeBrightnessMarkers(
                                         event.getEntity().level(),
                                         playerPos,
                                         HCSettings.getInstance().rangeBrightness,
@@ -153,8 +153,8 @@ public class BrightnessModHandler {
             }
         }
         else {
-            if (tergetMarkers != null) {
-                tergetMarkers = null;
+            if (targetMarkers != null) {
+                targetMarkers = null;
                 prevPlayerPos = BlockPos.ZERO;
             }
         }
@@ -215,14 +215,21 @@ public class BrightnessModHandler {
     }
 
     @SubscribeEvent
+    public void onRenderHighlightBlock(RenderHighlightEvent.Block event) {
+        BlockState state = Minecraft.getInstance().player.level().getBlockState(event.getTarget().getBlockPos());
+        Block b = state.getBlock();
+        LOGGER.info(b);
+    }
+
+    @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) {
             return;
         }
 
-        if (tergetMarkers != null) {
-            tergetMarkers.forEach(
-                    m -> m.draw(brightnessMarkerRenderer.update(new PoseStack())));
+        if (targetMarkers != null) {
+            targetMarkers.forEach(
+                    m -> m.draw(brightnessMarkerRenderer.update(event.getPoseStack())));
         }
     }
 
