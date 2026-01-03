@@ -2,11 +2,6 @@ package com.htbcraft.hcutilsmod;
 
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import com.htbcraft.hcutilsmod.common.HCSettings;
-import com.htbcraft.hcutilsmod.mods.brightness.BrightnessModHandler;
-import com.htbcraft.hcutilsmod.mods.coords.CoordsModHandler;
-import com.htbcraft.hcutilsmod.mods.direction.BlockDirectionModHandler;
-import com.htbcraft.hcutilsmod.mods.inventory.InventoryCustomModHandler;
-import com.htbcraft.hcutilsmod.mods.spawner.FindSpawnerModHandler;
 import com.htbcraft.hcutilsmod.screen.MainSettingsScreen;
 import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
@@ -22,57 +17,41 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.*;
 
-@Mod(HCUtilsMod.MOD_ID)
+@Mod(HCUtilsMod.MODID)
 public class HCUtilsMod {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final String MOD_ID = "hcutilsmod";
+    public static final String MODID = "hcutilsmod";
 
-    private final HCSettings settings;
+    private HCSettings settings;
     private MainSettingsScreen mainSettingsScreen;
 
     // デフォルトキー：[H]
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
-            "hcutilsmod.settings.key_description",
+            "key.category.minecraft.hcutilsmod.settings",
             GLFW_KEY_H,
             0,
             GLFW_RELEASE
     );
 
-    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        event.register(BIND_KEY);
-    }
-
     public HCUtilsMod(IEventBus modEventBus, ModContainer modContainer) {
-        settings = new HCSettings(Minecraft.getInstance());
-        settings.loadOptions();
-
-        CoordsModHandler coordsModHandler = new CoordsModHandler();
-        BlockDirectionModHandler blockDirectionModHandler = new BlockDirectionModHandler();
-        InventoryCustomModHandler inventoryCustomModHandler = new InventoryCustomModHandler();
-        FindSpawnerModHandler findSpawnerModHandler = new FindSpawnerModHandler();
-        BrightnessModHandler brightnessModHandler = new BrightnessModHandler();
-
         // キー登録のハンドラを登録
         modEventBus.addListener(this::onRegisterKeyMappings);
-        modEventBus.addListener(blockDirectionModHandler::onRegisterKeyMappings);
-        modEventBus.addListener(inventoryCustomModHandler::onRegisterKeyMappings);
-        modEventBus.addListener(brightnessModHandler::onRegisterKeyMappings);
 
         // MODのハンドラを登録
         NeoForge.EVENT_BUS.register(this);
-        NeoForge.EVENT_BUS.register(coordsModHandler);
-        NeoForge.EVENT_BUS.register(blockDirectionModHandler);
-        NeoForge.EVENT_BUS.register(inventoryCustomModHandler);
-        NeoForge.EVENT_BUS.register(findSpawnerModHandler);
-        NeoForge.EVENT_BUS.register(brightnessModHandler);
+    }
+
+    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+        event.register(BIND_KEY);
     }
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("HELLO from server starting");
+        settings = new HCSettings(Minecraft.getInstance());
+        settings.loadOptions();
     }
 
     @SubscribeEvent

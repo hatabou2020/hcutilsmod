@@ -1,5 +1,6 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
+import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -7,20 +8,29 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@Mod(value = HCUtilsMod.MODID, dist = Dist.CLIENT)
+@EventBusSubscriber(modid = HCUtilsMod.MODID, value = Dist.CLIENT)
 public class FindSpawnerModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private BlockPos prevPlayerPos = BlockPos.ZERO;
-    private BlockPos prevHitBlockPos = BlockPos.ZERO;
-    private BlockPos hitBlockPos = null;
+    private static BlockPos prevPlayerPos = BlockPos.ZERO;
+    private static BlockPos prevHitBlockPos = BlockPos.ZERO;
+    private static BlockPos hitBlockPos = null;
+
+    public FindSpawnerModHandler(ModContainer container) {
+    }
 
     @SubscribeEvent
-    public void onPlayerTickPost(PlayerTickEvent.Post event) {
+    public static void onPlayerTickPost(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer) {
             return;
         }
@@ -62,7 +72,7 @@ public class FindSpawnerModHandler {
         }
     }
 
-    private BlockPos findSpawnerPosInArea(Level world, BlockPos pos, int range) {
+    private static BlockPos findSpawnerPosInArea(Level world, BlockPos pos, int range) {
         int i = pos.getX() - range;
         int j = pos.getX() + range;
         int k = pos.getY() - range;

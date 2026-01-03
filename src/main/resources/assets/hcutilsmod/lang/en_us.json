@@ -1,9 +1,9 @@
 {
-    "hcutilsmod.common.key_category" : "Useful MOD collection in Survival",
-    "hcutilsmod.settings.key_description" : "- Open MOD settings -",
-    "hcutilsmod.direction.key_description" : "Rotate Block (hold down)",
-    "hcutilsmod.inventory.key_description" : "Sort Inventory",
-    "hcutilsmod.brightness.key_description" : "Show Brightness Marker",
+    "key.category.minecraft.hcutilsmod" : "Useful MOD collection in Survival",
+    "key.category.minecraft.hcutilsmod.settings" : "Open MOD settings",
+    "key.category.minecraft.hcutilsmod.direction" : "Rotate Block (hold down)",
+    "key.category.minecraft.hcutilsmod.inventory" : "Sort Inventory",
+    "key.category.minecraft.hcutilsmod.brightness" : "Show Brightness Marker",
 
     "hcutilsmod.findspawner.text" : "Found a spawner!",
 

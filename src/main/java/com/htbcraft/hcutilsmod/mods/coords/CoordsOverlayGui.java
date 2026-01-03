@@ -10,16 +10,14 @@ import org.apache.logging.log4j.Logger;
 public class CoordsOverlayGui {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final Minecraft mc;
     private BlockPos oldBlockPos = null;
     private String textCoords = "";
 
-    public CoordsOverlayGui(Minecraft mc) {
-        this.mc = mc;
+    public CoordsOverlayGui() {
     }
 
     public void render(GuiGraphics guiGraphics) {
-        Entity cameraEntity = this.mc.getCameraEntity();
+        Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
         if (cameraEntity == null) {
             return;
         }
@@ -32,9 +30,9 @@ public class CoordsOverlayGui {
             LOGGER.info(textCoords);
         }
 
-        int w = this.mc.font.width(textCoords);
-        int h = this.mc.font.lineHeight;
+        int w = Minecraft.getInstance().font.width(textCoords);
+        int h = Minecraft.getInstance().font.lineHeight;
         guiGraphics.fill(1, 1, 1 + w + 1, 1 + h + 1, -1873784752);
-        guiGraphics.drawString(this.mc.font, textCoords, 2, 2, 14737632, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, textCoords, 2, 2, -2039584, false);
     }
 }

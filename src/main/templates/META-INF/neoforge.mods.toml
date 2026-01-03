@@ -3,11 +3,6 @@
 # The overall format is standard TOML format, v0.5.0.
 # Note that there are a couple of TOML lists in this file.
 # Find more information on toml format here:  https://github.com/toml-lang/toml
-# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
-modLoader="javafml" #mandatory
-
-# A version range to match for said mod loader - for regular FML @Mod it will be the FML version. This is currently 2.
-loaderVersion="${loader_version_range}" #mandatory
 
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
@@ -55,8 +50,13 @@ description='''
 #03 インベントリを整理する（シングルプレイのみ）
 #04 手持ちを使い切ったら自動で補充する（シングルプレイのみ）
 #05 スポナーを見つける
-#06 明るさマーカーを表示する（Ver.1.53～）
 
+--------
+Ver.2.01
+--------
+2026/01/04
+・NeoForge 21.10.64 に対応
+・「#06 明るさマーカーを表示する」を削除（サポート終了）
 --------
 Ver.2.00
 --------
@@ -89,7 +89,7 @@ Ver.2.00
     # Optional field describing why the dependency is required or why it is incompatible
     # reason="..."
     # The version range of the dependency
-    versionRange="${neo_version_range}" #mandatory
+    versionRange="[${neo_version},)" #mandatory
     # An ordering relationship for the dependency.
     # BEFORE - This mod is loaded BEFORE the dependency
     # AFTER - This mod is loaded AFTER the dependency

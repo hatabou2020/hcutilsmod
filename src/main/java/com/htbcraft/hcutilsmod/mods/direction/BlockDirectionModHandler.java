@@ -3,7 +3,7 @@ package com.htbcraft.hcutilsmod.mods.direction;
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.common.HCKeyBinding;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -11,7 +11,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
@@ -22,43 +26,49 @@ import org.apache.logging.log4j.Logger;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+@Mod(value = HCUtilsMod.MODID, dist = Dist.CLIENT)
+@EventBusSubscriber(modid = HCUtilsMod.MODID, value = Dist.CLIENT)
 public class BlockDirectionModHandler {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int STATE_INFO_FLAGS = (1 | 2);
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation DIRECT_UP = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_up");
-    private static final ResourceLocation DIRECT_DOWN = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "hud/direct_down");
+    private static final ResourceLocation DIRECT_UP = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "hud/direct_up");
+    private static final ResourceLocation DIRECT_DOWN = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "hud/direct_down");
     private static final int DIRECT_ICON_SIZE = 24;
 
-    private boolean directMode = false;
-    private boolean guiOpened = false;
-    private boolean mouseClick = false;
+    private static boolean directMode = false;
+    private static boolean guiOpened = false;
+    private static boolean mouseClick = false;
 
     // デフォルトキー：[r] 長押し
     private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
-            "hcutilsmod.direction.key_description",
+            "key.category.minecraft.hcutilsmod.direction",
             GLFW_KEY_R,
             0,
             GLFW_REPEAT
     );
 
-    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
+    public BlockDirectionModHandler(ModContainer container) {
+    }
+
+    @SubscribeEvent
+    public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(BIND_KEY);
     }
 
     @SubscribeEvent
-    public void onScreenOpening(ScreenEvent.Opening event) {
+    public static void onScreenOpening(ScreenEvent.Opening event) {
         guiOpened = true;
     }
 
     @SubscribeEvent
-    public void onScreenClosing(ScreenEvent.Closing event) {
+    public static void onScreenClosing(ScreenEvent.Closing event) {
         guiOpened = false;
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.Key event) {
+    public static void onKeyInput(InputEvent.Key event) {
         if (Minecraft.getInstance().screen != null) {
             LOGGER.info("Displaying on screen");
             return;
@@ -75,7 +85,7 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onInputMouseButtonPost(InputEvent.MouseButton.Post event) {
+    public static void onInputMouseButtonPost(InputEvent.MouseButton.Post event) {
         if (directMode) {
             if (event.getButton() == GLFW_MOUSE_BUTTON_RIGHT) {
                 mouseClick = (event.getAction() == GLFW_PRESS);
@@ -84,7 +94,7 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (directMode) {
             // このイベントはクライアント・サーバー、メインハンド・オフハンドの組み合わせで受信する
             // サーバーでメインハンドだけを処理する
@@ -99,7 +109,7 @@ public class BlockDirectionModHandler {
         }
     }
 
-    private boolean change(Level world, BlockPos pos) {
+    private static boolean change(Level world, BlockPos pos) {
         boolean ret = false;
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -177,7 +187,7 @@ public class BlockDirectionModHandler {
     }
 
     @SubscribeEvent
-    public void onRenderGuiLayerPre(RenderGuiLayerEvent.Pre event) {
+    public static void onRenderGuiLayerPre(RenderGuiLayerEvent.Pre event) {
         if (directMode) {
             if (!event.getName().getPath().equals("crosshair")) {
                 return;
@@ -190,7 +200,7 @@ public class BlockDirectionModHandler {
 
             // 十字カーソルを指アイコンに切り替え
             event.getGuiGraphics().blitSprite(
-                    RenderType::crosshair,
+                    RenderPipelines.CROSSHAIR,
                     mouseClick ? DIRECT_DOWN : DIRECT_UP,
                     x,
                     y + 12,

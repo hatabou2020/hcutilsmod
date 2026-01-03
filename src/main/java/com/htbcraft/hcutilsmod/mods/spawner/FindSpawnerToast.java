@@ -5,7 +5,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ public class FindSpawnerToast implements Toast {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("toast/advancement");
-    private static final ResourceLocation SPAWNER_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MOD_ID, "toast/spawner");
+    private static final ResourceLocation SPAWNER_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "toast/spawner");
     private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 
     private final BlockPos blockPos;
@@ -60,15 +60,15 @@ public class FindSpawnerToast implements Toast {
     @Override
     public void render(GuiGraphics guiGraphics, Font font, long l) {
         // トーストの枠
-        guiGraphics.blitSprite(RenderType::guiTextured, TEXTURE, 0, 0, this.width(), this.height());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
-        guiGraphics.blitSprite(RenderType::guiTextured, SPAWNER_ICON, 6, 6, 20, 20);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPAWNER_ICON, 6, 6, 20, 20);
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        guiGraphics.drawString(font, Component.translatable("hcutilsmod.findspawner.text"), 30, 7, 14737632);
-        guiGraphics.drawString(font, text, 36, 18, 14737632);
+        guiGraphics.drawString(font, Component.translatable("hcutilsmod.findspawner.text"), 30, 7, -2039584);
+        guiGraphics.drawString(font, text, 36, 18, -2039584);
 
         wantedVisibility = Visibility.SHOW;
     }

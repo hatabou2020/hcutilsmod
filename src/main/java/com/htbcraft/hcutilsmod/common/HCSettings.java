@@ -69,8 +69,8 @@ public class HCSettings {
                 });
             }
 
-            for(String s : compoundTag.getAllKeys()) {
-                String s1 = compoundTag.getString(s);
+            for(String s : compoundTag.keySet()) {
+                String s1 = compoundTag.getStringOr(s, "");
 
                 try {
                     if ("cordsmod".equals(s)) {

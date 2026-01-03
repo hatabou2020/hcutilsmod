@@ -1,30 +1,32 @@
 package com.htbcraft.hcutilsmod.mods.brightness;
 
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 public class BrightnessMarkerRenderer {
-    private final Minecraft minecraft;
-
     private PoseStack matrixStack;
-    private EntityRenderDispatcher renderManager;
-
+    private Matrix4f matrix4f;
     private BufferBuilder bufferBuilder;
 
-    public BrightnessMarkerRenderer(Minecraft minecraft) {
-        this.minecraft = minecraft;
+    public BrightnessMarkerRenderer() {
     }
 
-    public BrightnessMarkerRenderer update(PoseStack matrixStack) {
+    public BrightnessMarkerRenderer update(PoseStack matrixStack, Matrix4f matrix4f) {
         this.matrixStack = matrixStack;
-        this.renderManager = this.minecraft.getEntityRenderDispatcher();
+        this.matrix4f = matrix4f;
         return this;
     }
 
     public Vec3 getCameraViewPosition() {
-        return this.renderManager.camera.getPosition();
+        Camera camera = Minecraft.getInstance().getEntityRenderDispatcher().camera;
+        if (camera == null) {
+            return null;
+        }
+        return camera.getPosition();
     }
 
     public void beginVertex() {
@@ -32,14 +34,13 @@ public class BrightnessMarkerRenderer {
     }
 
     public void endVertex() {
-        BufferUploader.drawWithShader(this.bufferBuilder.buildOrThrow());
     }
 
     public void addVertex(float x, float y, float z, float u, float v, int r, int g, int b, int alpha) {
         this.bufferBuilder
-                .addVertex(this.matrixStack.last().pose(), x, y, z)
+                .addVertex(this.matrix4f, x, y, z)
                 .setUv(u, v)
-                .setColor(r, g, b, alpha);
+                .setColor(ARGB.color(alpha, r, g, b));
     }
 
     public void push() {

@@ -1,9 +1,9 @@
 {
-    "hcutilsmod.common.key_category" : "サバイバルで便利なMOD集",
-    "hcutilsmod.settings.key_description" : "- 設定画面を開く -",
-    "hcutilsmod.direction.key_description" : "ブロックの向きを変える（長押し）",
-    "hcutilsmod.inventory.key_description" : "インベントリの整理",
-    "hcutilsmod.brightness.key_description" : "明るさマーカーの表示",
+    "key.category.minecraft.hcutilsmod" : "サバイバルで便利なMOD集",
+    "key.category.minecraft.hcutilsmod.settings" : "設定画面を開く",
+    "key.category.minecraft.hcutilsmod.direction" : "ブロックの向きを変える（長押し）",
+    "key.category.minecraft.hcutilsmod.inventory" : "インベントリの整理",
+    "key.category.minecraft.hcutilsmod.brightness" : "明るさマーカーの表示",
 
     "hcutilsmod.findspawner.text" : "スポナー発見！",
 
