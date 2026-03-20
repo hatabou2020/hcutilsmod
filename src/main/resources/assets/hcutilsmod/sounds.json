@@ -1,0 +1,8 @@
+{
+  "bed.chime": {
+    "sounds": [
+      "hcutilsmod:chime"
+    ],
+    "subtitle": "subtitles.hcutilsmod.bed.chime"
+  }
+}

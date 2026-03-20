@@ -36,6 +36,9 @@ public class HCUtilsMod {
     );
 
     public HCUtilsMod(IEventBus modEventBus, ModContainer modContainer) {
+        // 音声イベントを登録
+        ModSounds.SOUNDS.register(modEventBus);
+
         // キー登録のハンドラを登録
         modEventBus.addListener(this::onRegisterKeyMappings);
 
