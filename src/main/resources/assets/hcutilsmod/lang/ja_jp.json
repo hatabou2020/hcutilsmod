@@ -76,6 +76,11 @@
     "hcutilsmod.settings.twitter.destroy.restart" : "Minecraftを再起動してください。",
     "hcutilsmod.settings.twitter.return" : "戻る",
 
+    "hcutilsmod.settings.other.title" : "その他の設定",
+    "hcutilsmod.settings.other.bed.chime.on" : "就寝可タイミング通知： オン",
+    "hcutilsmod.settings.other.bed.chime.off" : "就寝可タイミング通知： オフ",
+    "hcutilsmod.settings.other.return" : "戻る",
+
     "hcutilsmod.inventory.button" : "整理 [%s]",
     "hcutilsmod.direction.icon" : "右クリック"
 }

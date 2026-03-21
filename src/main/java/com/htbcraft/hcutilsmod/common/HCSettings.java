@@ -36,6 +36,7 @@ public class HCSettings {
     public Boolean zombieBrightness = true;                     // ゾンビが湧くことができないブロック：除外する(true)／除外しない(false)
     public MinecraftColor colorBrightness = MinecraftColor.RED; // 明るさマーカーの色
     public int alphaBrightness = 0x7F;                          // 明るさマーカーの透過度
+    public Boolean enableBedChime = false;                      // 就寝可タイミング通知
 
     public HCSettings(Minecraft mcIn) {
         instance = this;
@@ -107,6 +108,9 @@ public class HCSettings {
                     if ("brightnessmod.alpha".equals(s)) {
                         alphaBrightness = Integer.parseInt(s1);
                     }
+                    if ("bedchime".equals(s)) {
+                        enableBedChime = Boolean.valueOf(s1);
+                    }
                 } catch (Exception exception) {
                     LOGGER.warn("Skipping bad option: {}:{}", s, s1);
                 }
@@ -131,6 +135,7 @@ public class HCSettings {
             printwriter.println("brightnessmod.zombie:" + zombieBrightness);
             printwriter.println("brightnessmod.color:" + colorBrightness.ordinal());
             printwriter.println("brightnessmod.alpha:" + alphaBrightness);
+            printwriter.println("bedchime:" + enableBedChime);
         } catch (Exception exception) {
             LOGGER.error("Failed to save options", exception);
         }

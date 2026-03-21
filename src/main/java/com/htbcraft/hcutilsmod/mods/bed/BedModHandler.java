@@ -2,6 +2,7 @@ package com.htbcraft.hcutilsmod.mods.bed;
 
 import com.htbcraft.hcutilsmod.HCUtilsMod;
 import com.htbcraft.hcutilsmod.ModSounds;
+import com.htbcraft.hcutilsmod.common.HCSettings;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.neoforged.api.distmarker.Dist;
@@ -25,6 +26,9 @@ public class BedModHandler {
 
     @SubscribeEvent
     public static void onPlayerTickPost(PlayerTickEvent.Post event) {
+        if (!HCSettings.getInstance().enableBedChime) {
+            return;
+        }
         if (event.getEntity() instanceof LocalPlayer player) {
             long dayTime = player.level().getDayTime() % 24000;
             

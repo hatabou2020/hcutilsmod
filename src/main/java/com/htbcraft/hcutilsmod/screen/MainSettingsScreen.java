@@ -51,6 +51,15 @@ public class MainSettingsScreen extends SettingsScreen {
 //            .size(180, 20)
 //            .build());
 
+        // その他の設定
+        this.addRenderableWidget(
+            Button.builder(
+                Component.translatable("hcutilsmod.settings.other.title").append("..."),
+                (var1) -> this.getMinecraft().setScreen(new OtherSettingsScreen(this)))
+            .pos(getPosX() + (getWidth() - 180) / 2, getPosY() + 130)
+            .size(180, 20)
+            .build());
+
         // ゲームに戻る
         this.addRenderableWidget(
             Button.builder(
