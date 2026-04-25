@@ -1,7 +1,7 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
-import com.htbcraft.hcutilsmod.HCUtilsMod;
-import com.htbcraft.hcutilsmod.common.HCSettings;
+import com.htbcraft.hcutilsmod.HcUtilsMod;
+import com.htbcraft.hcutilsmod.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,19 +14,15 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-@Mod(value = HCUtilsMod.MODID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = HCUtilsMod.MODID, value = Dist.CLIENT)
-public class FindSpawnerModHandler {
-    private static final Logger LOGGER = LogManager.getLogger();
-
+@Mod(value = HcUtilsMod.MODID, dist = Dist.CLIENT)
+@EventBusSubscriber(modid = HcUtilsMod.MODID, value = Dist.CLIENT)
+public class FindSpawnerClient {
     private static BlockPos prevPlayerPos = BlockPos.ZERO;
     private static BlockPos prevHitBlockPos = BlockPos.ZERO;
     private static BlockPos hitBlockPos = null;
 
-    public FindSpawnerModHandler(ModContainer container) {
+    public FindSpawnerClient(ModContainer container) {
     }
 
     @SubscribeEvent
@@ -35,7 +31,7 @@ public class FindSpawnerModHandler {
             return;
         }
 
-        if (HCSettings.getInstance().enableFindSpawnerMod) {
+        if (Config.FIND_SPAWNER_ENABLE.get()) {
             BlockPos playerPos = event.getEntity().blockPosition();
             if (prevPlayerPos.compareTo(playerPos) != 0) {
                 prevPlayerPos = playerPos;
@@ -43,9 +39,9 @@ public class FindSpawnerModHandler {
                 // 1マス歩くごとに検索
                 new Thread(() ->
                         hitBlockPos = findSpawnerPosInArea(
-                            event.getEntity().level(),
-                            playerPos,
-                            HCSettings.getInstance().rangeFindSpawner)
+                                event.getEntity().level(),
+                                playerPos,
+                                Config.FIND_SPAWNER_RANGE.get())
                 ).start();
             }
         }
@@ -59,11 +55,11 @@ public class FindSpawnerModHandler {
         // スポナーを見つけたらトースト表示
         if (hitBlockPos != null) {
             if (prevHitBlockPos.compareTo(hitBlockPos) != 0) {
-                LOGGER.info("Add Toast!! " + hitBlockPos);
+                HcUtilsMod.LOGGER.info("Add Toast!! {}", hitBlockPos);
                 Minecraft.getInstance().getToastManager().addToast(
                         new FindSpawnerToast(
                                 hitBlockPos,
-                                HCSettings.getInstance().timeFindSpawner));
+                                Config.FIND_SPAWNER_TIME.get()));
                 prevHitBlockPos = hitBlockPos;
             }
         }

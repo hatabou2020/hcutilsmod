@@ -1,8 +1,8 @@
 package com.htbcraft.hcutilsmod.mods.inventory;
 
-import com.htbcraft.hcutilsmod.HCUtilsMod;
-import com.htbcraft.hcutilsmod.common.HCKeyBinding;
-import com.htbcraft.hcutilsmod.common.HCSettings;
+import com.htbcraft.hcutilsmod.HcUtilsMod;
+import com.htbcraft.hcutilsmod.my.MyKeyBinding;
+import com.htbcraft.hcutilsmod.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,37 +31,30 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerDestroyItemEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.util.List;
 
-import static org.lwjgl.glfw.GLFW.*;
-
-// 仕様
-// ・インベントリ、チェストを開いているときに登録キー押下で整理することができる
-// ・手持ちのアイテムを使い切ったら、インベントリ内から自動で取り出す
-@Mod(value = HCUtilsMod.MODID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = HCUtilsMod.MODID, value = Dist.CLIENT)
-public class InventoryCustomModHandler {
-    private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final String INVENTORY_BUTTON_TEXT = "hcutilsmod.inventory.button";
+@Mod(value = HcUtilsMod.MODID, dist = Dist.CLIENT)
+@EventBusSubscriber(modid = HcUtilsMod.MODID, value = Dist.CLIENT)
+public class InventoryCustomClient {
+    private static final String INVENTORY_BUTTON_TEXT = "hcutilsmod.configuration.sortType.inventory";
 
     private static boolean sortInventory = false;
     private static boolean sortEnable = false;
     private static Button inventorySortButton = null;
 
     // デフォルトキー：[ｏ]
-    private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
+    private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
+            Config.KEY_CATEGORY,
             "key.category.minecraft.hcutilsmod.inventory",
-            GLFW_KEY_O,
+            GLFW.GLFW_KEY_O,
             0,
-            GLFW_RELEASE
+            GLFW.GLFW_RELEASE
     );
 
-    public InventoryCustomModHandler(ModContainer container) {
+    public InventoryCustomClient(ModContainer container) {
     }
 
     @SubscribeEvent
@@ -72,9 +65,9 @@ public class InventoryCustomModHandler {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if ((Minecraft.getInstance().screen != null) &&
-            !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
-            !(Minecraft.getInstance().screen instanceof ContainerScreen)) {
-            LOGGER.info("Displaying on screen");
+                !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
+                !(Minecraft.getInstance().screen instanceof ContainerScreen)) {
+            HcUtilsMod.LOGGER.info("Displaying on screen");
             return;
         }
 
@@ -94,7 +87,7 @@ public class InventoryCustomModHandler {
     @SubscribeEvent
     public static void onScreenMouseButtonReleasedPost(ScreenEvent.MouseButtonReleased.Post event) {
         if (sortEnable) {
-            if (event.getButton() == GLFW_MOUSE_BUTTON_LEFT) {
+            if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
                 inventorySortButton.mouseClicked(event.getMouseButtonEvent(), false);
             }
         }
@@ -105,7 +98,7 @@ public class InventoryCustomModHandler {
         sortEnable = false;
 
         Screen gui = event.getScreen();
-        LOGGER.info(gui.getTitle().getString());
+        HcUtilsMod.LOGGER.info(gui.getTitle().getString());
 
         Component keyName = Component.translatable(INVENTORY_BUTTON_TEXT, BIND_KEY.getKeyName());
         int width = Minecraft.getInstance().font.width(keyName.getString());
@@ -113,13 +106,13 @@ public class InventoryCustomModHandler {
         if ((gui instanceof InventoryScreen) || (gui instanceof ContainerScreen)) {
             sortEnable = true;
             inventorySortButton = Button.builder(keyName,
-                                                (var1) -> {
-                                                    sortInventory = true;
-                                                    inventorySortButton.active = false;
-                                                })
-                                            .pos(0, 0)
-                                            .size(width + 10, 20)
-                                            .build();
+                            (var1) -> {
+                                sortInventory = true;
+                                inventorySortButton.active = false;
+                            })
+                    .pos(0, 0)
+                    .size(width + 10, 20)
+                    .build();
         }
     }
 
@@ -138,7 +131,7 @@ public class InventoryCustomModHandler {
 
             inventorySortButton.setX(gui.width - inventorySortButton.getWidth());
             inventorySortButton.setY(0);
-            inventorySortButton.render(event.getGuiGraphics(), (int) mouseX, (int) mouseY, 0.0F);
+            inventorySortButton.extractRenderState(event.getGuiGraphics(), (int) mouseX, (int) mouseY, 0.0F);
 
             if (!sortInventory) {
                 inventorySortButton.active = true;
@@ -174,7 +167,7 @@ public class InventoryCustomModHandler {
     private static void sortPlayerInventory(NonNullList<ItemStack> inInventory) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
-            LOGGER.info("player == null");
+            HcUtilsMod.LOGGER.info("player == null");
             return;
         }
 
@@ -183,7 +176,7 @@ public class InventoryCustomModHandler {
         int inventorySize = inInventory.size();
         List<ItemStack> itemStacks = inInventory.subList(hotbarSize, inventorySize);
 
-        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+        if (Config.SORT_TYPE.get() == Config.SortType.CATEGORY) {
             try (Level level = player.level()) {
                 // クリエイティブモードのタブをロード
                 CreativeModeTabs.tryRebuildTabContents(
@@ -195,7 +188,7 @@ public class InventoryCustomModHandler {
                 // カテゴリ順でソート
                 itemStacks.sort(new InventoryCategorySort());
             } catch (IOException e) {
-                LOGGER.info("catch IOException");
+                HcUtilsMod.LOGGER.info("catch IOException");
             }
         }
         else {
@@ -210,7 +203,7 @@ public class InventoryCustomModHandler {
         int size = inventory.getContainerSize();
         List<ItemStack> itemStacks = container.getItems().subList(0, size);
 
-        if (HCSettings.getInstance().sortType == HCSettings.SortType.CATEGORY) {
+        if (Config.SORT_TYPE.get() == Config.SortType.CATEGORY) {
             // カテゴリ順でソート
             itemStacks.sort(new InventoryCategorySort());
         }
@@ -262,7 +255,7 @@ public class InventoryCustomModHandler {
 
     @SubscribeEvent
     public static void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
-        if (!HCSettings.getInstance().enableAutoReplaceItem) {
+        if (!Config.AUTO_REPLACE_ITEM_ENABLE.get()) {
             return;
         }
 
@@ -272,6 +265,6 @@ public class InventoryCustomModHandler {
         }
 
         destroyItemParam = new DestroyItemParam(event.getHand(), event.getOriginal());
-        LOGGER.info("PlayerDestroyItemEvent: {} / {}", event.getHand(), event.getOriginal());
+        HcUtilsMod.LOGGER.info("PlayerDestroyItemEvent: {} / {}", event.getHand(), event.getOriginal());
     }
 }

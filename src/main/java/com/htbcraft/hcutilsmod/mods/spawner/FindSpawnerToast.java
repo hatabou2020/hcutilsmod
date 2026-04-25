@@ -1,24 +1,26 @@
 package com.htbcraft.hcutilsmod.mods.spawner;
 
-import com.htbcraft.hcutilsmod.HCUtilsMod;
+import com.htbcraft.hcutilsmod.HcUtilsMod;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashSet;
 
 public class FindSpawnerToast implements Toast {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.withDefaultNamespace("toast/advancement");
-    private static final ResourceLocation SPAWNER_ICON = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "toast/spawner");
+    private static final Identifier TEXTURE = Identifier.withDefaultNamespace("toast/advancement");
+    private static final Identifier SPAWNER_ICON = Identifier.fromNamespaceAndPath(HcUtilsMod.MODID, "toast/spawner");
     private static final LinkedHashSet<BlockPos> blockPosList = new LinkedHashSet<>();
 
     private final BlockPos blockPos;
@@ -36,39 +38,44 @@ public class FindSpawnerToast implements Toast {
     }
 
     @Override
-    public Visibility getWantedVisibility() {
+    public @NonNull Visibility getWantedVisibility() {
         return wantedVisibility;
     }
 
     @Override
-    public void update(ToastManager toastManager, long l) {
+    public void update(@NonNull ToastManager toastManager, long l) {
         // すでに表示している座標の場合は即非表示
         if (!this.visibility) {
-            LOGGER.info("Already displayed!! " + this.blockPos);
+            LOGGER.info("Already displayed!! {}", this.blockPos);
             wantedVisibility = Visibility.HIDE;
             // HIDE を返すと音が鳴るのがイケてない。
         }
 
+        if (Minecraft.getInstance().screen != null) {
+            LOGGER.info("Screen Display");
+            wantedVisibility = Visibility.HIDE;
+        }
+
         // 設定されている時間だけ表示
         if (l > (this.timeout * 1000L)) {
-            LOGGER.info("Time up!! " + this.blockPos);
+            LOGGER.info("Time up!! {}", this.blockPos);
             blockPosList.remove(this.blockPos);
             wantedVisibility = Visibility.HIDE;
         }
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, Font font, long l) {
+    public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, @NonNull Font font, long l) {
         // トーストの枠
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, this.width(), this.height());
+        guiGraphicsExtractor.blitSprite(RenderPipelines.GUI_TEXTURED, TEXTURE, 0, 0, this.width(), this.height());
 
         // スポナーのアイコン
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPAWNER_ICON, 6, 6, 20, 20);
+        guiGraphicsExtractor.blitSprite(RenderPipelines.GUI_TEXTURED, SPAWNER_ICON, 6, 6, 20, 20);
 
         // 見つけたスポナーの座標
         String text = "X:" + this.blockPos.getX() + " Y:" + this.blockPos.getY() + " Z:" + this.blockPos.getZ();
-        guiGraphics.drawString(font, Component.translatable("hcutilsmod.findspawner.text"), 30, 7, -2039584);
-        guiGraphics.drawString(font, text, 36, 18, -2039584);
+        guiGraphicsExtractor.text(font, Component.translatable("hcutilsmod.toast.findSpawner.message"), 30, 7, -2039584);
+        guiGraphicsExtractor.text(font, text, 36, 18, -2039584);
 
         wantedVisibility = Visibility.SHOW;
     }

@@ -1,8 +1,7 @@
-package com.htbcraft.hcutilsmod.common;
+package com.htbcraft.hcutilsmod.my;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 
@@ -11,9 +10,7 @@ import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class HCKeyBinding extends KeyMapping {
-    private static final Category KEY_CATEGORY = new Category(ResourceLocation.withDefaultNamespace("hcutilsmod"));
-
+public class MyKeyBinding extends KeyMapping {
     private static final Map<Integer, KeyModifier> MODIFIER_MAP = new HashMap<>() {
         {
             put(0, KeyModifier.NONE);
@@ -34,8 +31,12 @@ public class HCKeyBinding extends KeyMapping {
 
     private final int action;
 
-    public HCKeyBinding(String description, int key, int modifiers, int action) {
-        super(description, KeyConflictContext.UNIVERSAL, MODIFIER_MAP.get(modifiers), InputConstants.Type.KEYSYM.getOrCreate(key), KEY_CATEGORY);
+    public MyKeyBinding(Category category, String description, int key, int modifiers, int action) {
+        super(description,
+                KeyConflictContext.UNIVERSAL,
+                MODIFIER_MAP.get(modifiers),
+                InputConstants.Type.KEYSYM.getOrCreate(key),
+                category);
         this.action = action;
     }
 

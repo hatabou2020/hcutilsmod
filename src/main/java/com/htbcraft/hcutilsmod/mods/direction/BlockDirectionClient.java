@@ -1,16 +1,17 @@
 package com.htbcraft.hcutilsmod.mods.direction;
 
-import com.htbcraft.hcutilsmod.HCUtilsMod;
-import com.htbcraft.hcutilsmod.common.HCKeyBinding;
+import com.htbcraft.hcutilsmod.HcUtilsMod;
+import com.htbcraft.hcutilsmod.config.Config;
+import com.htbcraft.hcutilsmod.my.MyKeyBinding;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -21,20 +22,16 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
-import static org.lwjgl.glfw.GLFW.*;
-
-@Mod(value = HCUtilsMod.MODID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = HCUtilsMod.MODID, value = Dist.CLIENT)
-public class BlockDirectionModHandler {
-    private static final Logger LOGGER = LogManager.getLogger();
+@Mod(value = HcUtilsMod.MODID, dist = Dist.CLIENT)
+@EventBusSubscriber(modid = HcUtilsMod.MODID, value = Dist.CLIENT)
+public class BlockDirectionClient {
     private static final int STATE_INFO_FLAGS = (1 | 2);
 
     // https://icon-rainbow.com/
-    private static final ResourceLocation DIRECT_UP = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "hud/direct_up");
-    private static final ResourceLocation DIRECT_DOWN = ResourceLocation.fromNamespaceAndPath(HCUtilsMod.MODID, "hud/direct_down");
+    private static final Identifier DIRECT_UP = Identifier.fromNamespaceAndPath(HcUtilsMod.MODID, "hud/direct_up");
+    private static final Identifier DIRECT_DOWN = Identifier.fromNamespaceAndPath(HcUtilsMod.MODID, "hud/direct_down");
     private static final int DIRECT_ICON_SIZE = 24;
 
     private static boolean directMode = false;
@@ -42,14 +39,15 @@ public class BlockDirectionModHandler {
     private static boolean mouseClick = false;
 
     // デフォルトキー：[r] 長押し
-    private static final HCKeyBinding BIND_KEY = new HCKeyBinding(
+    private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
+            Config.KEY_CATEGORY,
             "key.category.minecraft.hcutilsmod.direction",
-            GLFW_KEY_R,
+            GLFW.GLFW_KEY_R,
             0,
-            GLFW_REPEAT
+            GLFW.GLFW_REPEAT
     );
 
-    public BlockDirectionModHandler(ModContainer container) {
+    public BlockDirectionClient(ModContainer container) {
     }
 
     @SubscribeEvent
@@ -70,7 +68,7 @@ public class BlockDirectionModHandler {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (Minecraft.getInstance().screen != null) {
-            LOGGER.info("Displaying on screen");
+            HcUtilsMod.LOGGER.info("Displaying on screen");
             return;
         }
 
@@ -87,8 +85,8 @@ public class BlockDirectionModHandler {
     @SubscribeEvent
     public static void onInputMouseButtonPost(InputEvent.MouseButton.Post event) {
         if (directMode) {
-            if (event.getButton() == GLFW_MOUSE_BUTTON_RIGHT) {
-                mouseClick = (event.getAction() == GLFW_PRESS);
+            if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                mouseClick = (event.getAction() == GLFW.GLFW_PRESS);
             }
         }
     }
@@ -101,7 +99,7 @@ public class BlockDirectionModHandler {
             if (event.getSide().isServer() && event.getHand().equals(InteractionHand.MAIN_HAND)) {
                 // ブロックの方向を変える
                 boolean ret = change(event.getLevel(), event.getPos());
-                LOGGER.info("change: " + ret);
+                HcUtilsMod.LOGGER.info("change: {}", ret);
             }
 
             // ここでキャンセルしておけばちらつかない
@@ -113,7 +111,7 @@ public class BlockDirectionModHandler {
         boolean ret = false;
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
-        LOGGER.info(block);
+        HcUtilsMod.LOGGER.info(block.toString());
 
         if (block instanceof StairBlock) {                  // 階段
             blockState = new StairsDirectionAdapter(blockState).change();

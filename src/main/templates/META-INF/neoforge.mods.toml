@@ -31,14 +31,12 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/hcutilsmod" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="icon.png" #optional
-# �f�ޒ�
-# https://icon-icons.com/ja/%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3/%E3%81%8A%E4%BA%92%E3%81%84%E3%81%AB%E5%B9%B4%E9%BD%A2%E3%81%AF%E5%90%8C%E5%B9%B4%E4%BB%A3%E3%81%A7-%E6%89%80%E5%B1%9E/94415
-# https://hpgpixer.jp/
+
 # A text field displayed in the mod UI
 #credits="" #optional
 
-# A text field displayed in the mod UI
-authors="${mod_authors}" #optional
+# The authors of the mod, displayed in the mod UI (optional)
+authors="hatabou2020"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
@@ -52,6 +50,11 @@ description='''
 #05 スポナーを見つける
 #07 ベッドで眠れるようになったタイミングでチャイムを鳴らす
 
+--------
+Ver.3.0.0
+--------
+2026/XX/XX
+・
 --------
 Ver.2.02
 --------
