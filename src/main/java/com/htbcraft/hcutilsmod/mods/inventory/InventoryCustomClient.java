@@ -64,9 +64,9 @@ public class InventoryCustomClient {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if ((Minecraft.getInstance().screen != null) &&
-                !(Minecraft.getInstance().screen instanceof InventoryScreen) &&
-                !(Minecraft.getInstance().screen instanceof ContainerScreen)) {
+        if ((Minecraft.getInstance().gui.screen() != null) &&
+                !(Minecraft.getInstance().gui.screen() instanceof InventoryScreen) &&
+                !(Minecraft.getInstance().gui.screen() instanceof ContainerScreen)) {
             HcUtilsMod.LOGGER.info("Displaying on screen");
             return;
         }

@@ -56,7 +56,7 @@ public class FindSpawnerClient {
         if (hitBlockPos != null) {
             if (prevHitBlockPos.compareTo(hitBlockPos) != 0) {
                 HcUtilsMod.LOGGER.info("Add Toast!! {}", hitBlockPos);
-                Minecraft.getInstance().getToastManager().addToast(
+                Minecraft.getInstance().gui.toastManager().addToast(
                         new FindSpawnerToast(
                                 hitBlockPos,
                                 Config.FIND_SPAWNER_TIME.get()));

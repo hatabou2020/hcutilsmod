@@ -67,7 +67,7 @@ public class BlockDirectionClient {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if (Minecraft.getInstance().screen != null) {
+        if (Minecraft.getInstance().gui.screen() != null) {
             HcUtilsMod.LOGGER.info("Displaying on screen");
             return;
         }

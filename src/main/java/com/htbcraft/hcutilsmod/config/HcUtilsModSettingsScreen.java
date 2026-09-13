@@ -45,7 +45,7 @@ public class HcUtilsModSettingsScreen extends MySettingsScreen {
                         (var1) -> {
                             HcUtilsMod.LOGGER.info("Push Done");
                             Config.SPEC.save();
-                            Minecraft.getInstance().setScreen(getParent());
+                            Minecraft.getInstance().gui.setScreen(getParent());
                         })
                         .size(BUTTON_WIDTH, BUTTON_HEIGHT)
                         .build());

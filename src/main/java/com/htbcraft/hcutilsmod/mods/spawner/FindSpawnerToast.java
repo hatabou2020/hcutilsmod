@@ -51,7 +51,7 @@ public class FindSpawnerToast implements Toast {
             // HIDE を返すと音が鳴るのがイケてない。
         }
 
-        if (Minecraft.getInstance().screen != null) {
+        if (Minecraft.getInstance().gui.screen() != null) {
             LOGGER.info("Screen Display");
             wantedVisibility = Visibility.HIDE;
         }
