@@ -22,6 +22,7 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -37,6 +38,7 @@ public class BrightnessClient {
     private static boolean displayBrightness = false;
     private static BrightnessScan brightnessScan;
     private static List<BrightnessMarker> targetMarkers = List.of();
+    // 1 tickあたりの走査量を制限し、フレーム落ちを抑える
     private static final int SCAN_BLOCKS_PER_TICK = 4096;
 
     // デフォルトキー：[b]
@@ -110,15 +112,26 @@ public class BrightnessClient {
         MinecraftColor color = Config.BRIGHTNESS_COLOR.get();
         int alpha = Config.BRIGHTNESS_ALPHA.get();
 
-        if (brightnessScan == null || !brightnessScan.matches(
-                world, playerPos, range, threshold, zombie, color, alpha)) {
+        // 完了後も再走査し、プレイヤー位置やブロック状態の変化を反映する
+        if (brightnessScan == null || brightnessScan.isComplete() || !brightnessScan.matches(
+                world, range, threshold, zombie, color, alpha)) {
             brightnessScan = new BrightnessScan(
                     world, playerPos, range, threshold, zombie, color, alpha);
-            targetMarkers = List.of();
         }
 
         if (!brightnessScan.isComplete() && brightnessScan.advance()) {
             targetMarkers = List.copyOf(brightnessScan.markers);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
+        // 範囲内のブロック更新があれば、次の tick から走査し直す
+        if (displayBrightness
+                && event.getLevel() == Minecraft.getInstance().level
+                && brightnessScan != null
+                && brightnessScan.containsAffectedPosition(event.getPos())) {
+            brightnessScan = null;
         }
     }
 
@@ -205,14 +218,12 @@ public class BrightnessClient {
 
         private boolean matches(
                 Level world,
-                BlockPos playerPos,
                 int range,
                 int threshold,
                 boolean zombie,
                 MinecraftColor color,
                 int alpha) {
             return this.world == world
-                    && this.playerPos.equals(playerPos)
                     && this.range == range
                     && this.threshold == threshold
                     && this.zombie == zombie
@@ -224,9 +235,19 @@ public class BrightnessClient {
             return nextBlock >= totalBlocks;
         }
 
+        private boolean containsAffectedPosition(BlockPos pos) {
+            return pos.getX() >= playerPos.getX() - range
+                    && pos.getX() < playerPos.getX() + range
+                    && pos.getY() >= playerPos.getY() - range - 1
+                    && pos.getY() < playerPos.getY() + range
+                    && pos.getZ() >= playerPos.getZ() - range
+                    && pos.getZ() < playerPos.getZ() + range;
+        }
+
         private boolean advance() {
             int processed = 0;
             while (nextBlock < totalBlocks && processed < BrightnessClient.SCAN_BLOCKS_PER_TICK) {
+                // 1次元の走査位置を x, y, z 座標に戻す
                 int x = playerPos.getX() - range + nextBlock / (width * width);
                 int y = playerPos.getY() - range + nextBlock / width % width;
                 int z = playerPos.getZ() - range + nextBlock % width;
