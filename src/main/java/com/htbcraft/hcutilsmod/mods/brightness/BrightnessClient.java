@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
@@ -27,6 +26,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Mod(value = HcUtilsMod.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = HcUtilsMod.MODID, value = Dist.CLIENT)
@@ -35,8 +35,9 @@ public class BrightnessClient {
     private static final Identifier LIGHT = Identifier.fromNamespaceAndPath(HcUtilsMod.MODID, "hud/light");
 
     private static boolean displayBrightness = false;
-    private static BlockPos prevPlayerPos = BlockPos.ZERO;
-    private static ArrayList<BrightnessMarker> targetMarkers = null;
+    private static BrightnessScan brightnessScan;
+    private static List<BrightnessMarker> targetMarkers = List.of();
+    private static final int SCAN_BLOCKS_PER_TICK = 4096;
 
     // デフォルトキー：[b]
     private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
@@ -87,82 +88,41 @@ public class BrightnessClient {
 
     @SubscribeEvent
     public static void onPlayerTickPost(PlayerTickEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (event.getEntity() != minecraft.player) {
             return;
         }
         if (!isOverWorld()) {
             displayBrightness = false;
         }
 
-        if (displayBrightness) {
-            BlockPos playerPos = event.getEntity().blockPosition();
-            if (prevPlayerPos.compareTo(playerPos) != 0) {
-                prevPlayerPos = playerPos;
-
-                new Thread(() ->
-                        targetMarkers = makeBrightnessMarkers(
-                                event.getEntity().level(),
-                                playerPos,
-                                Config.BRIGHTNESS_RANGE.get(),
-                                Config.BRIGHTNESS_THRESHOLD.get(),
-                                Config.BRIGHTNESS_ZOMBIE.get(),
-                                Config.BRIGHTNESS_COLOR.get(),
-                                Config.BRIGHTNESS_ALPHA.get())
-                ).start();
-            }
+        if (!displayBrightness) {
+            brightnessScan = null;
+            targetMarkers = List.of();
+            return;
         }
-        else {
-            if (targetMarkers != null) {
-                targetMarkers = null;
-                prevPlayerPos = BlockPos.ZERO;
-            }
+
+        Level world = event.getEntity().level();
+        BlockPos playerPos = event.getEntity().blockPosition().immutable();
+        int range = Config.BRIGHTNESS_RANGE.get();
+        int threshold = Config.BRIGHTNESS_THRESHOLD.get();
+        boolean zombie = Config.BRIGHTNESS_ZOMBIE.get();
+        MinecraftColor color = Config.BRIGHTNESS_COLOR.get();
+        int alpha = Config.BRIGHTNESS_ALPHA.get();
+
+        if (brightnessScan == null || !brightnessScan.matches(
+                world, playerPos, range, threshold, zombie, color, alpha)) {
+            brightnessScan = new BrightnessScan(
+                    world, playerPos, range, threshold, zombie, color, alpha);
+            targetMarkers = List.of();
+        }
+
+        if (!brightnessScan.isComplete() && brightnessScan.advance()) {
+            targetMarkers = List.copyOf(brightnessScan.markers);
         }
     }
 
-    private static ArrayList<BrightnessMarker> makeBrightnessMarkers(
-            Level world,
-            BlockPos playerPos,
-            int range,
-            int threshold,
-            Boolean zombie,
-            MinecraftColor color,
-            int alpha) {
-        ArrayList<BrightnessMarker> makeMarkers = new ArrayList<>();
-
-        int i = playerPos.getX() - range;
-        int j = playerPos.getX() + range;
-        int k = playerPos.getY() - range;
-        int l = playerPos.getY() + range;
-        int i1 = playerPos.getZ() - range;
-        int j1 = playerPos.getZ() + range;
-
-        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-        BlockPos.MutableBlockPos mutableBlockPosY1 = new BlockPos.MutableBlockPos();
-
-        for (int k1 = i; k1 < j; ++k1) {
-            for (int l1 = k; l1 < l; ++l1) {
-                for (int i2 = i1; i2 < j1; ++i2) {
-                    mutableBlockPos.set(k1, l1, i2);
-                    mutableBlockPosY1.set(k1, l1 - 1, i2);
-                    if (checkBrightness(world, mutableBlockPos, mutableBlockPosY1, threshold, zombie) != -1) {
-                        makeMarkers.add(
-                                new BrightnessMarker(
-                                        color,
-                                        alpha,
-                                        mutableBlockPos.immutable()));
-                    }
-                }
-            }
-        }
-
-        if (makeMarkers.isEmpty()) {
-            return null;
-        }
-
-        return makeMarkers;
-    }
-
-    private static int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, Boolean zombie) {
+    private static int checkBrightness(Level world, BlockPos pos, BlockPos posY1, int threshold, boolean zombie) {
         // ゾンビが湧くことができないブロックは除外する
         if (zombie && !SpawnPlacements.isSpawnPositionOk(EntityTypes.ZOMBIE, world, pos)) {
             return -1;
@@ -184,7 +144,10 @@ public class BrightnessClient {
     public static void onSubmitCustomGeometry(SubmitCustomGeometryEvent event) {
         if (targetMarkers != null) {
             targetMarkers.forEach(marker -> {
-                marker.draw(event.getPoseStack());
+                marker.draw(
+                        event.getPoseStack(),
+                        event.getSubmitNodeCollector(),
+                        event.getLevelRenderState().cameraRenderState.pos);
             });
         }
     }
@@ -203,6 +166,79 @@ public class BrightnessClient {
                     y,
                     20,
                     20);
+        }
+    }
+
+    private static final class BrightnessScan {
+        private final Level world;
+        private final BlockPos playerPos;
+        private final int range;
+        private final int threshold;
+        private final boolean zombie;
+        private final MinecraftColor color;
+        private final int alpha;
+        private final int width;
+        private final int totalBlocks;
+        private final ArrayList<BrightnessMarker> markers = new ArrayList<>();
+        private final BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        private final BlockPos.MutableBlockPos mutableBlockPosY1 = new BlockPos.MutableBlockPos();
+        private int nextBlock;
+
+        private BrightnessScan(
+                Level world,
+                BlockPos playerPos,
+                int range,
+                int threshold,
+                boolean zombie,
+                MinecraftColor color,
+                int alpha) {
+            this.world = world;
+            this.playerPos = playerPos;
+            this.range = range;
+            this.threshold = threshold;
+            this.zombie = zombie;
+            this.color = color;
+            this.alpha = alpha;
+            this.width = range * 2;
+            this.totalBlocks = width * width * width;
+        }
+
+        private boolean matches(
+                Level world,
+                BlockPos playerPos,
+                int range,
+                int threshold,
+                boolean zombie,
+                MinecraftColor color,
+                int alpha) {
+            return this.world == world
+                    && this.playerPos.equals(playerPos)
+                    && this.range == range
+                    && this.threshold == threshold
+                    && this.zombie == zombie
+                    && this.color == color
+                    && this.alpha == alpha;
+        }
+
+        private boolean isComplete() {
+            return nextBlock >= totalBlocks;
+        }
+
+        private boolean advance() {
+            int processed = 0;
+            while (nextBlock < totalBlocks && processed < BrightnessClient.SCAN_BLOCKS_PER_TICK) {
+                int x = playerPos.getX() - range + nextBlock / (width * width);
+                int y = playerPos.getY() - range + nextBlock / width % width;
+                int z = playerPos.getZ() - range + nextBlock % width;
+                mutableBlockPos.set(x, y, z);
+                mutableBlockPosY1.set(x, y - 1, z);
+                if (checkBrightness(world, mutableBlockPos, mutableBlockPosY1, threshold, zombie) != -1) {
+                    markers.add(new BrightnessMarker(color, alpha, mutableBlockPos.immutable()));
+                }
+                nextBlock++;
+                processed++;
+            }
+            return isComplete();
         }
     }
 }
