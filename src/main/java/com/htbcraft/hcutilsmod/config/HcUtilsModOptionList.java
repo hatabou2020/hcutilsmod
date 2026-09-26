@@ -1,5 +1,6 @@
 package com.htbcraft.hcutilsmod.config;
 
+import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import com.htbcraft.hcutilsmod.my.*;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -56,5 +57,44 @@ public class HcUtilsModOptionList extends MyOptionList {
                 Config.FIND_SPAWNER_TIME_MAX,
                 Config.FIND_SPAWNER_TIME_INTERVAL,
                 Component.translatable("hcutilsmod.configuration.findSpawner.seconds")));
+
+        addEntry(new MyCenterTitleOnlyEntry(
+                Component.translatable("hcutilsmod.configuration.brightness.title")));
+
+        addEntry(new MyRangeEntry(
+                Config.BRIGHTNESS_RANGE,
+                Component.translatable("hcutilsmod.configuration.brightness.range"),
+                Config.BRIGHTNESS_RANGE_MIN,
+                Config.BRIGHTNESS_RANGE_MAX,
+                Config.BRIGHTNESS_RANGE_INTERVAL,
+                Component.translatable("hcutilsmod.configuration.brightness.blocks")));
+
+        addEntry(new MyRangeEntry(
+                Config.BRIGHTNESS_THRESHOLD,
+                Component.translatable("hcutilsmod.configuration.brightness.threshold"),
+                Config.BRIGHTNESS_THRESHOLD_MIN,
+                Config.BRIGHTNESS_THRESHOLD_MAX,
+                Config.BRIGHTNESS_THRESHOLD_INTERVAL,
+                Component.empty()));
+
+        addEntry(new MyBooleanEntry(
+                Config.BRIGHTNESS_ZOMBIE,
+                Component.translatable("hcutilsmod.configuration.brightness.zombie"),
+                Component.translatable("hcutilsmod.configuration.brightness.zombie.without"),
+                Component.translatable("hcutilsmod.configuration.brightness.zombie.with")));
+
+        addEntry(new MyEnumEntry<>(
+                Config.BRIGHTNESS_COLOR,
+                MinecraftColor.class,
+                Component.translatable("hcutilsmod.configuration.brightness.color"),
+                MinecraftColor.getLabels()));
+
+        addEntry(new MyRangeEntry(
+                Config.BRIGHTNESS_ALPHA,
+                Component.translatable("hcutilsmod.configuration.brightness.alpha"),
+                Config.BRIGHTNESS_ALPHA_MIN,
+                Config.BRIGHTNESS_ALPHA_MAX,
+                Config.BRIGHTNESS_ALPHA_INTERVAL,
+                Component.empty()));
     }
 }

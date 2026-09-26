@@ -1,28 +1,36 @@
 package com.htbcraft.hcutilsmod.common;
 
+import net.minecraft.network.chat.Component;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 // https://www.colordic.org/
 public enum MinecraftColor {
-    WHITE(0xFFFFFF),        // 白色 (=white)
-    BLACK(0x000000),        // 黒色 (=black)
-    GRAY(0x808080),         // 灰色 (=gray)
-    LIGHT_GRAY(0xC0C0C0),   // 薄灰色 (=silver)
-    BROWN(0x8B4513),        // 茶色 (=saddlebrown)
-    RED(0xFF0000),          // 赤色 (=red)
-    ORANGE(0xFFA500),       // 橙色 (=orange)
-    YELLOW(0xFFFF00),       // 黄色 (=yellow)
-    GREEN(0x008000),        // 緑色 (=green)
-    LIME(0x00FF00),         // 黄緑色 (=lime)
-    BLUE(0x0000FF),         // 青色 (=blue)
-    CYAN(0x008B8B),         // 青緑色 (=darkcyan)
-    LIGHT_BLUE(0x00FFFF),   // 空色 (=cyan)
-    PURPLE(0x800080),       // 紫色 (=purple)
-    MAGENTA(0xFF00FF),      // 赤紫色 (=magenta)
-    PINK(0xFFC0CB);         // 桃色 (=pink)
+    WHITE(0xFFFFFF, "white"),           // 白色 (=white)
+    BLACK(0x000000, "black"),           // 黒色 (=black)
+    GRAY(0x808080, "gray"),             // 灰色 (=gray)
+    LIGHT_GRAY(0xC0C0C0, "light_gray"), // 薄灰色 (=silver)
+    BROWN(0x8B4513, "brown"),           // 茶色 (=saddlebrown)
+    RED(0xFF0000, "red"),               // 赤色 (=red)
+    ORANGE(0xFFA500, "orange"),         // 橙色 (=orange)
+    YELLOW(0xFFFF00, "yellow"),         // 黄色 (=yellow)
+    GREEN(0x008000, "green"),           // 緑色 (=green)
+    LIME(0x00FF00, "lime"),             // 黄緑色 (=lime)
+    BLUE(0x0000FF, "blue"),             // 青色 (=blue)
+    CYAN(0x008B8B, "cyan"),             // 青緑色 (=darkcyan)
+    LIGHT_BLUE(0x00FFFF, "light_blue"), // 空色 (=cyan)
+    PURPLE(0x800080, "purple"),         // 紫色 (=purple)
+    MAGENTA(0xFF00FF, "magenta"),       // 赤紫色 (=magenta)
+    PINK(0xFFC0CB, "pink");             // 桃色 (=pink)
 
     private final int rgb;
+    private final Component label;
 
-    MinecraftColor(int rgb) {
+    MinecraftColor(int rgb, String key) {
         this.rgb = rgb;
+        this.label = Component.translatable("common.minecraft.color." + key);
     }
 
     public int getRGB() {
@@ -41,12 +49,16 @@ public enum MinecraftColor {
         return this.rgb & 0x000000FF;
     }
 
+    public static List<Component> getLabels() {
+        ArrayList<Component> labels = new ArrayList<>();
+        for (MinecraftColor e : values()) {
+            labels.add(e.label);
+        }
+        return labels;
+    }
+
     @Override
     public String toString() {
-        return "MinecraftColor{" +
-                "red=" + Integer.toHexString(getRed()) +
-                ", green=" + Integer.toHexString(getGreen()) +
-                ", blue=" + Integer.toHexString(getBlue()) +
-                '}';
+        return this.label.getString();
     }
 }

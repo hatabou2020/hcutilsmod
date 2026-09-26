@@ -28,7 +28,7 @@ public class InventoryCategorySort implements Comparator<ItemStack> {
     public int compare(ItemStack o1, ItemStack o2) {
         String s1 = o1.getDisplayName().getString();
         String s2 = o2.getDisplayName().getString();
-        LOGGER.info(s1 + " / " + s2);
+        LOGGER.info("{} / {}", s1, s2);
 
         // AIRは後ろに回す
         if ((o1.isEmpty()) && (o2.isEmpty())) {

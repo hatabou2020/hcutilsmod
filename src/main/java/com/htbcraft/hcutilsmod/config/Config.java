@@ -1,6 +1,7 @@
 package com.htbcraft.hcutilsmod.config;
 
 import com.htbcraft.hcutilsmod.HcUtilsMod;
+import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -41,6 +42,21 @@ public class Config {
     public static final int FIND_SPAWNER_TIME_MAX = 6 * FIND_SPAWNER_TIME_INTERVAL;
     public static final int FIND_SPAWNER_TIME_DEF = 3 * FIND_SPAWNER_TIME_INTERVAL;
 
+    public static final int BRIGHTNESS_RANGE_INTERVAL = 1;
+    public static final int BRIGHTNESS_RANGE_MIN = 1;
+    public static final int BRIGHTNESS_RANGE_MAX = 16;
+    public static final int BRIGHTNESS_RANGE_DEF = 16;
+
+    public static final int BRIGHTNESS_THRESHOLD_INTERVAL = 1;
+    public static final int BRIGHTNESS_THRESHOLD_MIN = 0;
+    public static final int BRIGHTNESS_THRESHOLD_MAX = 14;
+    public static final int BRIGHTNESS_THRESHOLD_DEF = 0;
+
+    public static final int BRIGHTNESS_ALPHA_INTERVAL = 1;
+    public static final int BRIGHTNESS_ALPHA_MIN = 1;
+    public static final int BRIGHTNESS_ALPHA_MAX = 255;
+    public static final int BRIGHTNESS_ALPHA_DEF = 128;
+
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     public static final ModConfigSpec.BooleanValue COORDS_ENABLE = BUILDER
@@ -63,6 +79,21 @@ public class Config {
 
     public static final ModConfigSpec.IntValue FIND_SPAWNER_TIME = BUILDER
             .defineInRange("findSpawnerTime", FIND_SPAWNER_TIME_DEF, FIND_SPAWNER_TIME_MIN, FIND_SPAWNER_TIME_MAX);
+
+    public static final ModConfigSpec.IntValue BRIGHTNESS_RANGE = BUILDER
+            .defineInRange("brightnessRange", BRIGHTNESS_RANGE_DEF, BRIGHTNESS_RANGE_MIN, BRIGHTNESS_RANGE_MAX);
+
+    public static final ModConfigSpec.IntValue BRIGHTNESS_THRESHOLD = BUILDER
+            .defineInRange("brightnessThreshold", BRIGHTNESS_THRESHOLD_DEF, BRIGHTNESS_THRESHOLD_MIN, BRIGHTNESS_THRESHOLD_MAX);
+
+    public static final ModConfigSpec.BooleanValue BRIGHTNESS_ZOMBIE = BUILDER
+            .define("brightnessZombie", true);
+
+    public static final ModConfigSpec.EnumValue<MinecraftColor> BRIGHTNESS_COLOR = BUILDER
+            .defineEnum("brightnessColor", MinecraftColor.RED);
+
+    public static final ModConfigSpec.IntValue BRIGHTNESS_ALPHA = BUILDER
+            .defineInRange("brightnessAlpha", BRIGHTNESS_ALPHA_DEF, BRIGHTNESS_ALPHA_MIN, BRIGHTNESS_ALPHA_MAX);
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 }
