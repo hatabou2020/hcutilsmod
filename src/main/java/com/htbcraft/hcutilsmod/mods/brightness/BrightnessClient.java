@@ -4,6 +4,7 @@ import com.htbcraft.hcutilsmod.HcUtilsMod;
 import com.htbcraft.hcutilsmod.common.MinecraftColor;
 import com.htbcraft.hcutilsmod.config.Config;
 import com.htbcraft.hcutilsmod.my.MyKeyBinding;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
@@ -24,7 +25,6 @@ import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.SubmitCustomGeometryEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +45,9 @@ public class BrightnessClient {
     private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
             Config.KEY_CATEGORY,
             "key.category.minecraft.hcutilsmod.brightness",
-            GLFW.GLFW_KEY_B,
+            InputConstants.KEY_B,
             0,
-            GLFW.GLFW_RELEASE
+            InputConstants.RELEASE
     );
 
     // オーバーワールドにいるときだけ利用可能にする

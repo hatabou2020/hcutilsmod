@@ -3,6 +3,7 @@ package com.htbcraft.hcutilsmod.mods.inventory;
 import com.htbcraft.hcutilsmod.HcUtilsMod;
 import com.htbcraft.hcutilsmod.my.MyKeyBinding;
 import com.htbcraft.hcutilsmod.config.Config;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,7 +32,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerDestroyItemEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,9 +49,9 @@ public class InventoryCustomClient {
     private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
             Config.KEY_CATEGORY,
             "key.category.minecraft.hcutilsmod.inventory",
-            GLFW.GLFW_KEY_O,
+            InputConstants.KEY_O,
             0,
-            GLFW.GLFW_RELEASE
+            InputConstants.RELEASE
     );
 
     public InventoryCustomClient(ModContainer container) {
@@ -87,7 +87,7 @@ public class InventoryCustomClient {
     @SubscribeEvent
     public static void onScreenMouseButtonReleasedPost(ScreenEvent.MouseButtonReleased.Post event) {
         if (sortEnable) {
-            if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+            if (event.getButton() == InputConstants.MOUSE_BUTTON_LEFT) {
                 inventorySortButton.mouseClicked(event.getMouseButtonEvent(), false);
             }
         }

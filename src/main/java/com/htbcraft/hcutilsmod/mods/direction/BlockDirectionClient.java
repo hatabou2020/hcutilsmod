@@ -3,6 +3,7 @@ package com.htbcraft.hcutilsmod.mods.direction;
 import com.htbcraft.hcutilsmod.HcUtilsMod;
 import com.htbcraft.hcutilsmod.config.Config;
 import com.htbcraft.hcutilsmod.my.MyKeyBinding;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -22,7 +23,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import org.lwjgl.glfw.GLFW;
 
 @Mod(value = HcUtilsMod.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = HcUtilsMod.MODID, value = Dist.CLIENT)
@@ -42,9 +42,9 @@ public class BlockDirectionClient {
     private static final MyKeyBinding BIND_KEY = new MyKeyBinding(
             Config.KEY_CATEGORY,
             "key.category.minecraft.hcutilsmod.direction",
-            GLFW.GLFW_KEY_R,
+            InputConstants.KEY_R,
             0,
-            GLFW.GLFW_REPEAT
+            InputConstants.REPEAT
     );
 
     public BlockDirectionClient(ModContainer container) {
@@ -85,8 +85,8 @@ public class BlockDirectionClient {
     @SubscribeEvent
     public static void onInputMouseButtonPost(InputEvent.MouseButton.Post event) {
         if (directMode) {
-            if (event.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-                mouseClick = (event.getAction() == GLFW.GLFW_PRESS);
+            if (event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT) {
+                mouseClick = (event.getAction() == InputConstants.PRESS);
             }
         }
     }

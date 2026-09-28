@@ -8,24 +8,22 @@ import net.neoforged.neoforge.client.settings.KeyModifier;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.glfw.GLFW.*;
-
 public class MyKeyBinding extends KeyMapping {
     private static final Map<Integer, KeyModifier> MODIFIER_MAP = new HashMap<>() {
         {
             put(0, KeyModifier.NONE);
-            put(GLFW_MOD_SHIFT, KeyModifier.SHIFT);
-            put(GLFW_MOD_CONTROL, KeyModifier.CONTROL);
-            put(GLFW_MOD_ALT, KeyModifier.ALT);
+            put(InputConstants.MOD_SHIFT, KeyModifier.SHIFT);
+            put(InputConstants.MOD_CONTROL, KeyModifier.CONTROL);
+            put(InputConstants.MOD_ALT, KeyModifier.ALT);
         }
     };
 
     private static final Map<Integer, String> MODIFIER_NAME = new HashMap<>() {
         {
             put(0, "");
-            put(GLFW_MOD_SHIFT, "Shift");
-            put(GLFW_MOD_CONTROL, "Ctrl");
-            put(GLFW_MOD_ALT, "Alt");
+            put(InputConstants.MOD_SHIFT, "Shift");
+            put(InputConstants.MOD_CONTROL, "Ctrl");
+            put(InputConstants.MOD_ALT, "Alt");
         }
     };
 
@@ -35,7 +33,7 @@ public class MyKeyBinding extends KeyMapping {
         super(description,
                 KeyConflictContext.UNIVERSAL,
                 MODIFIER_MAP.get(modifiers),
-                InputConstants.Type.KEYSYM.getOrCreate(key),
+                InputConstants.Type.KEYBOARD.getOrCreate(key),
                 category);
         this.action = action;
     }
@@ -45,14 +43,14 @@ public class MyKeyBinding extends KeyMapping {
     }
 
     public int getModifiers() {
-        if (this.getKeyModifier().equals(MODIFIER_MAP.get(GLFW_MOD_SHIFT))) {
-            return GLFW_MOD_SHIFT;
+        if (this.getKeyModifier().equals(KeyModifier.SHIFT)) {
+            return InputConstants.MOD_SHIFT;
         }
-        else if (this.getKeyModifier().equals(MODIFIER_MAP.get(GLFW_MOD_CONTROL))) {
-            return GLFW_MOD_CONTROL;
+        else if (this.getKeyModifier().equals(KeyModifier.CONTROL)) {
+            return InputConstants.MOD_CONTROL;
         }
-        else if (this.getKeyModifier().equals(MODIFIER_MAP.get(GLFW_MOD_ALT))) {
-            return GLFW_MOD_ALT;
+        else if (this.getKeyModifier().equals(KeyModifier.ALT)) {
+            return InputConstants.MOD_ALT;
         }
 
         return 0;
@@ -69,15 +67,14 @@ public class MyKeyBinding extends KeyMapping {
     }
 
     public String getKeyName() {
-        int key = getKeyCode();
         int modifiers = getModifiers();
         String s;
 
         if (modifiers != 0) {
-            s = MODIFIER_NAME.get(modifiers) + " + " + glfwGetKeyName(key, 0);
+            s = MODIFIER_NAME.get(modifiers) + " + " + this.getKey().getDisplayName().getString();
         }
         else {
-            s = glfwGetKeyName(key, 0);
+            s = this.getKey().getDisplayName().getString();
         }
 
         return s;
